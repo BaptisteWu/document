@@ -1,0 +1,81 @@
+--nvm安装
+-修改nvm/settings.txt
+root: D:\nodejs\nvm
+path: D:\nodejs\nodejs
+arch: 64                  								
+proxy: none 
+node_mirror: https://npm.taobao.org/mirrors/node/ 
+npm_mirror: https://npm.taobao.org/mirrors/npm/
+
+-指令
+安装的nodejs版本
+nvm list
+可以安装的nodejs版本
+nvm list available
+
+nvm install 版本号
+nvm use 版本号
+
+--npm相关
+npm -v
+npm config list --json
+
+--vue相关
+-vscode插件
+Vetur
+
+-vue2.x脚手架
+npm i -g vue-cli
+vue -V
+-初始化项目
+vue init webpack demo
+cd demo
+npm run dev
+
+-element ui
+npm i element-ui -S
+
+--react native相关
+-vscode插件
+-脚手架
+npm i -g react-native-cli
+react-native -v
+react-native -h
+-初始化项目
+react-native init demo
+cd demo
+react-native run-android
+
+--webpack相关
+npm init
+npm i -D webpack
+npm i -D webpack-cli
+npm i -D webpack-dev-server
+npm i -D babel-loader @babel/core
+npm i -D @babel/preset-env
+npm i -D css-loader
+npm i -D style-loader
+npm i -D postcss-loader
+npm i -D less-loader
+npm i -D less
+npm i -D html-loader
+npm i -D html-webpack-plugin
+npm i -D vue-loader
+npm i -D vue-template-compiler
+npm i -S vue
+
+--electron相关
+npm init
+npm install --save-dev electron
+electron-packager ./ wubin --win --arch=x64 --out ./exe --electron-version 6.0.2 --overwrite --icon=./app.ico --ignore=node_modules
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,287 @@
+原符号	替换符号
+<	&lt;
+<=	&lt;=
+>	&gt;
+>=	&gt;=
+&	&amp;
+’	&apos;
+"	&quot;
+
+sqlplus /nolog
+conn /as sysdba
+alter user scott account unlock;
+grant dba to scott;
+
+exp fzxs/123456@orcl file=d:\fzxs.dmp
+
+乱码
+select userenv('language') from dual;
+新建一个环境变量：NLS_LANG
+值：AMERICAN_AMERICA.ZHS16GBK
+
+查看数据库的sid_name语句：
+select INSTANCE_NAME from v$instance;
+
+--创建用户
+create user "ybsb" identified by "123456"
+--授权
+grant connect,resource,dba to test;
+
+--创建序列
+create sequence SEQ_T_PASS
+increment by 1
+start with 1
+
+--创建触发器
+create or replace trigger TRIGGER_T_PASS
+before insert on T_PASS
+for each row
+begin
+select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
+end;
+
+--数据类型
+varchar 固定长度 2000
+varchar2 可变长度 4000
+
+--between前后都是闭区间
+
+--为null字段设置默认值
+--表示：如果expr1不为null，则返回expr1。如果expr1为null，则返回expr2。
+nvl(expr1, expr2)
+--表示：如果expr1不为null，则返回expr2。如果expr1为null，则返回expr3。
+nvl2(expr1, expr2, expr3)
+
+--保留小数
+select ceil(2.2) from dual // 取整（大）
+select floor(2.9) from dual // 取整（小）
+select round((5/3), 2) from dual // 四舍五入
+select trunc((5/3), 2) from dual // 舍
+
+--数字转字符串
+select to_char(20181023) from dual
+select to_char(0.1, 'fm9999999.9999') from dual // .1
+select to_char(0.0, 'fm9999999.9999') from dual // 0.
+select to_char(0.0, 'fm9999990.9999') from dual // 0.
+select to_char(0.0, 'fm9999999.0999') from dual // .0
+select to_char(0.0, 'fm9999990.0999') from dual // 0.0
+select to_char(0.0) from dual // 0
+select to_char(1.0) from dual // 1
+select to_char(0.1) from dual // .1
+
+--时间转字符串
+select to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') from dual
+select to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss.ff') from dual
+--字符串转时间date
+select to_date('2019-08-08 18:18:18', 'yyyy-mm-dd hh24:mi:ss') from dual
+--字符串转时间timestamp
+select to_timestamp('2020-02-02 20:20:02.0202', 'yyyy-mm-dd hh24:mi:ss.ff') from dual
+--timestamp转date
+select systimestamp + 0 from dual
+select cast(systimestamp as date) from dual
+
+--时间加减
+select sysdate + numtoyminterval(-1, 'year') from dual
+select sysdate + numtoyminterval(1, 'month') from dual
+select sysdate + numtodsinterval(-1, 'day') from dual
+select sysdate + numtodsinterval(8, 'hour') from dual
+select sysdate + numtodsinterval(1, 'minute') from dual
+select sysdate + numtodsinterval(1, 'second') from dual
+
+select add_months(sysdate, 1) from dual
+
+--当天0点
+select to_date(to_char(sysdate, 'yyyy-mm-dd'), 'yyyy-mm-dd') from dual
+select trunc(sysdate) from dual
+--昨天0点
+select trunc(sysdate - 1) from dual
+--当周第一天（即上周日）0点
+select trunc(sysdate, 'd') from dual
+--当周周一0点
+select trunc(sysdate, 'iw') from dual
+--当月1号0点
+select to_date(to_char(sysdate, 'yyyy-mm'), 'yyyy-mm') from dual
+select trunc(sysdate, 'mm') from dual
+--上月1号0点
+select trunc(add_months(sysdate, -1), 'mm') from dual
+--当年1月1号0点
+select to_date(to_char(sysdate, 'yyyy'), 'yyyy') from dual
+select trunc(sysdate, 'y') from dual
+--去年1月1号0点
+select trunc(add_months(sysdate, -12), 'y') from dual
+
+--字符串截取
+select substr('hello world', 0, 5) from dual
+--字符串拼接
+select 'hello'||'world' from dual
+--字符串拼接数字
+select 123||'hello world' from dual
+
+--替换字符串
+select replace('１９８１123abc', '１９８１', '1981') from dual
+--提取字符串
+select translate('123.456tom', '0123456789.', ' ') from dual
+
+--判断字符串中是否包含某个字符串
+select instr('abcdefg', 'bcd') from dual
+
+varchar2与nvarchar2互转
+translate('你好' USING NCHAR_CS)
+translate(pubdate USING CHAR_CS)
+
+select wm_concat(hour) hour from
+(
+select rownum - 1 hour from dual connect by rownum < 25
+)
+
+select to_date('2018-11-15', 'yyyy-mm-dd') + rownum - 1 
+from dual 
+connect by rownum < sysdate - to_date('2018-11-15', 'yyyy-mm-dd')
+
+with temp as(
+select '2018-11-15' day,'tom1' name from dual union all 
+select '2018-11-15' day,'tom2' name from dual union all 
+select '2018-11-17' day,'tom3' name from dual 
+)
+select d.dateTime,num from
+(
+select to_char(to_date('2018-11-15', 'yyyy-mm-dd') + rownum - 1, 'yyyy-mm-dd') dateTime
+from dual 
+connect by rownum < sysdate - to_date('2018-11-15', 'yyyy-mm-dd')
+) d 
+left join
+(
+select day,count(*) num from temp group by day
+) t
+on d.dateTime = t.day
+order by d.dateTime
+
+--通用表表达式CTE
+with sales as (
+select '2000' year,'Finland' country,'Computer' product,1500 profit from dual union all
+select '2001' year,'USA' country,'Computer' product,1200 profit from dual union all
+select '2001' year,'Finland' country,'Phone' product,10 profit from dual union all
+select '2000' year,'India' country,'Calculator' product,75 profit from dual union all
+select '2001' year,'USA' country,'TV' product,150 profit from dual union all
+select '2000' year,'India' country,'Computer' product,1200 profit from dual union all
+select '2000' year,'USA' country,'Calculator' product,5 profit from dual union all
+select '2000' year,'USA' country,'Computer' product,1500 profit from dual union all
+select '2000' year,'Finland' country,'Phone' product,100 profit from dual union all
+select '2001' year,'USA' country,'Calculator' product,50 profit from dual union all
+select '2001' year,'USA' country,'Computer' product,1500 profit from dual union all
+select '2000' year,'India' country,'Calculator' product,75 profit from dual union all
+select '2001' year,'USA' country,'TV' product,100 profit from dual
+)
+--窗口函数
+--
+select year,country,product,profit,
+sum(profit) over(partition by country) sum_profit1,
+sum(profit) over(partition by country order by profit) sum_profit2,
+sum(profit) over(partition by country order by profit range between unbounded preceding and current row) sum_profit3,
+sum(profit) over(partition by country order by profit rows between unbounded preceding and current row) sum_profit4,
+sum(profit) over(partition by country order by profit rows between unbounded preceding and unbounded following) sum_profit5,
+sum(profit) over(partition by country order by profit rows between 1 preceding and 1 following) sum_profit6
+from sales
+
+sum_profit2与sum_profit3相同
+range值的取值范围（要在第一行的值到当前行的值之间）
+rows行的取值范围
+
+count(field),avg(field),min(field),max(field)
+first_value(field [ignore nulls]),last_value(field [ignore nulls])
+nth_value(field, n) 返回field字段第几行的值
+ntile(n) 将数据等分成n份
+max()/min() keep (dense_rank first/last order by ...) over() 取组内第一或最后一条
+
+--排名函数
+select year,country,product,profit,
+row_number() over(partition by country order by profit) row_number_profit,
+rank() over(partition by country order by profit) rank_profit,
+dense_rank() over(partition by country order by profit) dense_rank_profit,
+percent_rank() over(partition by country order by profit) percent_rank_profit,
+cume_dist() over(partition by country order by profit) cume_dist_profit,
+percentile_cont(0.5) within group(order by profit) over(partition by country) percentile_cont_profit,
+percentile_disc(0.5) within group(order by profit) over(partition by country) percentile_disc_profit
+from sales
+
+row_number() 相同不并列
+rank() 相同并列，跳过名次
+dense_rank() 相同并列，不跳过名次
+percent_rank() (rank_profit - 1) / (总行数 - 1)
+cume_dist() 行数 / 总行数 （排名相同取最后一行）
+percentile_cont(0.5) within group(order by ...) 取两边平均值
+percentile_disc(0.5) within group(order by ...) 取两边最近的值
+
+--百分比函数
+select year,country,product,profit,
+ratio_to_report(profit) over() 占所有,
+ratio_to_report(profit) over(partition by country) 占分组
+from sales
+
+--偏移函数
+select year,country,product,profit,
+lead(profit) over(partition by country order by profit) lead_profit1,
+lead(profit, 1, 0) over(partition by country order by profit) lead_profit2,
+lag(profit) over(partition by country order by profit) lag_profit1,
+lag(profit, 1, 0) over(partition by country order by profit) lag_profit2
+from sales
+
+lead() 上移
+lag() 下移
+lead(field, num, defaultvalue)
+lag(field, num, defaultvalue)
+field字段名
+num偏移量
+defaultvalue默认值
+
+--行列转换
+with temp as(
+select '1993' year,'1' month,'a' type,4 num from dual union all 
+select '1993' year,'1' month,'b' type,5 num from dual union all 
+select '1993' year,'1' month,'c' type,6 num from dual union all 
+select '1993' year,'1' month,'a' type,7 num from dual union all 
+select '1994' year,'2' month,'a' type,1 num from dual union all 
+select '1994' year,'2' month,'b' type,2 num from dual union all 
+select '1994' year,'2' month,'c' type,3 num from dual 
+)
+select type,(case when type='a' then 'wubin' else 'tom' end) from temp
+select type,(case type when 'a' then 'wubin' else 'tom' end) from temp
+字符集不匹配：试试select type,(case type when N'a' then 'wubin' else 'tom' end) from temp
+select type,decode(type,'a','wubin','tom') from temp
+select type,decode(type,'a','wubin','b','tom','mary') from temp
+select * from temp pivot (sum(num) for type in ('a' a,'b' b,'c' c)) order by year
+
+select type,sum(amount) sl from wx_tp_amount 
+where exists (select name from wx_tp_classify where name = wx_tp_amount.type)
+group by type order by sl desc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

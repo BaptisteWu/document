@@ -1,0 +1,325 @@
+--开启binlog
+  server-id = 1
+  log-bin = bin-log
+  binlog-format = Row
+
+--查看binlog格式
+show variables like 'binlog_format';
+--查看指定binlog文件的内容
+show binlog events in 'bin-log.000001';
+mysqlbinlog --base64-output=decode-rows -v C:\mysql-5.7.13-winx64\data\bin-log.000004
+
+--登录
+mysql -uroot -proot
+
+show variables where Variable_name like 'character_set_%' or Variable_name like 'collation%';
+
+--为null字段设置默认值
+select ifnull(null, 0);
+select coalesce(null, 0);
+
+--保留小数
+select round(100.3465, 2),round(100, 2),round(0.6, 2),round(114.6, -1); // 四舍五入
+select truncate(100.3465, 2),truncate(100, 2),truncate(0.6, 2),truncate(114.6, -1); // 舍
+
+--数据类型转换
+select cast(10 as char);
+select cast(10 as char(1));
+select cast('010' as signed);
+select convert('010', signed);
+
+字符型，可带参数：char()
+日期：date
+时间：time
+日期时间型：datetime
+浮点数：decimal
+整数：signed
+无符号整数：unsigned
+
+--字符串转数字
+select '010.010' + 0;
+
+--时间转字符串
+select date_format(now(), '%Y-%m-%d %H:%i:%s');
+select date_format(now(), '%Y-%c-%e %h:%i:%s');
+select date_format(now(6), '%Y-%m-%d %T.%f');
+--字符串转时间
+select str_to_date('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s');
+
+--时间转时间戳
+select unix_timestamp(now());
+--时间戳转时间
+select from_unixtime(1539238971);
+
+--年月日时分秒格式化成年月日
+select date(now());
+
+select now(); // 年月日时分秒
+select now(6); // 年月日时分秒毫秒
+select curdate(); // 年月日
+select curtime(); // 时分秒
+select curtime(6); // 时分秒毫秒
+
+select current_date(); // 年月日
+select current_time(); // 时分秒
+select current_time(6); // 时分秒毫秒
+select current_timestamp(); // 年月日时分秒
+select current_timestamp(6); // 年月日时分秒毫秒
+
+--一年当中的第几天
+select dayofyear(curdate());
+--一月当中的第几天
+select dayofmonth(curdate());
+--一周当中的第几天（周日第一天）
+select dayofweek(curdate());
+--一周当中的索引位置（0=周一）
+select weekday(curdate());
+
+--几几年
+select year(now());
+--几月
+select month(now());
+--几周
+select week(now());
+--几号
+select day(now());
+--几时
+select hour(now());
+--几分
+select minute(now());
+--几秒
+select second(now());
+
+--时间加减
+select date_add(curdate(), interval -1 day);
+select date_sub(curdate(), interval -1 year);
+
+--当天0点
+select curdate();
+--昨天0点
+select date_add(curdate(), interval -1 day);
+--当周周一0点
+select date_add(curdate(), interval -weekday(curdate()) day);
+--当月1号0点
+select date_add(curdate(), interval -day(curdate()) + 1 day);
+--上月1号0点
+select date_add(curdate() - day(curdate()) + 1, interval -1 month);
+--下月1号0点
+select date_add(curdate() - day(curdate()) + 1, interval 1 month);
+--当月最后一天0点
+select last_day(curdate());
+----当年1月1号0点
+select date_add(curdate(), interval -dayofyear(curdate()) + 1 day);
+--去年1月1号0点
+select date_add(curdate() - dayofyear(curdate()) + 1, interval -1 year);
+
+--比较时分秒
+select timediff('1993-07-22 08:08:08', '1993-07-20 06:06:06');
+--比较天数
+select datediff('1993-07-22 06:06:06', '1993-07-20 08:08:08');
+--比较时间
+select timestampdiff(year, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+select timestampdiff(month, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+select timestampdiff(day, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+select timestampdiff(hour, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+select timestampdiff(minute, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+select timestampdiff(second, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+
+--字符串长度
+--length()一个汉字三个字符，char_length()一个汉字一个字符
+select length('吴彬');
+select char_length('吴彬');
+
+--字符串拼接
+select concat('%', 'wubin', '%');
+
+--取顺序第一个逗号前面的字符串
+select substring_index('123,456,789,0', ',', 1); //123
+--取顺序第二个逗号前面的字符串
+select substring_index('123,456,789,0', ',', 2); //123,456
+--取倒序第一个逗号后面的字符串
+select substring_index('123,456,789,0', ',', -1); //0
+
+select substring_index(substring_index('123,456,789,0', ',', 2), ',', -1); //456
+
+select find_in_set('b', 'a,b,c,d'); //2
+select find_in_set('e', 'a,b,c,d'); //0
+
+--group_concat一般与group by同时使用
+select group_concat(id) from wubin;
+select name,group_concat(id) from wubin group by name;
+
+--count()函数有条件
+select count(case when charge_type = 2 then charge_type end) from chargerecord_8
+select count(charge_type = 2 or null) from chargerecord_8
+
+--分组求最大值，并取最大值所在的行
+SELECT a.* FROM wubin a
+LEFT JOIN wubin b
+ON a.name = b.name AND a.amount < b.amount
+WHERE b.name IS NULL;
+
+SELECT b.* FROM
+(
+SELECT name,MAX(amount) amount
+FROM wubin
+GROUP BY name
+) a
+LEFT JOIN wubin b
+ON a.amount = b.amount AND a.name = b.name;
+
+SELECT * FROM wubin
+WHERE amount IN (
+SELECT MAX(amount) FROM wubin
+GROUP BY name
+);
+
+SELECT * FROM wubin a
+WHERE amount = (
+SELECT MAX(amount) FROM wubin b
+WHERE a.name = b.name
+);
+
+--自连接
+SELECT create_time,COUNT(*) c,
+(
+SELECT COUNT(*) 
+FROM wubin b 
+WHERE b.create_time <= a.create_time
+) ltec
+FROM wubin a
+GROUP BY create_time;
+
+--索引
+--创建索引
+CREATE INDEX index_username ON user(username);
+ALTER TABLE user ADD INDEX index_username (username);
+CREATE INDEX index_user ON user(username,create_time,age);
+
+--删除索引
+DROP INDEX index_username ON user;
+ALTER TABLE user DROP INDEX index_username;
+
+--索引字段名不要是关键字
+--记录超过一半，索引无效（IS NULL 或 IS NOT NULL）
+
+--LIKE 以%开头，索引无效；不以%开头，索引有效
+EXPLAIN SELECT * FROM user WHERE username LIKE '%t%';
+EXPLAIN SELECT * FROM user WHERE username LIKE 't%';
+
+--OR语句
+EXPLAIN SELECT * FROM user WHERE age = 23 OR age = 24; //结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE age < 12 OR age > 12; //结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE username = 'tom' OR username = 'jack'; //结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 15:33:00' OR create_time = '2019-12-09 15:33:01'; //结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 10:07:08' OR create_time > '2020-02-04 10:47:50'; //结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE username = 'wubin' OR age = 54; //每个字段结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE username = 'wubin' OR realname = 'wer'; //每个字段结果<=1，索引有效
+
+--<>，!=主键索引有效，非主键索引结果<=1，索引有效
+EXPLAIN SELECT * FROM user WHERE id != 12;
+EXPLAIN SELECT * FROM user WHERE age != 12; //结果<=1，索引有效
+
+--数据类型隐式转化
+EXPLAIN SELECT * FROM user WHERE username = '123';
+EXPLAIN SELECT * FROM user WHERE username = 123; //索引无效
+EXPLAIN SELECT * FROM user WHERE username = CAST(123 AS CHAR);
+
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40';
+EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 14:42:40';
+EXPLAIN SELECT * FROM user WHERE create_time < CAST('2019-12-09 14:42:40' AS DATETIME);
+EXPLAIN SELECT * FROM user WHERE create_time < STR_TO_DATE('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s');
+
+--对索引字段进行计算，索引无效
+EXPLAIN SELECT * FROM user WHERE age - 1 = 1; //索引无效
+EXPLAIN SELECT * FROM user WHERE age = 23 + 1; //索引有效
+
+--对索引字段使用函数，索引无效
+EXPLAIN SELECT * FROM user WHERE LENGTH(username) = 8;
+
+--组合索引 最佳左前缀法则
+EXPLAIN SELECT * FROM user WHERE username = 'tom';
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40'; //索引无效
+EXPLAIN SELECT * FROM user WHERE age = 12; //索引无效
+EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time = '2019-12-09 14:42:40';
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND username = 'tom';
+EXPLAIN SELECT * FROM user WHERE username = 'tom' AND age = 12;
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND age = 12; //索引无效
+EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time = '2019-12-09 14:42:40' AND age = 12;
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND age = 12 AND username = 'tom';
+EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time < '2019-12-09 14:42:40' AND age = 12; //范围条件后的索引失效
+
+--创建临时表
+CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT);
+
+--根据某个字段把一条记录分成多条
+SELECT substring_index(substring_index('82,83,84,85,86',',',auto_incre_id),',',-1) AS id FROM 
+(
+SELECT 1 auto_incre_id
+UNION ALL SELECT 2 auto_incre_id
+UNION ALL SELECT 3 auto_incre_id
+) a
+WHERE auto_incre_id <= (length('82,83,84,85,86') - length(REPLACE('82,83,84,85,86',',',''))+1);
+
+--一张表数据插入另一张表
+INSERT INTO restaurant_box_order(id,create_time,order_name,box_id,applicant_id,applicant,application_unit,dinner_place_id,
+dinner_date,dinner_time,dinner_number,dinner_standard,contact,contact_mode,remarks,
+status,unsubscribe_status,complete_status,is_delete)
+SELECT a.CODE,a.APPLY_TIME,CONCAT(APPLY_USER,'的包厢预定'),a.BOOTHS_ID,a.APPLY_USER_ID,a.APPLY_USER,a.APPLY_SECTION,b.place_id,
+a.MEAL_DATE,1,a.NUMBER,a.STANDARD,a.CONTACTS,a.CONTACTS_NUMBER,a.MEMO,3,(CASE WHEN a.STATUS = 4 THEN 3 ELSE 1 END),3,1
+FROM c_dinner_booths_book a
+LEFT JOIN restaurant_box_config b
+ON a.BOOTHS_ID = b.id
+WHERE a.APPLY_TIME > STR_TO_DATE('2019-11-01','%Y-%m-%d')
+
+--前10条记录中，每隔5条取1条
+SELECT * FROM
+(
+SELECT *,@rownum:=@rownum+1 AS rowno FROM `test`,(SELECT @rownum:=0) t
+ORDER BY id DESC LIMIT 0,10
+) a 
+WHERE MOD(a.rowno,5)=1
+
+select concat(case when timestampdiff(hour,in_produce_date,out_produce_date) < 10 then concat('0',timestampdiff(hour,in_produce_date,out_produce_date))
+else timestampdiff(hour,in_produce_date,out_produce_date) end,':',
+case when timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60 < 10 
+then concat('0',timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60)
+else timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60 end,':',
+case when timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60 < 10 
+then concat('0',timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60)
+else timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60 end)
+from inoutrecord_8 
+where id = 628
+
+SELECT a.shour,IFNULL(b.electronicPay,0.00)electronicPay,IFNULL(b.cashPay,0.00) cashPay FROM
+(
+SELECT '00:00' shour UNION SELECT '01:00' UNION SELECT '02:00' UNION SELECT '03:00'
+UNION SELECT '04:00' UNION SELECT '05:00' UNION SELECT '06:00' UNION SELECT '07:00'
+UNION SELECT '08:00' UNION SELECT '09:00' UNION SELECT '10:00' UNION SELECT '11:00'
+UNION SELECT '12:00' UNION SELECT '13:00' UNION SELECT '14:00' UNION SELECT '15:00'
+UNION SELECT '16:00' UNION SELECT '17:00' UNION SELECT '18:00' UNION SELECT '19:00'
+UNION SELECT '20:00' UNION SELECT '21:00' UNION SELECT '22:00' UNION SELECT '23:00'
+) a
+LEFT JOIN
+(
+SELECT CONCAT(DATE_FORMAT(exit_date,'%H'),':00') shour,
+SUM(money_electronic_received) electronicPay,SUM(money_cash_received) cashPay FROM `chargerecord_8`
+WHERE exit_date >= curdate() AND curdate() + 1 > exit_date
+GROUP BY DATE_FORMAT(exit_date,'%H')
+) b
+ON a.shour = b.shour
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

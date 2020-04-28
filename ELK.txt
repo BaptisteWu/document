@@ -1,0 +1,929 @@
+GET _cat/health?v
+GET _cat/nodes?v
+GET _cat/shards?v
+GET _cat/indices?v
+GET _cat/count?v
+
+GET _cluster/settings
+GET _cluster/health
+
+GET _analyze
+{
+  "analyzer": "ik_max_word",
+  "text": "数据库"
+}
+
+GET logstash-*/_search
+GET %3Clogstash-%7Bnow%2Fd%7D%3E/_search
+
+PUT admin
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "password": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
+GET admin
+DELETE admin
+
+PUT _template/template_1
+{
+  "order": 0,
+  "version": 123,
+  "index_patterns": [
+    "*"
+  ],
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "doc": {
+      "_source": {
+        "enabled": true
+      },
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||epoch_millis||strict_date_optional_time"
+        }
+      }
+    }
+  }
+}
+GET _template/template_1
+DELETE _template/template_1
+
+GET user
+GET user/_search
+DELETE user
+
+GET _template/logstash
+
+GET _all
+GET _aliases
+GET _mappings
+GET _settings
+
+GET employee
+GET employee/_alias
+GET employee/_mapping
+GET employee/_settings
+
+GET employee/_doc/_mapping
+
+------增删改查------
+PUT employee/_doc/1
+{
+  "first_name": "John",
+  "last_name": "Smith",
+  "age": 25,
+  "about": "I love to go rock climbing",
+  "interests": [
+    "sports",
+    "music"
+  ]
+}
+
+PUT employee/_doc/1/_create
+{
+  "first_name": "John",
+  "last_name": "Smith",
+  "age": 25,
+  "about": "I love to go rock climbing",
+  "interests": [
+    "sports",
+    "music"
+  ]
+}
+
+POST employee/_doc
+{
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "age": 32,
+  "about": "I like to collect rock albums",
+  "interests": [
+    "music"
+  ]
+}
+
+DELETE employee/_doc/4
+
+POST employee/_doc/_delete_by_query?conflicts=proceed
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+POST employee/_doc/4/_update
+{
+  "doc": {
+    "first_name": "John",
+    "about": "I love to go rock climbing"
+  },
+  "doc_as_upsert": true
+}
+
+POST employee/_doc/5/_update
+{
+  "doc": {
+    "first_name": "John",
+    "about": "I love to go rock climbing"
+  },
+  "detect_noop": false,
+  "upsert": {
+    "first_name": "John",
+    "last_name": "Smith",
+    "age": 25,
+    "about": "I love to go rock climbing",
+    "interests": [
+      "sports",
+      "music"
+    ]
+  }
+}
+
+POST employee/_doc/6/_update
+{
+  "script": {
+    "source": "ctx._source.age += params.count",
+    "lang": "painless",
+    "params": {
+      "count": 4
+    }
+  },
+  "upsert": {
+    "age": 10
+  }
+}
+
+POST employee/_doc/_update_by_query?conflicts=proceed
+{
+  "script": "ctx._source.age++"
+}
+
+POST employee/_doc/_update_by_query?conflicts=proceed
+{
+  "query": {
+    "match_all": {}
+  },
+  "script": {
+    "source": "ctx._source.age = params.age;ctx._source.about = params.about",
+    "lang": "painless",
+    "params": {
+      "age": "100",
+      "about": "basketball"
+    }
+  }
+}
+
+POST employee/_doc/_bulk
+{"index":{"_id":"1"}}
+{"first_name":"John","last_name":"Smith","age":25,"about":"I love to go rock climbing","interests":["sports","music"]}
+{"index":{"_id":"2"}}
+{"first_name":"Jane","last_name":"Smith","age":32,"about":"I like to collect rock albums","interests":["music"]}
+{"index":{"_id":"3"}}
+{"first_name":"Douglas","last_name":"Fir","age":35,"about":"I like to build cabinets","interests":["forestry"]}
+
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "employee",
+    "type": "_doc",
+    "query": {
+      "term": {
+        "age": 26
+      }
+    },
+    "_source": ["interests", "age"]
+  },
+  "dest": {
+    "index": "employee2",
+    "version_type": "internal",
+    "op_type": "create"
+  }
+}
+
+GET employee/_doc/_mget
+{
+  "ids": [
+    "1",
+    "2"
+  ]
+}
+
+GET employee/_doc/1
+
+GET employee/_doc/_count
+
+GET employee/_doc/_search
+
+GET employee/_doc/_search
+{
+  "query": {
+    "term": {
+      "about": "rock"
+    }
+  },
+  "sort": {
+    "age": "desc"
+  },
+  "from": 0,
+  "size": 2,
+  "_source": {
+    "includes": [
+      "first_name",
+      "about",
+      "age"
+    ]
+  },
+  "highlight": {
+    "fields": {
+      "about": {}
+    }
+  }
+}
+
+GET employee/_doc/_search?scroll=1m
+{
+  "size": 1
+}
+
+POST _search/scroll?scroll=1m
+{
+  "scroll_id": ""
+}
+
+DELETE _search/scroll
+{
+  "scroll_id": ""
+}
+
+DELETE _search/scroll/_all
+
+GET employee/_doc/_search
+{
+  "collapse": {
+    "field": "last_name.keyword",
+    "inner_hits": [
+      {
+        "name": "s1",
+        "size": 1
+      },
+      {
+        "name": "s2",
+        "size": 2
+      }
+    ]
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "match_all": {
+      "boost": 1.2
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "match": {
+      "about": "rock climbing"
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "match_phrase": {
+      "about": "rock climbing"
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "range": {
+      "age": {
+        "gt": 25,
+        "lte": 35,
+        "boost": 2
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match_all": {}
+      },
+      "filter": {
+        "range": {
+          "age": {
+            "gte": 25
+          }
+        }
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "script": {
+          "script": {
+            "source": "(doc['age'].value > params.age)&&(doc['age'].value < 35)",
+            "lang": "painless",
+            "params": {
+              "age": 25
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+------聚合查询------
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "avg_age": {
+      "avg": {
+        "field": "age",
+        "missing": 0
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "stats_age": {
+      "stats": {
+        "field": "age",
+        "missing": 0
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword"
+      },
+      "aggs": {
+        "top2": {
+          "top_hits": {
+            "sort": [
+              {
+                "age": {
+                  "order": "asc"
+                }
+              }
+            ],
+            "_source": {
+              "includes": [
+                "interests",
+                "first_name",
+                "age"
+              ]
+            },
+            "size": 2
+          }
+        }
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "value_count_interests": {
+      "value_count": {
+        "field": "interests.keyword"
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword"
+      }
+    },
+    "avg_age": {
+      "avg": {
+        "field": "age"
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "query": {
+    "term": {
+      "last_name": "smith"
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "avg_age": {
+      "avg": {
+        "field": "age"
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "filter_avg": {
+      "filter": {
+        "term": {
+          "last_name.keyword": "Smith"
+        }
+      },
+      "aggs": {
+        "avg_age": {
+          "avg": {
+            "field": "age"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "histogram_age": {
+      "histogram": {
+        "field": "age",
+        "interval": 5,
+        "min_doc_count": 0,
+        "extended_bounds": {
+          "min": 20,
+          "max": 40
+        },
+        "keyed": true
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "range_age": {
+      "range": {
+        "field": "age",
+        "ranges": [
+          {
+            "key": "key1",
+            "to": 25
+          },
+          {
+            "key": "key2",
+            "from": 25,
+            "to": 30
+          },
+          {
+            "key": "key3",
+            "from": 30
+          }
+        ],
+        "keyed": true
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword",
+        "size": 5,
+        "min_doc_count": 1,
+        "order": [
+          {
+            "_count": "desc"
+          },
+          {
+            "_key": "asc"
+          }
+        ]
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword",
+        "order": {
+          "avg_age": "desc"
+        }
+      },
+      "aggs": {
+        "avg_age": {
+          "avg": {
+            "field": "age"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword",
+        "order": {
+          "avg_age": "desc"
+        }
+      },
+      "aggs": {
+        "avg_age": {
+          "avg": {
+            "field": "age"
+          }
+        }
+      }
+    },
+    "stats_bucket_age": {
+      "stats_bucket": {
+        "buckets_path": "terms_interests>avg_age"
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword",
+        "order": {
+          "avg_age": "desc"
+        }
+      },
+      "aggs": {
+        "avg_age": {
+          "avg": {
+            "field": "age"
+          }
+        },
+        "bucket_script_age": {
+          "bucket_script": {
+            "buckets_path": {
+              "avgAge": "avg_age"
+            },
+            "script": "params.avgAge * 10"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET employee/_doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_interests": {
+      "terms": {
+        "field": "interests.keyword",
+        "order": {
+          "avg_age": "desc"
+        }
+      },
+      "aggs": {
+        "avg_age": {
+          "avg": {
+            "field": "age"
+          }
+        },
+        "bucket_selector_age": {
+          "bucket_selector": {
+            "buckets_path": {
+              "avgAge": "avg_age"
+            },
+            "script": "params.avgAge > 30"
+          }
+        }
+      }
+    }
+  }
+}
+
+------时间------
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "terms_hour": {
+      "terms": {
+        "script": {
+          "source": "doc['createTime'].value.hourOfDay",
+          "lang": "painless"
+        }
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "range_hour": {
+      "range": {
+        "script": {
+          "source": "doc['createTime'].value.hourOfDay",
+          "lang": "painless"
+        },
+        "ranges": [
+          {
+            "to": 8
+          },
+          {
+            "from": 8,
+            "to": 16
+          },
+          {
+            "from": 16
+          }
+        ]
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "histogram_hour": {
+      "histogram": {
+        "script": {
+          "source": "doc['createTime'].value.hourOfDay",
+          "lang": "painless"
+        },
+        "interval": 2,
+        "min_doc_count": 0,
+        "extended_bounds": {
+          "min": 0,
+          "max": 23
+        },
+        "keyed": true
+      }
+    }
+  }
+}
+
+GET blog
+GET blog/_search
+
+POST blog/doc/2/_update
+{
+  "doc": {
+    "createTime": "2019-12-08 16:47:43"
+  }
+}
+
+GET blog/doc/_search
+{
+  "query": {
+    "range": {
+      "createTime": {
+        "gt": "2019-12-09 00:00:00",
+        "lte": "now"
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match_all": {}
+      },
+      "filter": {
+        "range": {
+          "createTime": {
+            "gte": "2019-12-09 00:00:00",
+            "lte": "now"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "script": {
+          "script": {
+            "source": "doc['createTime'].value.hourOfDay == params.time",
+            "lang": "painless",
+            "params": {
+              "time": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "date_histogram_createTime": {
+      "date_histogram": {
+        "field": "createTime",
+        "interval": "hour",
+        "format": "yyyy-MM-dd HH:mm:ss",
+        "min_doc_count": 1,
+        "order": {
+          "max_id": "desc"
+        }
+      },
+      "aggs": {
+        "avg_updateTime": {
+          "avg": {
+            "field": "updateTime",
+            "format": "yyyy-MM-dd HH:mm:ss"
+          }
+        },
+        "derivative_updateTime": {
+          "derivative": {
+            "buckets_path": "avg_updateTime",
+            "unit": "minute"
+          }
+        },
+        "max_id": {
+          "max": {
+            "field": "id"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "date_histogram_createTime": {
+      "date_histogram": {
+        "field": "createTime",
+        "interval": "day",
+        "format": "yyyy-MM-dd",
+        "min_doc_count": 0,
+        "extended_bounds": {
+          "min": "2019-12-07",
+          "max": "2019-12-10"
+        },
+        "keyed": true
+      }
+    }
+  }
+}
+
+GET blog/doc/_search
+{
+  "size": 0,
+  "aggs": {
+    "range_createTime": {
+      "range": {
+        "field": "createTime",
+        "format": "yyyy-MM-dd",
+        "ranges": [
+          {
+            "key": "key1",
+            "to": "2019-12-10"
+          },
+          {
+            "key": "key2",
+            "from": "2019-12-10",
+            "to": "now/d"
+          },
+          {
+            "key": "key3",
+            "from": "now/d"
+          }
+        ],
+        "keyed": true
+      }
+    }
+  }
+}
+
+GET _xpack
+GET _xpack/license
+GET _xpack/security/_authenticate
+
+curl -H "Content-Type: application/x-ndjson" -XPOST "localhost:9200/bank/account/_bulk?pretty" --data-binary @D:/db/ELK/data/accounts.json
+curl -H "Content-Type: application/x-ndjson" -XPOST "localhost:9200/shakespeare/doc/_bulk?pretty" --data-binary @D:/db/ELK/data/shakespeare_6.0.json
+curl -H "Content-Type: application/x-ndjson" -XPOST "localhost:9200/_bulk?pretty" --data-binary @D:/db/ELK/data/logs.jsonl
+
+logstash
+logstash -e "input { stdin {} } output { stdout {} }"
+logstash -f ../config/logstash-test.conf
+logstash -f ../config/logstash-es.conf
+logstash -f ../config/logstash-beat.conf
+logstash -f ../config/logstash-mysql.conf
+logstash -f ../config/logstash-mysql-es.conf
+logstash -f ../config/order-takeout-first.conf
+logstash -f ../config/order-restaurant-first.conf
+
+filebeat
+filebeat -e -c filebeat-test.yml
+filebeat -e -c filebeat-es.yml
+filebeat -e -c filebeat-logstash.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,6 +2,8 @@
 https://code.visualstudio.com/docs/editor/portable
 -ESLint
 -Vetur
+-Path Intellisense
+-npm Intellisense
 
 --nvm相关
 -修改nvm/settings.txt
@@ -22,6 +24,10 @@ nvm use 版本号
 --npm相关
 npm -v
 npm config list --json
+
+npm i vue
+-S --save 不指定默认-S
+-D --save-dev
 
 --vue相关
 -vue2.x脚手架
@@ -51,21 +57,34 @@ react-native run-android
 
 --webpack相关
 npm init
-npm i -D webpack
+npm i -D webpack@3
+-webpack4+需要webpack-cli
 npm i -D webpack-cli
-npm i -D webpack-dev-server
-npm i -D babel-loader @babel/core
-npm i -D @babel/preset-env
-npm i -D css-loader
-npm i -D style-loader
-npm i -D postcss-loader
-npm i -D less-loader
-npm i -D less
-npm i -D html-loader
-npm i -D html-webpack-plugin
+npm i -D webpack-dev-server@2
+npm i -D cross-env
+npm i vue
 npm i -D vue-loader
 npm i -D vue-template-compiler
-npm i -S vue
+npm i -D css-loader@0
+npm i -D style-loader@0
+npm i -D url-loader@0
+npm i -D file-loader@1
+npm i -D html-webpack-plugin@2
+npm i -D extract-text-webpack-plugin
+
+npm i -D postcss-loader
+npm i -D autoprefixer
+npm i -D babel-loader
+npm i -D babel-core
+npm i -D babel-preset-env
+npm i -D babel-plugin-transform-vue-jsx
+npm i -D babel-helper-vue-jsx-merge-props
+npm i -D babel-plugin-syntax-jsx
+npm i -D less
+npm i -D less-loader
+npm i -D stylus
+npm i -D stylus-loader
+npm i -D html-loader
 
 --electron相关
 npm init

@@ -38,8 +38,8 @@ vue init webpack demo
 cd demo
 npm run dev
 
--element ui
 npm i element-ui -S
+npm i js-cookie -S
 
 --react native相关
 -脚手架

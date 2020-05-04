@@ -1,0 +1,138 @@
+python -m pip install pip==19.3.1
+
+easy_install -i https://pypi.tuna.tsinghua.edu.cn/simple pip
+easy_install -i https://pypi.tuna.tsinghua.edu.cn/simple "pip == 19.3.1"
+easy_install -m pip
+
+pip install wheel -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
+pip install opencv_python-4.2.0.32-cp27-cp27m-win_amd64.whl
+
+--pip
+pip list
+pip install opencv-python
+pip uninstall opencv-python
+
+-生成依赖列表
+pip freeze > requirements.txt
+
+-从依赖文件安装依赖
+pip install -r requirements.txt
+
+--venv
+-cd 到项目文件夹目录下
+-创建虚拟环境
+python -m venv .
+
+激活虚拟环境
+Scripts\activate
+
+退出虚拟环境
+deactivate
+
+--pipenv
+-安装
+pip3 install pipenv -i https://mirrors.aliyun.com/pypi/simple/
+
+-修改 pipenv 虚拟环境安装位置
+变量名：WORKON_HOME
+变量值：D:\.virtualenvs
+
+-cd 到项目文件夹目录下
+-创建虚拟环境
+pipenv install
+或
+pipenv --two
+或
+pipenv --three
+
+-Pipfile 文件换源
+url = "https://pypi.org/simple"
+==>
+url = "https://mirrors.aliyun.com/pypi/simple"
+
+https://www.lfd.uci.edu/~gohlke/pythonlibs
+
+-激活虚拟环境
+pipenv shell
+
+-安装第三方库 并加入 Pipfile 的依赖清单
+pipenv install xxx
+
+-卸载第三方库 并清理 Pipfile 的依赖清单
+pipenv uninstall xxx
+
+-卸载全部包
+pipenv uninstall --all
+
+-显示当前依赖关系图
+pipenv graph
+
+-退出虚拟环境
+exit
+
+-删除虚拟环境，先 cd 进入 Pipfile 文件所在目录
+pipenv --rm
+
+-scrapy
+pipenv install Twisted-19.2.0-cp37-cp37m-win_amd64.whl
+-修改 twisted = "*"
+pipenv lock
+pipenv install scrapy
+pipenv install pywin32
+pipenv install pillow
+-创建scrapy项目
+cd C:\Baptiste\python
+scrapy startproject crawler
+-创建爬虫
+cd C:\Baptiste\python\crawler\crawler\spiders
+scrapy genspider douban_spider movie.douban.com
+-运行爬虫，保存数据
+scrapy crawl douban_spider
+scrapy crawl douban_spider -o test.json
+scrapy crawl douban_spider -o test.csv
+
+-turtule
+下载turtle-0.0.2.tar.gz
+修改setup.py文件，第40行：except (ValueError, ve)
+pipenv install -e D:\project\python\assort\turtle-0.0.2
+
+-pyinstaller
+pipenv install pyinstaller
+-打包
+pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
+
+--conda
+-环境列表
+conda env list
+
+-当前环境的所有包
+conda list
+
+-创建虚拟环境
+conda create -n xxx python=3.6
+
+-删除虚拟环境及下属所有包
+conda remove -n xxx --all
+
+-激活默认环境
+conda activate
+
+-激活指定环境
+conda activate xxx
+
+-关闭当前环境
+conda deactivate
+
+-安装第三方包
+conda install xxx
+
+-卸载第三方包
+conda remove xxx
+
+-导出当前环境的包信息
+conda env export > environment.yaml
+
+-用配置文件创建新的虚拟环境
+conda env create -f environment.yaml

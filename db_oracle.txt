@@ -251,6 +251,10 @@ select type,decode(type,'a','wubin','tom') from temp
 select type,decode(type,'a','wubin','b','tom','mary') from temp
 select * from temp pivot (sum(num) for type in ('a' a,'b' b,'c' c)) order by year
 
+--查看执行计划
+explain plan for select * from TB_USER;
+select * from table(dbms_xplan.display)
+
 select type,sum(amount) sl from wx_tp_amount 
 where exists (select name from wx_tp_classify where name = wx_tp_amount.type)
 group by type order by sl desc

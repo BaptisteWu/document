@@ -42,6 +42,7 @@ npm run dev
 
 npm i element-ui -S
 npm i js-cookie -S
+npm i axios
 
 --react native相关
 -脚手架

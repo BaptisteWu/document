@@ -43,6 +43,13 @@ npm run dev
 npm i element-ui -S
 npm i js-cookie -S
 npm i axios
+npm i qs
+npm i echarts
+
+-ie兼容Promise
+npm i babel-polyfill
+-ie兼容URLSearchParams
+npm i url-search-params-polyfill
 
 --react native相关
 -脚手架

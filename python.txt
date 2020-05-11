@@ -6,8 +6,12 @@ easy_install -m pip
 
 pip install wheel -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
 pip install opencv_python-4.2.0.32-cp27-cp27m-win_amd64.whl
+
+pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
+pip install matplotlib -i https://mirrors.aliyun.com/pypi/simple/
+pip install scipy -i https://mirrors.aliyun.com/pypi/simple/
+pip install imutils -i https://mirrors.aliyun.com/pypi/simple/
 
 --pip
 pip list

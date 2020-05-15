@@ -45,6 +45,8 @@ npm i js-cookie -S
 npm i axios
 npm i qs
 npm i echarts
+npm i el-tree-select
+npm i @smallwei/avue
 
 -ie兼容Promise
 npm i babel-polyfill

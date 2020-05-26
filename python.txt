@@ -13,6 +13,9 @@ pip install SQLAlchemy -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install fastapi -i https://mirrors.aliyun.com/pypi/simple/
 pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
+pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
 
 --pip
 pip list

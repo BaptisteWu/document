@@ -25,7 +25,7 @@ select INSTANCE_NAME from v$instance;
 --创建用户
 create user "ybsb" identified by "123456"
 --授权
-grant connect,resource,dba to test;
+grant connect, resource, dba to test;
 
 --创建序列
 create sequence SEQ_T_PASS
@@ -39,6 +39,10 @@ for each row
 begin
 select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
 end;
+
+--
+update a set a.name = (select b.name from b where a.id = b.id)
+merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age
 
 --数据类型
 varchar 固定长度 2000
@@ -110,38 +114,70 @@ select trunc(sysdate, 'y') from dual
 --去年1月1号0点
 select trunc(add_months(sysdate, -12), 'y') from dual
 
---字符串截取
-select substr('hello world', 0, 5) from dual
 --字符串拼接
 select 'hello'||'world' from dual
 --字符串拼接数字
 select 123||'hello world' from dual
 
---替换字符串
-select replace('１９８１123abc', '１９８１', '1981') from dual
---提取字符串
-select translate('123.456tom', '0123456789.', ' ') from dual
+--字符串截取
+select substr('hello world', 0, 5) from dual
 
 --判断字符串中是否包含某个字符串
 select instr('abcdefg', 'bcd') from dual
 
-varchar2与nvarchar2互转
-translate('你好' USING NCHAR_CS)
-translate(pubdate USING CHAR_CS)
+--替换字符串
+select replace('１９８１123abc', '１９８１', '1981') from dual
 
+--提取字符串
+select translate('123.456tom', '0123456789.', ' ') from dual
+
+--正则
+select regexp_replace('张三12李四ab', '\d', 'a') from dual
+select regexp_replace('张三12李四ab', '\D') from dual
+select regexp_replace('张三12李四ab', '[[:alpha:]]') from dual
+select regexp_replace('张三12李四ab', '[0-9a-zA-Z]') from dual
+select regexp_replace('张三12李四ab', '[^0-9a-zA-Z]') from dual
+select regexp_instr('张三12李四ab', '[[:alpha:]]') from dual
+
+[:alphanum:] 可以匹配字符 0-9、A-Z、a-z
+[:alpha:]可以匹配字符 A-Z、a-z
+[:blank:]可以匹配空格或者tab键
+[:digit:]可以匹配数字 0-9
+[:gragh:]可以匹配非空字符
+[:punct:]可以匹配 . , ' " 等标点符号
+[:upper:]可以匹配字符 A-Z
+[:lower:]可以匹配字符 a-z
+
+--递归
+with dept as (
+select 1 id, 0 parent_id,'全国' name from dual union all
+select 2 id, 1 parent_id,'浙江' name from dual union all
+select 3 id, 2 parent_id,'绍兴' name from dual union all
+select 4 id, 1 parent_id,'上海' name from dual union all
+select 5 id, 3 parent_id,'越城' name from dual union all
+select 6 id, 2 parent_id,'杭州' name from dual
+)
+select d.*, prior name parent_name,
+sys_connect_by_path(d.name, '/') path
+from dept d
+start with parent_id = 0
+connect by parent_id = prior id
+order siblings by d.id desc
+
+--
 select wm_concat(hour) hour from
 (
 select rownum - 1 hour from dual connect by rownum < 25
 )
 
-select to_date('2018-11-15', 'yyyy-mm-dd') + rownum - 1 
+select to_date('2018-11-15', 'yyyy-mm-dd') + rownum - 1
 from dual 
 connect by rownum < sysdate - to_date('2018-11-15', 'yyyy-mm-dd')
 
 with temp as(
-select '2018-11-15' day,'tom1' name from dual union all 
-select '2018-11-15' day,'tom2' name from dual union all 
-select '2018-11-17' day,'tom3' name from dual 
+select '2018-11-15' day, 'tom1' name from dual union all 
+select '2018-11-15' day, 'tom2' name from dual union all 
+select '2018-11-17' day, 'tom3' name from dual 
 )
 select d.dateTime,num from
 (
@@ -158,23 +194,23 @@ order by d.dateTime
 
 --通用表表达式CTE
 with sales as (
-select '2000' year,'Finland' country,'Computer' product,1500 profit from dual union all
-select '2001' year,'USA' country,'Computer' product,1200 profit from dual union all
-select '2001' year,'Finland' country,'Phone' product,10 profit from dual union all
-select '2000' year,'India' country,'Calculator' product,75 profit from dual union all
-select '2001' year,'USA' country,'TV' product,150 profit from dual union all
-select '2000' year,'India' country,'Computer' product,1200 profit from dual union all
-select '2000' year,'USA' country,'Calculator' product,5 profit from dual union all
-select '2000' year,'USA' country,'Computer' product,1500 profit from dual union all
-select '2000' year,'Finland' country,'Phone' product,100 profit from dual union all
-select '2001' year,'USA' country,'Calculator' product,50 profit from dual union all
-select '2001' year,'USA' country,'Computer' product,1500 profit from dual union all
-select '2000' year,'India' country,'Calculator' product,75 profit from dual union all
-select '2001' year,'USA' country,'TV' product,100 profit from dual
+select '2000' year, 'Finland' country, 'Computer' product, 1500 profit from dual union all
+select '2001' year, 'USA' country, 'Computer' product, 1200 profit from dual union all
+select '2001' year, 'Finland' country, 'Phone' product, 10 profit from dual union all
+select '2000' year, 'India' country, 'Calculator' product, 75 profit from dual union all
+select '2001' year, 'USA' country, 'TV' product, 150 profit from dual union all
+select '2000' year, 'India' country, 'Computer' product, 1200 profit from dual union all
+select '2000' year, 'USA' country, 'Calculator' product, 5 profit from dual union all
+select '2000' year, 'USA' country, 'Computer' product, 1500 profit from dual union all
+select '2000' year, 'Finland' country, 'Phone' product, 100 profit from dual union all
+select '2001' year, 'USA' country, 'Calculator' product, 50 profit from dual union all
+select '2001' year, 'USA' country, 'Computer' product, 1500 profit from dual union all
+select '2000' year, 'India' country, 'Calculator' product, 75 profit from dual union all
+select '2001' year, 'USA' country, 'TV' product, 100 profit from dual
 )
 --窗口函数
 --
-select year,country,product,profit,
+select year, country, product, profit,
 sum(profit) over(partition by country) sum_profit1,
 sum(profit) over(partition by country order by profit) sum_profit2,
 sum(profit) over(partition by country order by profit range between unbounded preceding and current row) sum_profit3,
@@ -194,7 +230,7 @@ ntile(n) 将数据等分成n份
 max()/min() keep (dense_rank first/last order by ...) over() 取组内第一或最后一条
 
 --排名函数
-select year,country,product,profit,
+select year, country, product, profit,
 row_number() over(partition by country order by profit) row_number_profit,
 rank() over(partition by country order by profit) rank_profit,
 dense_rank() over(partition by country order by profit) dense_rank_profit,
@@ -213,13 +249,13 @@ percentile_cont(0.5) within group(order by ...) 取两边平均值
 percentile_disc(0.5) within group(order by ...) 取两边最近的值
 
 --百分比函数
-select year,country,product,profit,
+select year, country, product, profit,
 ratio_to_report(profit) over() 占所有,
 ratio_to_report(profit) over(partition by country) 占分组
 from sales
 
 --偏移函数
-select year,country,product,profit,
+select year, country, product, profit,
 lead(profit) over(partition by country order by profit) lead_profit1,
 lead(profit, 1, 0) over(partition by country order by profit) lead_profit2,
 lag(profit) over(partition by country order by profit) lag_profit1,
@@ -236,32 +272,24 @@ defaultvalue默认值
 
 --行列转换
 with temp as(
-select '1993' year,'1' month,'a' type,4 num from dual union all 
-select '1993' year,'1' month,'b' type,5 num from dual union all 
-select '1993' year,'1' month,'c' type,6 num from dual union all 
-select '1993' year,'1' month,'a' type,7 num from dual union all 
-select '1994' year,'2' month,'a' type,1 num from dual union all 
-select '1994' year,'2' month,'b' type,2 num from dual union all 
-select '1994' year,'2' month,'c' type,3 num from dual 
+select '1993' year, '1' month, 'a' type, 4 num from dual union all 
+select '1993' year, '1' month, 'b' type, 5 num from dual union all 
+select '1993' year, '1' month, 'c' type, 6 num from dual union all 
+select '1993' year, '1' month, 'a' type, 7 num from dual union all 
+select '1994' year, '2' month, 'a' type, 1 num from dual union all 
+select '1994' year, '2' month, 'b' type, 2 num from dual union all 
+select '1994' year, '2' month, 'c' type, 3 num from dual 
 )
-select type,(case when type='a' then 'wubin' else 'tom' end) from temp
-select type,(case type when 'a' then 'wubin' else 'tom' end) from temp
-字符集不匹配：试试select type,(case type when N'a' then 'wubin' else 'tom' end) from temp
-select type,decode(type,'a','wubin','tom') from temp
-select type,decode(type,'a','wubin','b','tom','mary') from temp
+select type, (case when type='a' then 'wubin' else 'tom' end) from temp
+select type, (case type when 'a' then 'wubin' else 'tom' end) from temp
+字符集不匹配：试试select type, (case type when N'a' then 'wubin' else 'tom' end) from temp
+select type, decode(type,'a','wubin','tom') from temp
+select type, decode(type,'a','wubin','b','tom','mary') from temp
 select * from temp pivot (sum(num) for type in ('a' a,'b' b,'c' c)) order by year
 
 --查看执行计划
 explain plan for select * from TB_USER;
 select * from table(dbms_xplan.display)
-
-select type,sum(amount) sl from wx_tp_amount 
-where exists (select name from wx_tp_classify where name = wx_tp_amount.type)
-group by type order by sl desc
-
-
-
-
 
 
 

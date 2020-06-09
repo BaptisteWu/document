@@ -3,7 +3,9 @@ https://mirrors.aliyun.com/pypi/simple/
 
 pip install opencv_python-4.2.0.32-cp27-cp27m-win_amd64.whl
 
+pip install tensorflow -i https://mirrors.aliyun.com/pypi/simple/
 pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
+pip instal opencv-contrib-python
 pip install matplotlib -i https://mirrors.aliyun.com/pypi/simple/
 pip install scipy -i https://mirrors.aliyun.com/pypi/simple/
 pip install imutils -i https://mirrors.aliyun.com/pypi/simple/

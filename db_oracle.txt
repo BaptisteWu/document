@@ -7,13 +7,6 @@
 ’	&apos;
 "	&quot;
 
-sqlplus /nolog
-conn /as sysdba
-alter user scott account unlock;
-grant dba to scott;
-
-exp fzxs/123456@orcl file=d:\fzxs.dmp
-
 乱码
 select userenv('language') from dual;
 新建一个环境变量：NLS_LANG
@@ -22,8 +15,16 @@ select userenv('language') from dual;
 查看数据库的sid_name语句：
 select INSTANCE_NAME from v$instance;
 
+--导出数据
+exp fzxs/123456@orcl file=d:\fzxs.dmp
+
+--用户解锁
+sqlplus / as sysdba
+alter user scott account unlock;
+alter profile default limit failed_login_attempts unlimited;
+
 --创建用户
-create user "ybsb" identified by "123456"
+create user "ybsb" identified by "123456";
 --授权
 grant connect, resource, dba to test;
 
@@ -40,7 +41,7 @@ begin
 select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
 end;
 
---
+--复杂更新
 update a set a.name = (select b.name from b where a.id = b.id)
 merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age
 

@@ -12,146 +12,144 @@ mysqlbinlog --base64-output=decode-rows -v C:\mysql-5.7.13-winx64\data\bin-log.0
 --µÇÂ¼
 mysql -uroot -proot
 
-show variables where Variable_name like 'character_set_%' or Variable_name like 'collation%';
-
---Îªnull×Ö¶ÎÉèÖÃÄ¬ÈÏÖµ
-select ifnull(null, 0);
-select coalesce(null, 0);
+--ÎªNULL×Ö¶ÎÉèÖÃÄ¬ÈÏÖµ
+SELECT IFNULL(NULL, 0);
+SELECT COALESCE(NULL, 0);
 
 --±£ÁôĞ¡Êı
-select round(100.3465, 2),round(100, 2),round(0.6, 2),round(114.6, -1); // ËÄÉáÎåÈë
-select truncate(100.3465, 2),truncate(100, 2),truncate(0.6, 2),truncate(114.6, -1); // Éá
+SELECT ROUND(100.3465, 2), ROUND(100, 2), ROUND(0.6, 2), ROUND(114.6, -1); // ËÄÉáÎåÈë
+SELECT TRUNCATE(100.3465, 2), TRUNCATE(100, 2), TRUNCATE(0.6, 2), TRUNCATE(114.6, -1); // Éá
 
 --Êı¾İÀàĞÍ×ª»»
-select cast(10 as char);
-select cast(10 as char(1));
-select cast('010' as signed);
-select convert('010', signed);
+SELECT CAST(10 AS CHAR);
+SELECT CAST(10 AS CHAR(1));
+SELECT CAST('010' AS SIGNED);
+SELECT CONVERT('010', SIGNED);
 
-×Ö·ûĞÍ£¬¿É´ø²ÎÊı£ºchar()
-ÈÕÆÚ£ºdate
-Ê±¼ä£ºtime
-ÈÕÆÚÊ±¼äĞÍ£ºdatetime
-¸¡µãÊı£ºdecimal
-ÕûÊı£ºsigned
-ÎŞ·ûºÅÕûÊı£ºunsigned
+×Ö·ûĞÍ£¬¿É´ø²ÎÊı£ºCHAR()
+ÈÕÆÚ£ºDATE
+Ê±¼ä£ºTIME
+ÈÕÆÚÊ±¼äĞÍ£ºDATETIME
+¸¡µãÊı£ºDECIMAL
+ÓĞ·ûºÅÕûÊı£ºSIGNED
+ÎŞ·ûºÅÕûÊı£ºUNSIGNED
 
 --×Ö·û´®×ªÊı×Ö
-select '010.010' + 0;
+SELECT '010.010' + 0;
 
 --Ê±¼ä×ª×Ö·û´®
-select date_format(now(), '%Y-%m-%d %H:%i:%s');
-select date_format(now(), '%Y-%c-%e %h:%i:%s');
-select date_format(now(6), '%Y-%m-%d %T.%f');
+SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s');
+SELECT DATE_FORMAT(NOW(), '%Y-%c-%e %h:%i:%s');
+SELECT DATE_FORMAT(NOW(6), '%Y-%m-%d %T.%f');
 --×Ö·û´®×ªÊ±¼ä
-select str_to_date('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s');
+SELECT STR_TO_DATE('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s');
 
 --Ê±¼ä×ªÊ±¼ä´Á
-select unix_timestamp(now());
+SELECT UNIX_TIMESTAMP(NOW());
 --Ê±¼ä´Á×ªÊ±¼ä
-select from_unixtime(1539238971);
+SELECT FROM_UNIXTIME(1539238971);
 
 --ÄêÔÂÈÕÊ±·ÖÃë¸ñÊ½»¯³ÉÄêÔÂÈÕ
-select date(now());
+SELECT DATE(NOW());
 
-select now(); // ÄêÔÂÈÕÊ±·ÖÃë
-select now(6); // ÄêÔÂÈÕÊ±·ÖÃëºÁÃë
-select curdate(); // ÄêÔÂÈÕ
-select curtime(); // Ê±·ÖÃë
-select curtime(6); // Ê±·ÖÃëºÁÃë
+SELECT NOW(); // ÄêÔÂÈÕÊ±·ÖÃë
+SELECT NOW(6); // ÄêÔÂÈÕÊ±·ÖÃëºÁÃë
+SELECT CURDATE(); // ÄêÔÂÈÕ
+SELECT CURTIME(); // Ê±·ÖÃë
+SELECT CURTIME(6); // Ê±·ÖÃëºÁÃë
 
-select current_date(); // ÄêÔÂÈÕ
-select current_time(); // Ê±·ÖÃë
-select current_time(6); // Ê±·ÖÃëºÁÃë
-select current_timestamp(); // ÄêÔÂÈÕÊ±·ÖÃë
-select current_timestamp(6); // ÄêÔÂÈÕÊ±·ÖÃëºÁÃë
+SELECT CURRENT_DATE(); // ÄêÔÂÈÕ
+SELECT CURRENT_TIME(); // Ê±·ÖÃë
+SELECT CURRENT_TIME(6); // Ê±·ÖÃëºÁÃë
+SELECT CURRENT_TIMESTAMP(); // ÄêÔÂÈÕÊ±·ÖÃë
+SELECT CURRENT_TIMESTAMP(6); // ÄêÔÂÈÕÊ±·ÖÃëºÁÃë
 
 --Ò»Äêµ±ÖĞµÄµÚ¼¸Ìì
-select dayofyear(curdate());
+SELECT DAYOFYEAR(CURDATE());
 --Ò»ÔÂµ±ÖĞµÄµÚ¼¸Ìì
-select dayofmonth(curdate());
+SELECT DAYOFMONTH(CURDATE());
 --Ò»ÖÜµ±ÖĞµÄµÚ¼¸Ìì£¨ÖÜÈÕµÚÒ»Ìì£©
-select dayofweek(curdate());
+SELECT DAYOFWEEK(CURDATE());
 --Ò»ÖÜµ±ÖĞµÄË÷ÒıÎ»ÖÃ£¨0=ÖÜÒ»£©
-select weekday(curdate());
+SELECT WEEKDAY(CURDATE());
 
 --¼¸¼¸Äê
-select year(now());
+SELECT YEAR(NOW());
 --¼¸ÔÂ
-select month(now());
+SELECT MONTH(NOW());
 --¼¸ÖÜ
-select week(now());
+SELECT WEEK(NOW());
 --¼¸ºÅ
-select day(now());
+SELECT DAY(NOW());
 --¼¸Ê±
-select hour(now());
+SELECT HOUR(NOW());
 --¼¸·Ö
-select minute(now());
+SELECT MINUTE(NOW());
 --¼¸Ãë
-select second(now());
+SELECT SECOND(NOW());
 
 --Ê±¼ä¼Ó¼õ
-select date_add(curdate(), interval -1 day);
-select date_sub(curdate(), interval -1 year);
+SELECT DATE_ADD(CURDATE(), INTERVAL -1 DAY);
+SELECT DATE_SUB(CURDATE(), INTERVAL -1 YEAR);
 
 --µ±Ìì0µã
-select curdate();
+SELECT CURDATE();
 --×òÌì0µã
-select date_add(curdate(), interval -1 day);
+SELECT DATE_ADD(CURDATE(), INTERVAL -1 DAY);
 --µ±ÖÜÖÜÒ»0µã
-select date_add(curdate(), interval -weekday(curdate()) day);
+SELECT DATE_ADD(CURDATE(), INTERVAL -WEEKDAY(CURDATE()) DAY);
 --µ±ÔÂ1ºÅ0µã
-select date_add(curdate(), interval -day(curdate()) + 1 day);
+SELECT DATE_ADD(CURDATE(), INTERVAL -DAY(CURDATE()) + 1 DAY);
 --ÉÏÔÂ1ºÅ0µã
-select date_add(curdate() - day(curdate()) + 1, interval -1 month);
+SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL -1 MONTH);
 --ÏÂÔÂ1ºÅ0µã
-select date_add(curdate() - day(curdate()) + 1, interval 1 month);
+SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH);
 --µ±ÔÂ×îºóÒ»Ìì0µã
-select last_day(curdate());
+SELECT lASt_DAY(CURDATE());
 ----µ±Äê1ÔÂ1ºÅ0µã
-select date_add(curdate(), interval -dayofyear(curdate()) + 1 day);
+SELECT DATE_ADD(CURDATE(), INTERVAL -DAYOFYEAR(CURDATE()) + 1 DAY);
 --È¥Äê1ÔÂ1ºÅ0µã
-select date_add(curdate() - dayofyear(curdate()) + 1, interval -1 year);
+SELECT DATE_ADD(CURDATE() - DAYOFYEAR(CURDATE()) + 1, INTERVAL -1 YEAR);
 
 --±È½ÏÊ±·ÖÃë
-select timediff('1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMEDIFF('1993-07-22 08:08:08', '1993-07-20 06:06:06');
 --±È½ÏÌìÊı
-select datediff('1993-07-22 06:06:06', '1993-07-20 08:08:08');
+SELECT DATEDIFF('1993-07-22 06:06:06', '1993-07-20 08:08:08');
 --±È½ÏÊ±¼ä
-select timestampdiff(year, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
-select timestampdiff(month, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
-select timestampdiff(day, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
-select timestampdiff(hour, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
-select timestampdiff(minute, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
-select timestampdiff(second, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(YEAR, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(MONTH, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(DAY, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(HOUR, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(MINUTE, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
+SELECT TIMESTAMPDIFF(SECOND, '1993-07-22 08:08:08', '1993-07-20 06:06:06');
 
 --×Ö·û´®³¤¶È
---length()Ò»¸öºº×ÖÈı¸ö×Ö·û£¬char_length()Ò»¸öºº×ÖÒ»¸ö×Ö·û
-select length('Îâ±ò');
-select char_length('Îâ±ò');
+--LENGTH()Ò»¸öºº×ÖÈı¸ö×Ö·û£¬CHAR_LENGTH()Ò»¸öºº×ÖÒ»¸ö×Ö·û
+SELECT LENGTH('Îâ±ò');
+SELECT CHAR_LENGTH('Îâ±ò');
 
 --×Ö·û´®Æ´½Ó
-select concat('%', 'wubin', '%');
+SELECT CONCAT('%', 'wubin', '%');
 
 --È¡Ë³ĞòµÚÒ»¸ö¶ººÅÇ°ÃæµÄ×Ö·û´®
-select substring_index('123,456,789,0', ',', 1); //123
+SELECT SUBSTRING_INDEX('123,456,789,0', ',', 1); //123
 --È¡Ë³ĞòµÚ¶ş¸ö¶ººÅÇ°ÃæµÄ×Ö·û´®
-select substring_index('123,456,789,0', ',', 2); //123,456
+SELECT SUBSTRING_INDEX('123,456,789,0', ',', 2); //123,456
 --È¡µ¹ĞòµÚÒ»¸ö¶ººÅºóÃæµÄ×Ö·û´®
-select substring_index('123,456,789,0', ',', -1); //0
+SELECT SUBSTRING_INDEX('123,456,789,0', ',', -1); //0
 
-select substring_index(substring_index('123,456,789,0', ',', 2), ',', -1); //456
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('123,456,789,0', ',', 2), ',', -1); //456
 
-select find_in_set('b', 'a,b,c,d'); //2
-select find_in_set('e', 'a,b,c,d'); //0
+SELECT FIND_IN_SET('b', 'a,b,c,d'); //2
+SELECT FIND_IN_SET('e', 'a,b,c,d'); //0
 
---group_concatÒ»°ãÓëgroup byÍ¬Ê±Ê¹ÓÃ
-select group_concat(id) from wubin;
-select name,group_concat(id) from wubin group by name;
+--GROUP_CONCATÒ»°ãÓëGROUP BYÍ¬Ê±Ê¹ÓÃ
+SELECT GROUP_CONCAT(id) FROM wubin;
+SELECT name,GROUP_CONCAT(id) FROM wubin GROUP BY name;
 
---count()º¯ÊıÓĞÌõ¼ş
-select count(case when charge_type = 2 then charge_type end) from chargerecord_8
-select count(charge_type = 2 or null) from chargerecord_8
+--COUNT()º¯ÊıÓĞÌõ¼ş
+SELECT COUNT(CASE WHEN charge_type = 2 THEN charge_type END) FROM chargerecord_8
+SELECT COUNT(charge_type = 2 OR NULL) FROM chargerecord_8
 
 --·Ö×éÇó×î´óÖµ£¬²¢È¡×î´óÖµËùÔÚµÄĞĞ
 SELECT a.* FROM wubin a
@@ -161,7 +159,7 @@ WHERE b.name IS NULL;
 
 SELECT b.* FROM
 (
-SELECT name,MAX(amount) amount
+SELECT name, MAX(amount) amount
 FROM wubin
 GROUP BY name
 ) a
@@ -181,7 +179,7 @@ WHERE a.name = b.name
 );
 
 --×ÔÁ¬½Ó
-SELECT create_time,COUNT(*) c,
+SELECT create_time, COUNT(*) c,
 (
 SELECT COUNT(*) 
 FROM wubin b 
@@ -194,14 +192,22 @@ GROUP BY create_time;
 --´´½¨Ë÷Òı
 CREATE INDEX index_username ON user(username);
 ALTER TABLE user ADD INDEX index_username (username);
-CREATE INDEX index_user ON user(username,create_time,age);
+CREATE INDEX index_user ON user(username, create_time, age);
 
 --É¾³ıË÷Òı
 DROP INDEX index_username ON user;
 ALTER TABLE user DROP INDEX index_username;
 
 --Ë÷Òı×Ö¶ÎÃû²»ÒªÊÇ¹Ø¼ü×Ö
---¼ÇÂ¼³¬¹ıÒ»°ë£¬Ë÷ÒıÎŞĞ§£¨IS NULL »ò IS NOT NULL£©
+--½á¹û³¬¹ıÒ»°ë£¬Ë÷ÒıÎŞĞ§
+
+--IS NULL£¬Ë÷ÒıÓĞĞ§£»IS NOT NULL£¬Ë÷ÒıÎŞĞ§
+EXPLAIN SELECT * FROM user WHERE username IS NULL;
+EXPLAIN SELECT * FROM user WHERE username IS NOT NULL;
+
+--IN Ğ¡ÓÚµÈÓÚÁ½¸ö£¬Ë÷ÒıÓĞĞ§£»´óÓÚÁ½¸ö£¬Ë÷ÒıÎŞĞ§
+EXPLAIN SELECT * FROM user WHERE username IN ('tom', 'mary');
+EXPLAIN SELECT * FROM user WHERE username IN ('tom', 'mary', 'wubin');
 
 --LIKE ÒÔ%¿ªÍ·£¬Ë÷ÒıÎŞĞ§£»²»ÒÔ%¿ªÍ·£¬Ë÷ÒıÓĞĞ§
 EXPLAIN SELECT * FROM user WHERE username LIKE '%t%';
@@ -220,15 +226,15 @@ EXPLAIN SELECT * FROM user WHERE username = 'wubin' OR realname = 'wer'; //Ã¿¸ö×
 EXPLAIN SELECT * FROM user WHERE id != 12;
 EXPLAIN SELECT * FROM user WHERE age != 12; //½á¹û<=1£¬Ë÷ÒıÓĞĞ§
 
---Êı¾İÀàĞÍÒşÊ½×ª»¯
+--Êı¾İÀàĞÍÒşÊ½×ª»¯£¨²»°üÀ¨Ê±¼äÀàĞÍ£©
 EXPLAIN SELECT * FROM user WHERE username = '123';
 EXPLAIN SELECT * FROM user WHERE username = 123; //Ë÷ÒıÎŞĞ§
-EXPLAIN SELECT * FROM user WHERE username = CAST(123 AS CHAR);
+EXPLAIN SELECT * FROM user WHERE username = CAST(123 AS char);
 
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40';
-EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 14:42:40';
-EXPLAIN SELECT * FROM user WHERE create_time < CAST('2019-12-09 14:42:40' AS DATETIME);
-EXPLAIN SELECT * FROM user WHERE create_time < STR_TO_DATE('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s');
+EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40'; //Ë÷ÒıÓĞĞ§
+EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 14:42:40'; //Ë÷ÒıÓĞĞ§
+EXPLAIN SELECT * FROM user WHERE create_time < CAST('2019-12-09 14:42:40' AS DATETIME); //Ë÷ÒıÓĞĞ§
+EXPLAIN SELECT * FROM user WHERE create_time < STR_TO_DATE('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s'); //Ë÷ÒıÓĞĞ§
 
 --¶ÔË÷Òı×Ö¶Î½øĞĞ¼ÆËã£¬Ë÷ÒıÎŞĞ§
 EXPLAIN SELECT * FROM user WHERE age - 1 = 1; //Ë÷ÒıÎŞĞ§
@@ -253,61 +259,54 @@ EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time < '2019-12-09 
 CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT);
 
 --¸ù¾İÄ³¸ö×Ö¶Î°ÑÒ»Ìõ¼ÇÂ¼·Ö³É¶àÌõ
-SELECT substring_index(substring_index('82,83,84,85,86',',',auto_incre_id),',',-1) AS id FROM 
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
 (
 SELECT 1 auto_incre_id
 UNION ALL SELECT 2 auto_incre_id
 UNION ALL SELECT 3 auto_incre_id
 ) a
-WHERE auto_incre_id <= (length('82,83,84,85,86') - length(REPLACE('82,83,84,85,86',',',''))+1);
+WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1);
 
 --Ò»ÕÅ±íÊı¾İ²åÈëÁíÒ»ÕÅ±í
-INSERT INTO restaurant_box_order(id,create_time,order_name,box_id,applicant_id,applicant,application_unit,dinner_place_id,
-dinner_date,dinner_time,dinner_number,dinner_standard,contact,contact_mode,remarks,
-status,unsubscribe_status,complete_status,is_delete)
-SELECT a.CODE,a.APPLY_TIME,CONCAT(APPLY_USER,'µÄ°üÏáÔ¤¶¨'),a.BOOTHS_ID,a.APPLY_USER_ID,a.APPLY_USER,a.APPLY_SECTION,b.place_id,
-a.MEAL_DATE,1,a.NUMBER,a.STANDARD,a.CONTACTS,a.CONTACTS_NUMBER,a.MEMO,3,(CASE WHEN a.STATUS = 4 THEN 3 ELSE 1 END),3,1
-FROM c_dinner_booths_book a
-LEFT JOIN restaurant_box_config b
-ON a.BOOTHS_ID = b.id
-WHERE a.APPLY_TIME > STR_TO_DATE('2019-11-01','%Y-%m-%d')
+INSERT INTO tb_user_copy1(id, username, password, create_time)
+SELECT id, username, password, create_time FROM tb_user
+WHERE id > 80
 
 --Ç°10Ìõ¼ÇÂ¼ÖĞ£¬Ã¿¸ô5ÌõÈ¡1Ìõ
 SELECT * FROM
 (
-SELECT *,@rownum:=@rownum+1 AS rowno FROM `test`,(SELECT @rownum:=0) t
-ORDER BY id DESC LIMIT 0,10
+SELECT *, @rownum := @rownum + 1 AS rowno FROM tb_user, (SELECT @rownum := 0) t
+ORDER BY id DESC LIMIT 0, 10
 ) a 
-WHERE MOD(a.rowno,5)=1
+WHERE MOD(a.rowno, 5) = 1
 
-select concat(case when timestampdiff(hour,in_produce_date,out_produce_date) < 10 then concat('0',timestampdiff(hour,in_produce_date,out_produce_date))
-else timestampdiff(hour,in_produce_date,out_produce_date) end,':',
-case when timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60 < 10 
-then concat('0',timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60)
-else timestampdiff(minute,in_produce_date,out_produce_date)-timestampdiff(hour,in_produce_date,out_produce_date)*60 end,':',
-case when timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60 < 10 
-then concat('0',timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60)
-else timestampdiff(second,in_produce_date,out_produce_date)-timestampdiff(minute,in_produce_date,out_produce_date)*60 end)
-from inoutrecord_8 
-where id = 628
 
-SELECT a.shour,IFNULL(b.electronicPay,0.00)electronicPay,IFNULL(b.cashPay,0.00) cashPay FROM
-(
-SELECT '00:00' shour UNION SELECT '01:00' UNION SELECT '02:00' UNION SELECT '03:00'
-UNION SELECT '04:00' UNION SELECT '05:00' UNION SELECT '06:00' UNION SELECT '07:00'
-UNION SELECT '08:00' UNION SELECT '09:00' UNION SELECT '10:00' UNION SELECT '11:00'
-UNION SELECT '12:00' UNION SELECT '13:00' UNION SELECT '14:00' UNION SELECT '15:00'
-UNION SELECT '16:00' UNION SELECT '17:00' UNION SELECT '18:00' UNION SELECT '19:00'
-UNION SELECT '20:00' UNION SELECT '21:00' UNION SELECT '22:00' UNION SELECT '23:00'
-) a
-LEFT JOIN
-(
-SELECT CONCAT(DATE_FORMAT(exit_date,'%H'),':00') shour,
-SUM(money_electronic_received) electronicPay,SUM(money_cash_received) cashPay FROM `chargerecord_8`
-WHERE exit_date >= curdate() AND curdate() + 1 > exit_date
-GROUP BY DATE_FORMAT(exit_date,'%H')
-) b
-ON a.shour = b.shour
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

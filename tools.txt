@@ -1,0 +1,201 @@
+--nginx
+e:
+cd E:\nginx-1.16.0
+start nginx
+nginx -s reload
+nginx -s quit
+
+
+--maven
+-配置setting.xml文件
+<localRepository>D:/apache/maven</localRepository>
+
+<offline>true</offline>
+
+<mirror>
+   <id>nexus-aliyun</id>
+   <mirrorOf>central</mirrorOf>
+   <name>Nexus aliyun</name>
+   <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+<mirror>
+   <id>central</id>
+   <mirrorOf>*</mirrorOf>
+   <name>central</name>
+   <url>file://D:\apache\maven</url>
+</mirror>
+
+-添加jar到本地仓库
+mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar
+
+
+--RabbitMQ
+
+
+--ActiveMQ
+
+
+--RocketMQ
+-配置 ROCKETMQ_HOME 环境变量
+-修改 bin\runserver.cmd
+set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"
+-->
+rem set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"
+set "JAVA_OPT=%JAVA_OPT% -server -Xms256m -Xmx512m"
+-启动NameServer，日志在 用户\logs\rocketmqlogs 下
+e:
+cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
+start mqnamesrv.cmd
+或双击 mqnamesrv.cmd
+-修改 bin\runbroker.cmd
+set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g"
+-->
+rem set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g"
+set "JAVA_OPT=%JAVA_OPT% -server -Xms256m -Xmx512m"
+-启动Broker，日志在 用户\logs\rocketmqlogs 下
+e:
+cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
+start mqbroker.cmd -n localhost:9876
+或修改 mqbroker.cmd
+在 call "%ROCKETMQ_HOME%\bin\runbroker.cmd" org.apache.rocketmq.broker.BrokerStartup %* 之前添加
+set "NAMESRV_ADDR=localhost:9876"
+双击 mqbroker.cmd
+-启动消费者
+e:
+cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
+set NAMESRV_ADDR=localhost:9876
+tools.cmd org.apache.rocketmq.example.quickstart.Consumer
+-启动生产者
+e:
+cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
+set NAMESRV_ADDR=localhost:9876
+tools.cmd org.apache.rocketmq.example.quickstart.Producer
+-关闭服务
+e:
+cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
+mqshutdown.cmd broker
+mqshutdown.cmd namesrv
+
+
+--kafka
+-修改 config\zookeeper.properties
+dataDir=D:/apache/kafka/tmp/zookeeper
+-修改 config\server.properties
+log.dirs=D:/apache/kafka/tmp/kafka-logs
+-启动自带 zookeeper 服务
+e:
+cd E:\mq\kafka_2.11-2.2.0
+bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+-启动 kafka 服务
+e:
+cd E:\mq\kafka_2.11-2.2.0
+bin\windows\kafka-server-start.bat config\server.properties
+-创建 topic
+e:
+cd E:\mq\kafka_2.11-2.2.0\bin\windows
+kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+-查看 topic
+e:
+cd E:\mq\kafka_2.11-2.2.0\bin\windows
+kafka-topics.bat --list --zookeeper localhost:2181
+-启动生产者
+e:
+cd E:\mq\kafka_2.11-2.2.0\bin\windows
+kafka-console-producer.bat --broker-list localhost:9092 --topic test
+-启动消费者
+e:
+cd E:\mq\kafka_2.11-2.2.0\bin\windows
+kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
+
+
+--zookeeper
+-拷贝 conf/zoo_sample.cfg，重命名为 zoo.cfg
+dataDir=D:\apache/zookeeper/data
+dataLogDir=D:\apache/zookeeper/log
+-启动服务
+e:
+cd E:\zookeeper\zookeeper-3.4.14\bin
+zkServer.cmd
+-启动客户端
+e:
+cd E:\zookeeper\zookeeper-3.4.14\bin
+zkCli.cmd
+-启动第三方客户端
+e:
+cd E:\zookeeper\ZooInspector\build
+java -jar zookeeper-dev-ZooInspector.jar
+
+
+--mongodb
+-新建 mongod.cfg
+systemLog:
+  destination: file
+  path: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\log\mongodb.log
+  logAppend: true
+storage:
+  dbPath: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\data\
+  journal:
+    enabled: true
+net:
+  bindIp: 127.0.0.1
+  port: 27017
+-启动服务
+d:
+cd D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin
+mongod --config D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg
+
+
+--netcat
+e:
+cd E:\netcat-1.11
+nc 114.115.204.60 21012 -v
+{"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":0}
+
+
+--tesseract
+tesseract --list-langs
+-cmd输出
+tesseract D:\test\en.jpg stdout
+tesseract D:\test\en.jpg stdout digits
+tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
+tesseract D:\test\num.png stdout -l chi_sim --psm 6
+-文件输出
+tesseract D:\test\ch.jpg result -l chi_sim
+
+
+--ffmpeg
+-格式转换
+ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
+-播放
+ffplay.exe -i C:\tools\video\012715-793-carib.rmvb
+
+
+--rtmp
+cd C:\apache\nginx-1.7.11.3-Gryphon
+nginx.exe -c conf\nginx-win-rtmp.conf
+
+cd C:\apache\ffmpeg-20190426-4b7166c-win64-static\bin
+ffmpeg.exe -re -i C:\doa\video.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/myapp/test
+ffplay.exe rtmp://localhost:1935/myapp/test
+ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

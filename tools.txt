@@ -55,7 +55,7 @@ set "JAVA_OPT=%JAVA_OPT% -server -Xms256m -Xmx512m"
 -启动Broker，日志在 用户\logs\rocketmqlogs 下
 e:
 cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
-start mqbroker.cmd -n localhost:9876
+start mqbroker.cmd -n localhost:9876 autoCreateTopicEnable=true
 或修改 mqbroker.cmd
 在 call "%ROCKETMQ_HOME%\bin\runbroker.cmd" org.apache.rocketmq.broker.BrokerStartup %* 之前添加
 set "NAMESRV_ADDR=localhost:9876"

@@ -108,6 +108,17 @@ cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
 
 
+--emqx
+-启动服务
+e:
+cd E:\mq\emqx\bin
+emqx start
+-关闭服务
+e:
+cd E:\mq\emqx\bin
+emqx stop
+
+
 --zookeeper
 -拷贝 conf/zoo_sample.cfg，重命名为 zoo.cfg
 dataDir=D:\apache/zookeeper/data

@@ -45,6 +45,15 @@ end;
 update a set a.name = (select b.name from b where a.id = b.id)
 merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age
 
+--关联更新
+update T_ZF_SL_CL a
+set a.SCJG = 1, a.BREAK = '123'
+where a.MC = '出线柜' and a.GG = 'GCS-K-11'
+and exists (
+select GC_ID from T_ZF_GC b
+where a.ZF_ID = b.ZF_ID and b.GC_ID = 567
+)
+
 --数据类型
 varchar 固定长度 2000
 varchar2 可变长度 4000

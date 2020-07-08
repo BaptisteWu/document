@@ -272,6 +272,13 @@ INSERT INTO tb_user_copy1(id, username, password, create_time)
 SELECT id, username, password, create_time FROM tb_user
 WHERE id > 80
 
+--关联更新
+update goods a
+left join category b
+on a.category_id = b.id
+set a.name = '苹果2'
+where a.id = 2 and b.name = '水果'
+
 --前10条记录中，每隔5条取1条
 SELECT * FROM
 (

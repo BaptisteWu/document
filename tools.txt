@@ -29,10 +29,12 @@ nginx -s quit
 mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar
 
 
---RabbitMQ
-
-
---ActiveMQ
+--gradle
+GRADLE_HOME
+GRADLE_USER_HOME
+maven { url 'https://maven.aliyun.com/repository/public/' }
+compile files('lib/ojdbc-14.jar')
+compile fileTree(dir: 'libs', include: ['*.jar'])
 
 
 --RocketMQ
@@ -108,7 +110,28 @@ cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
 
 
+--RabbitMQ
+-启动监控管理
+cd sbin
+rabbitmq-plugins enable rabbitmq_management
+重启rabbitmq服务
+http://localhost:15672
+用户名guest
+密码guest
+
+--ActiveMQ
+http://localhost:8161/
+用户名admin
+密码admin
+-启动服务
+E:\mq\apache-activemq-5.15.12\bin\win64
+双击activemq.bat
+
+
 --emqx
+http://localhost:18083/
+用户名admin
+密码public
 -启动服务
 e:
 cd E:\mq\emqx\bin
@@ -168,7 +191,8 @@ spring init --build=maven --java-version=1.8 --dependencies=web --packaging=jar 
 e:
 cd E:\netcat-1.11
 nc 114.115.204.60 21012 -v
-{"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":0}
+{"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
+{"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
 
 
 --tesseract

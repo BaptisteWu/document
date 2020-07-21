@@ -1,12 +1,3 @@
-原符号	替换符号
-<	&lt;
-<=	&lt;=
->	&gt;
->=	&gt;=
-&	&amp;
-’	&apos;
-"	&quot;
-
 乱码
 select userenv('language') from dual;
 新建一个环境变量：NLS_LANG
@@ -31,7 +22,7 @@ grant connect, resource, dba to test;
 --创建序列
 create sequence SEQ_T_PASS
 increment by 1
-start with 1
+start with 1;
 
 --创建触发器
 create or replace trigger TRIGGER_T_PASS
@@ -41,9 +32,35 @@ begin
 select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
 end;
 
+--表注释
+comment on table xx is '用户表';
+--列注释
+comment on column xx.id is '序号';
+
+--主键约束
+alter table xx add constraint pk_xx primary key (id);
+--外键约束
+alter table yy add constraint fk_yy_xx foreign key(xid) references xx(id) [on delete cascade, on delete set null];
+--唯一约束
+alter table xx add constraint uq_xx_name unique(name);
+--默认约束
+alter table xx add constraint df_password default('123456') for password;
+--检查约束
+alter table xx add constraint ck_age check(age between 15 and 40)
+
+--a表存在，字段和b表一样，复制数据
+insert into a select * from b;
+insert into a(field1,field2) select field1,field2 from b;
+--a表不存在，复制结构和数据
+create table a as select * from b;
+create table a as select * from b where 1= 2;
+-pl/sql不能用
+select * into a from b;
+select * into a from b where 1= 2;
+
 --复杂更新
-update a set a.name = (select b.name from b where a.id = b.id)
-merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age
+update a set a.name = (select b.name from b where a.id = b.id);
+merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age;
 
 --关联更新
 update T_ZF_SL_CL a

@@ -3,7 +3,6 @@ https://mirrors.aliyun.com/pypi/simple/
 
 pip install opencv_python-4.2.0.32-cp27-cp27m-win_amd64.whl
 
-pip install tensorflow -i https://mirrors.aliyun.com/pypi/simple/
 pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
 pip instal opencv-contrib-python
 pip install matplotlib -i https://mirrors.aliyun.com/pypi/simple/
@@ -16,6 +15,8 @@ pip install SQLAlchemy -i https://mirrors.aliyun.com/pypi/simple/
 pip install fastapi -i https://mirrors.aliyun.com/pypi/simple/
 pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
 pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install tensorflow -i https://mirrors.aliyun.com/pypi/simple/
 
 --pip
 pip list

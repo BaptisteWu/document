@@ -48,15 +48,15 @@ alter table xx add constraint df_password default('123456') for password;
 --检查约束
 alter table xx add constraint ck_age check(age between 15 and 40)
 
---a表存在，字段和b表一样，复制数据
-insert into a select * from b;
-insert into a(field1,field2) select field1,field2 from b;
 --a表不存在，复制结构和数据
 create table a as select * from b;
 create table a as select * from b where 1= 2;
 -pl/sql不能用
 select * into a from b;
 select * into a from b where 1= 2;
+--a表存在，字段和b表一样，复制数据
+insert into a select * from b;
+insert into a(field1,field2) select field1,field2 from b;
 
 --复杂更新
 update a set a.name = (select b.name from b where a.id = b.id);

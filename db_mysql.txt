@@ -9,6 +9,9 @@ show variables like 'binlog_format';
 show binlog events in 'bin-log.000001';
 mysqlbinlog --base64-output=decode-rows -v C:\mysql-5.7.13-winx64\data\bin-log.000004
 
+show global variables like 'wait_timeout';
+set global wait_timeout=28800;
+
 --µÇÂ¼
 mysql -uroot -proot
 

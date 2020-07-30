@@ -1,0 +1,19 @@
+yum install wget
+
+--centos7 yum 更换源
+-1.首先进行备份
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+-2.进入yum源所在文件夹
+cd /etc/yum.repos.d/
+-3.下载需要更新的yum源配置文件
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+-4.清理缓存并生成新的缓存
+yum clean all
+yum makecache
+-5.更新yum
+yum -y update
+
+--centos7 默认不带ifconfig，需要自己安装
+yum install net-tools
+ifconfig

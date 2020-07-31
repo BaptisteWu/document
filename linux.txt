@@ -1,19 +1,129 @@
-yum install wget
-
 --centos7 yum 更换源
--1.首先进行备份
+-备份
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
--2.进入yum源所在文件夹
-cd /etc/yum.repos.d/
--3.下载需要更新的yum源配置文件
+-下载需要更新的yum源配置文件
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
--4.清理缓存并生成新的缓存
+-清理缓存并生成新的缓存
 yum clean all
 yum makecache
--5.更新yum
 yum -y update
 
---centos7 默认不带ifconfig，需要自己安装
-yum install net-tools
+--yum查看是否已安装
+yum list installed | grep openssh-server
+
+--yum安装，-y表示不询问安装
+yum -y install wget
+
+-centos7 默认不带ifconfig，需要自己安装
+yum -y install net-tools
 ifconfig
+
+
+--ssh安装
+yum -y install openssh-server
+-启动ssh
+service sshd start
+-查看
+ps -e | grep sshd
+-开机启动ss
+systemctl enable sshd.service
+-查看
+systemctl list-unit-files | grep sshd
+
+
+--docker安装
+-脚本安装
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+curl -fsSL https://get.docker.com | sh
+curl -sSL https://get.daocloud.io/docker | sh
+-yum安装
+yum -y install docker
+
+-查看docker版本
+docker version
+-启动docker
+service docker start
+service docker restart
+-开机启动docker
+systemctl enable docker
+systemctl disable docker
+systemctl daemon-reload
+systemctl restart docker
+-查看docker状态
+systemctl status docker
+
+-国内镜像
+https://registry.docker-cn.com
+https://docker.mirrors.ustc.edu.cn
+https://hub-mirror.c.163.com
+https://{your_id}.mirror.aliyuncs.com
+http://{your_id}.m.daocloud.io
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://{your_id}.m.daocloud.io
+
+vi /etc/docker/daemon.json
+{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]}
+
+-测试
+docker pull hello-world
+docker run hello-world
+docker pull hub.c.163.com/library/tomcat:latest
+docker pull daocloud.io/library/rabbitmq:3.7.26-management
+
+docker search mysql
+
+-查看运行的容器
+docker ps
+-查看已退出的容器
+docker ps -a
+-删除容器
+docker rm 容器id
+-停用容器
+docker stop 容器id
+-删除所有容器
+docker rm $(docker ps -a -q)
+-停止所有容器
+docker stop $(docker ps -a -q)
+
+-查看镜像
+docker images
+-删除镜像
+docker rmi 镜像id
+docker rmi hello-world
+docker rmi hello-world:latest
+-删除所有镜像
+docker rmi $(docker images -q)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

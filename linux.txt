@@ -9,6 +9,12 @@ yum clean all
 yum makecache
 yum -y update
 
+FinalShell http://www.hostbuf.com/
+--
+mkdir tools
+rm -rf tools
+
+
 --yum查看是否已安装
 yum list installed | grep openssh-server
 
@@ -22,14 +28,23 @@ ifconfig
 
 --ssh安装
 yum -y install openssh-server
--启动ssh
-service sshd start
 -查看
 ps -e | grep sshd
--开机启动ss
+-启动ssh
+service sshd start
+-开机启动ssh
 systemctl enable sshd.service
 -查看
 systemctl list-unit-files | grep sshd
+
+
+--nginx安装
+-上传nginx-1.16.1.tar.gz
+psftp
+open 192.168.10.114
+put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
+
+pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
 
 
 --docker安装

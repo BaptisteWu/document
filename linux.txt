@@ -1,3 +1,37 @@
+--工具
+FinalShell http://www.hostbuf.com/
+
+-上传nginx-1.16.1.tar.gz
+psftp
+open 192.168.10.114
+put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
+或
+pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
+
+
+--指令
+mkdir tools
+rm -rf tools
+
+
+--防火墙
+systemctl status firewalld
+service firewalld start
+service firewalld restart
+service firewalld stop
+
+firewall-cmd --state
+firewall-cmd --list-all
+-查看端口是否开放
+firewall-cmd --query-port=80/tcp
+-开放端口
+firewall-cmd --permanent --add-port=80/tcp
+-移除端口
+firewall-cmd --permanent --remove-port=8080/tcp
+-重启防火墙
+firewall-cmd --reload
+
+
 --centos7 yum 更换源
 -备份
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
@@ -8,11 +42,6 @@ curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-
 yum clean all
 yum makecache
 yum -y update
-
-FinalShell http://www.hostbuf.com/
---
-mkdir tools
-rm -rf tools
 
 
 --yum查看是否已安装
@@ -38,13 +67,56 @@ systemctl enable sshd.service
 systemctl list-unit-files | grep sshd
 
 
---nginx安装
--上传nginx-1.16.1.tar.gz
-psftp
-open 192.168.10.114
-put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
+-http://vault.centos.org/
+-http://rpm.pbone.net/
+-http://nginx.org/packages/
+-http://nginx.org/packages/centos/7/x86_64/RPMS/
 
-pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
+--nginx rpm安装
+rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
+yum info nginx
+yum install nginx
+/etc/nginx/nginx.conf
+
+--nginx源码安装
+yum -y install gcc gcc-c++
+cpp-4.8.5-39.el7.x86_64.rpm
+gcc-c++-4.8.5-39.el7.x86_64.rpm
+glibc-devel-2.17-307.el7.1.x86_64.rpm
+glibc-headers-2.17-307.el7.1.x86_64.rpm
+libmpc-1.0.1-3.el7.x86_64.rpm
+libstdc++-devel-4.8.5-39.el7.x86_64.rpm
+mpfr-3.1.1-4.el7.x86_64.rpm
+gcc-4.8.5-39.el7.x86_64.rpm
+kernel-headers-3.10.0-1127.18.2.el7.x86_64.rpm
+
+yum -y install pcre pcre-devel
+pcre-devel-8.32-17.el7.x86_64.rpm
+
+yum -y install zlib zlib-devel
+zlib-devel-1.2.7-18.el7.x86_64.rpm
+
+yum -y install openssl openssl-devel
+keyutils-libs-devel-1.5.8-3.el7.x86_64.rpm
+libcom_err-devel-1.42.9-17.el7.x86_64.rpm
+krb5-devel-1.15.1-46.el7.x86_64.rpm
+libkadm5-1.15.1-46.el7.x86_64.rpm
+libsepol-devel-2.5-10.el7.x86_64.rpm
+libverto-devel-0.2.5-4.el7.x86_64.rpm
+openssl-devel-1.0.2k-19.el7.x86_64.rpm
+libselinux-devel-2.5-15.el7.x86_64.rpm
+
+wget /usr/local/tools/nginx-1.16.1.tar.gz http://nginx.org/download/nginx-1.16.1.tar.gz
+cd /usr/local/tools
+tar -zxvf nginx-1.16.1.tar.gz
+cd nginx-1.16.1
+#./configure --prefix=/usr/local/nginx
+./configure && make && make install
+cd /usr/local/nginx
+cd sbin
+./nginx -c /usr/local/nginx/conf/nginx.conf
+./nginx -s reload
+./nginx -s quit
 
 
 --docker安装
@@ -109,7 +181,20 @@ docker rmi hello-world:latest
 -删除所有镜像
 docker rmi $(docker images -q)
 
+-spring boot docker部署
+-Dockerfile
+FROM java:8
+EXPOSE 8080
+RUN
+VOLUME
+-ADD/COPY 将外部文件copy到容器中。区别是ADD可以使用URL，还可以是tar；COPY只能使用dockerfile所在目录
+ADD target/tomcat-release.war /usr/local/tomcat/webapps/
+COPY target/tomcat-release.war /usr/local/tomcat/webapps/
+ENTRYPOINT ["java", "-jar", "demo.jar"]
+CMD ["java", "-jar", "demo.jar"]
 
+docker build -t docker-demo .
+docker run -p 8080:8080 docker-demo
 
 
 

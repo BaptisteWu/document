@@ -1,7 +1,8 @@
 https://pypi.tuna.tsinghua.edu.cn/simple
 https://mirrors.aliyun.com/pypi/simple/
+https://www.lfd.uci.edu/~gohlke/pythonlibs/
 
-pip install opencv_python-4.2.0.32-cp27-cp27m-win_amd64.whl
+pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
 pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
 pip instal opencv-contrib-python
@@ -28,6 +29,18 @@ pip freeze > requirements.txt
 
 -从依赖文件安装依赖
 pip install -r requirements.txt
+
+-turtle
+下载turtle-0.0.2.tar.gz
+修改setup.py文件，第40行加括号：except (ValueError, ve)
+pip install -e D:\wubin\python\turtle-0.0.2
+
+-pyinstaller
+pip install pyinstaller
+-打包在当前文件夹下
+pyinstaller -F -w D:\project\python\assort\love\rose.py
+pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
+
 
 --venv
 -cd 到项目文件夹目录下
@@ -102,15 +115,6 @@ scrapy crawl douban_spider
 scrapy crawl douban_spider -o test.json
 scrapy crawl douban_spider -o test.csv
 
--turtule
-下载turtle-0.0.2.tar.gz
-修改setup.py文件，第40行：except (ValueError, ve)
-pipenv install -e D:\project\python\assort\turtle-0.0.2
-
--pyinstaller
-pipenv install pyinstaller
--打包
-pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
 
 --conda
 -环境列表

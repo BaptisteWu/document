@@ -1,6 +1,7 @@
 --工具
 FinalShell http://www.hostbuf.com/
 
+
 -上传nginx-1.16.1.tar.gz
 psftp
 open 192.168.10.114
@@ -12,6 +13,8 @@ pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
 --指令
 mkdir tools
 rm -rf tools
+ps -e | grep redis
+ps -aux | grep redis
 
 
 --防火墙
@@ -43,12 +46,12 @@ yum clean all
 yum makecache
 yum -y update
 
-
 --yum查看是否已安装
 yum list installed | grep openssh-server
 
 --yum安装，-y表示不询问安装
 yum -y install wget
+
 
 -centos7 默认不带ifconfig，需要自己安装
 yum -y install net-tools
@@ -58,7 +61,7 @@ ifconfig
 --ssh安装
 yum -y install openssh-server
 -查看
-ps -e | grep sshd
+ps -aux | grep sshd
 -启动ssh
 service sshd start
 -开机启动ssh
@@ -106,8 +109,8 @@ libverto-devel-0.2.5-4.el7.x86_64.rpm
 openssl-devel-1.0.2k-19.el7.x86_64.rpm
 libselinux-devel-2.5-15.el7.x86_64.rpm
 
-wget /usr/local/tools/nginx-1.16.1.tar.gz http://nginx.org/download/nginx-1.16.1.tar.gz
 cd /usr/local/tools
+wget http://nginx.org/download/nginx-1.16.1.tar.gz
 tar -zxvf nginx-1.16.1.tar.gz
 cd nginx-1.16.1
 #./configure --prefix=/usr/local/nginx
@@ -117,6 +120,25 @@ cd sbin
 ./nginx -c /usr/local/nginx/conf/nginx.conf
 ./nginx -s reload
 ./nginx -s quit
+
+
+--redis安装
+cd /usr/local/tools
+wget http://download.redis.io/releases/redis-4.0.9.tar.gz
+tar -zxvf redis-4.0.9.tar.gz
+cd redis-4.0.9
+make
+-修改redis.conf
+vi redis.conf
+-修改端口port
+-后台启动daemonize no 改成 daemonize yes
+-注释掉bind 127.0.0.1
+-设置密码requirepass 123456
+-启动redis
+src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
+-关闭redis
+ps -aux | grep redis
+kill -9 port
 
 
 --docker安装

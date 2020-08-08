@@ -75,6 +75,8 @@ systemctl list-unit-files | grep sshd
 -http://nginx.org/packages/
 -http://nginx.org/packages/centos/7/x86_64/RPMS/
 
+rpm -Uvh *.rpm --nodeps --force
+
 --nginx rpm安装
 rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 yum info nginx

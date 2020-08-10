@@ -5,6 +5,28 @@ start nginx
 nginx -s reload
 nginx -s quit
 
+-nginx.conf
+192.168.1.123:80/static/a.html
+location /static {
+	proxy_pass  192.168.2.321:81
+}
+==>192.168.2.321:81/static/a.html
+
+location /static/ {
+	proxy_pass  192.168.2.321:81
+}
+==>192.168.2.321:81/static/a.html
+
+location /static {
+	proxy_pass  192.168.2.321:81/
+}
+==>192.168.2.321:81/a.html
+
+location /static/ {
+	proxy_pass  192.168.2.321:81/
+}
+==>192.168.2.321:81/a.html
+
 
 --maven
 -配置setting.xml文件

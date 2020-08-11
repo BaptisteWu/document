@@ -22,6 +22,9 @@ varchar2 可变长度 4000
 
 --between前后都是闭区间
 
+--guid
+select rawtohex(sys_guid()) from dual
+
 --为null字段设置默认值
 --表示：如果expr1不为null，则返回expr1。如果expr1为null，则返回expr2。
 nvl(expr1, expr2)
@@ -102,6 +105,10 @@ select replace('１９８１123abc', '１９８１', '1981') from dual
 
 --提取字符串
 select translate('123.456tom', '0123456789.', ' ') from dual
+
+--wm_concat()
+select wm_concat(id) from wubin;
+select name, wm_concat(id) from wubin group by name;
 
 --正则
 select regexp_replace('张三12李四ab', '\d', 'a') from dual

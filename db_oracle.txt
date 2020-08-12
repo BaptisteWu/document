@@ -25,6 +25,9 @@ varchar2 可变长度 4000
 --guid
 select rawtohex(sys_guid()) from dual
 
+--find_in_set
+instr(','||NAME||',', ','||#{name}||',') != 0
+
 --为null字段设置默认值
 --表示：如果expr1不为null，则返回expr1。如果expr1为null，则返回expr2。
 nvl(expr1, expr2)
@@ -163,6 +166,7 @@ alter table xx add constraint ck_age check(age between 15 and 40)
 
 --复制表结构和数据
 create table a as select * from b;
+--复制表结构
 create table a as select * from b where 1= 2;
 
 --复杂更新

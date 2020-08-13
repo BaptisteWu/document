@@ -46,14 +46,14 @@ yum clean all
 yum makecache
 yum -y update
 
---yum查看是否已安装
+-yum查看是否已安装
 yum list installed | grep openssh-server
 
---yum安装，-y表示不询问安装
+-yum安装，-y表示不询问安装
 yum -y install wget
 
 
--centos7 默认不带ifconfig，需要自己安装
+--ifconfig安装
 yum -y install net-tools
 ifconfig
 
@@ -72,12 +72,11 @@ systemctl list-unit-files | grep sshd
 
 -http://vault.centos.org/
 -http://rpm.pbone.net/
--http://nginx.org/packages/
--http://nginx.org/packages/centos/7/x86_64/RPMS/
-
 rpm -Uvh *.rpm --nodeps --force
 
 --nginx rpm安装
+cd /usr/local/tools
+wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
 rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 yum info nginx
 yum install nginx
@@ -141,6 +140,22 @@ src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
 -关闭redis
 ps -aux | grep redis
 kill -9 port
+
+
+--rabbitmq packagecloud安装
+rpm --import https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+rpm --import https://packagecloud.io/gpg.key
+curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
+yum -y install erlang
+yum -y install erlang-22.3.4.5-1.el7.x86_64
+yum -y install rabbitmq-server
+yum -y install rabbitmq-server-3.8.6-1.el7.noarch
+
+--rabbitmq rpm安装
+cd /usr/local/tools
+wget https://github.com/rabbitmq/erlang-rpm/releases/download/v22.3.4.5/erlang-22.3.4.5-1.el7.x86_64.rpm
+wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.6/rabbitmq-server-3.8.6-1.el7.noarch.rpm
 
 
 --docker安装

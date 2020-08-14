@@ -50,7 +50,7 @@ location /static/ {
 -添加jar到本地仓库
 mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar
 
--
+-引入外部jar包
 <dependency>
 	<groupId>com.wubin</groupId>
 	<artifactId>taobao</artifactId>
@@ -158,6 +158,7 @@ http://localhost:15672
 用户名guest
 密码guest
 
+
 --ActiveMQ
 http://localhost:8161/
 用户名admin
@@ -226,12 +227,17 @@ d:
 cd D:\project\java\springboot2
 spring init --build=maven --java-version=1.8 --dependencies=web --packaging=jar --boot-version=2.1.5.RELEASE --groupId=com.example --artifactId=quartz --version=0.0.1-SNAPSHOT --name=quartz quartz
 
+
 --netcat
 e:
 cd E:\netcat-1.11
 nc 114.115.204.60 21012 -v
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
+
+-扫描端口
+nc -z -v 123.157.138.86 3306
+nc -z -v 114.115.204.60 21008-21020
 
 
 --tesseract
@@ -262,7 +268,7 @@ ffplay.exe rtmp://localhost:1935/myapp/test
 ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
 
 
---
+--虚拟机
 https://download3.vmware.com/software/wkst/file/VMware-workstation-full-15.5.0-14665864.exe
 UY758-0RXEQ-M81WP-8ZM7Z-Y3HDA
 VF750-4MX5Q-488DQ-9WZE9-ZY2D6

@@ -23,7 +23,7 @@ service firewalld start
 service firewalld restart
 service firewalld stop
 
-firewall-cmd --state
+firewall-cmd --list-all
 firewall-cmd --list-all
 -查看端口是否开放
 firewall-cmd --query-port=80/tcp
@@ -33,6 +33,9 @@ firewall-cmd --permanent --add-port=80/tcp
 firewall-cmd --permanent --remove-port=8080/tcp
 -重启防火墙
 firewall-cmd --reload
+
+
+--服务
 
 
 --centos7 yum 更换源
@@ -152,6 +155,20 @@ yum -y install erlang-22.3.4.5-1.el7.x86_64
 yum -y install rabbitmq-server
 yum -y install rabbitmq-server-3.8.6-1.el7.noarch
 
+systemctl start rabbitmq-server.service
+systemctl status rabbitmq-server.service
+
+rabbitmq-plugins enable rabbitmq_management
+15672
+
+rabbitmqctl add_user admin 123456
+rabbitmqctl set_user_tags admin administrator
+
+rabbitmqctl status
+rabbitmqctl list_users
+rabbitmqctl delete_user username
+rabbitmqctl oldPassword username newPassword
+
 --rabbitmq rpm安装
 cd /usr/local/tools
 wget https://github.com/rabbitmq/erlang-rpm/releases/download/v22.3.4.5/erlang-22.3.4.5-1.el7.x86_64.rpm
@@ -160,8 +177,8 @@ wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.6/rabbit
 
 --docker安装
 -脚本安装
-curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 curl -fsSL https://get.docker.com | sh
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 curl -sSL https://get.daocloud.io/docker | sh
 -yum安装
 yum -y install docker
@@ -193,10 +210,19 @@ vi /etc/docker/daemon.json
 -测试
 docker pull hello-world
 docker run hello-world
+
 docker pull hub.c.163.com/library/tomcat:latest
-docker pull daocloud.io/library/rabbitmq:3.7.26-management
 
 docker search mysql
+
+-查看镜像
+docker images
+-删除镜像
+docker rmi 镜像id
+docker rmi hello-world
+docker rmi hello-world:latest
+-删除所有镜像
+docker rmi $(docker images -q)
 
 -查看运行的容器
 docker ps
@@ -210,15 +236,6 @@ docker stop 容器id
 docker rm $(docker ps -a -q)
 -停止所有容器
 docker stop $(docker ps -a -q)
-
--查看镜像
-docker images
--删除镜像
-docker rmi 镜像id
-docker rmi hello-world
-docker rmi hello-world:latest
--删除所有镜像
-docker rmi $(docker images -q)
 
 -spring boot docker部署
 -Dockerfile

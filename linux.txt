@@ -146,14 +146,10 @@ kill -9 port
 
 
 --rabbitmq packagecloud安装
-rpm --import https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
-rpm --import https://packagecloud.io/gpg.key
 curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
 curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
 yum -y install erlang
-yum -y install erlang-22.3.4.5-1.el7.x86_64
 yum -y install rabbitmq-server
-yum -y install rabbitmq-server-3.8.6-1.el7.noarch
 
 systemctl start rabbitmq-server.service
 systemctl status rabbitmq-server.service

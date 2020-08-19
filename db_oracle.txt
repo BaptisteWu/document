@@ -3,7 +3,9 @@ select userenv('language') from dual;
 新建一个环境变量：NLS_LANG
 值：AMERICAN_AMERICA.ZHS16GBK
 
-查看数据库的sid_name语句：
+--查看版本
+select * from v$version;
+--查看实例
 select INSTANCE_NAME from v$instance;
 
 --导出数据

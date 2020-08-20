@@ -13,17 +13,48 @@ pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
 --指令
 mkdir tools
 rm -rf tools
-ps -e | grep redis
-ps -aux | grep redis
+ps -e | grep XX
+ps -aux | grep XX
+
+
+--服务
+-启动
+service [服务] start
+service [服务] stop
+service [服务] restart
+service [服务] status
+
+systemctl start [unit type]
+systemctl stop [unit type]
+systemctl restart [unit type]
+systemctl status [unit type]
+
+-开机启动
+chkconfig [服务] on
+chkconfig [服务] off
+
+systemctl enable [unit type]
+systemctl disable [unit type]
+
+-是否启动
+systemctl is-active [unit type]
+-是否开机启动
+systemctl is-enabled [unit type]
+
+-重新加载某个服务的配置文件
+systemctl reload [unit type]
+-重新加载所有服务的配置文件
+systemctl daemon-reload
+
+systemctl list-units | grep sshd
+systemctl list-units --all | grep sshd
+systemctl list-unit-files | grep sshd
 
 
 --防火墙
-systemctl status firewalld
+systemctl status firewalld.service
 service firewalld start
-service firewalld restart
-service firewalld stop
 
-firewall-cmd --list-all
 firewall-cmd --list-all
 -查看端口是否开放
 firewall-cmd --query-port=80/tcp
@@ -33,9 +64,6 @@ firewall-cmd --permanent --add-port=80/tcp
 firewall-cmd --permanent --remove-port=8080/tcp
 -重启防火墙
 firewall-cmd --reload
-
-
---服务
 
 
 --centos7 yum 更换源
@@ -63,19 +91,11 @@ ifconfig
 
 --ssh安装
 yum -y install openssh-server
--查看
+
 ps -aux | grep sshd
--启动ssh
+systemctl status sshd.service
 service sshd start
--开机启动ssh
-systemctl enable sshd.service
--查看
-systemctl list-unit-files | grep sshd
 
-
--http://vault.centos.org/
--http://rpm.pbone.net/
-rpm -Uvh *.rpm --nodeps --force
 
 --nginx rpm安装
 cd /usr/local/tools
@@ -84,6 +104,10 @@ rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 yum info nginx
 yum install nginx
 /etc/nginx/nginx.conf
+
+http://vault.centos.org/
+http://rpm.pbone.net/
+rpm -Uvh *.rpm --nodeps --force
 
 --nginx源码安装
 yum -y install gcc gcc-c++
@@ -151,8 +175,9 @@ curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/sc
 yum -y install erlang
 yum -y install rabbitmq-server
 
-systemctl start rabbitmq-server.service
+chkconfig rabbitmq-server on
 systemctl status rabbitmq-server.service
+service rabbitmq-server start
 
 rabbitmq-plugins enable rabbitmq_management
 15672
@@ -181,16 +206,10 @@ yum -y install docker
 
 -查看docker版本
 docker version
--启动docker
+
+systemctl enable docker.service
+systemctl status docker.service
 service docker start
-service docker restart
--开机启动docker
-systemctl enable docker
-systemctl disable docker
-systemctl daemon-reload
-systemctl restart docker
--查看docker状态
-systemctl status docker
 
 -国内镜像
 https://registry.docker-cn.com
@@ -200,8 +219,13 @@ https://{your_id}.mirror.aliyuncs.com
 http://{your_id}.m.daocloud.io
 curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://{your_id}.m.daocloud.io
 
+-修改配置文件
 vi /etc/docker/daemon.json
 {"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]}
+
+-重新加载配置文件
+systemctl reload docker.service
+systemctl daemon-reload
 
 -测试
 docker pull hello-world

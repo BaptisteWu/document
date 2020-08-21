@@ -11,6 +11,7 @@ pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
 
 
 --指令
+reboot
 mkdir tools
 rm -rf tools
 ps -e | grep XX
@@ -69,18 +70,18 @@ firewall-cmd --reload
 --centos7 yum 更换源
 -备份
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
--下载需要更新的yum源配置文件
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+-下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
--清理缓存并生成新的缓存
-yum clean all
-yum makecache
-yum -y update
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+-生成缓存
+yum clean all && yum makecache
+yum repolist
 
 -yum查看是否已安装
 yum list installed | grep openssh-server
 
--yum安装，-y表示不询问安装
+
+--wget安装，-y表示不询问安装
 yum -y install wget
 
 
@@ -97,17 +98,27 @@ systemctl status sshd.service
 service sshd start
 
 
+--nginx epel安装
+rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+或
+cd /usr/local/tools
+wget http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm
+rpm -ivh epel-release-7-12.noarch.rpm
+yum clean all && yum makecache
+yum repolist
+
+yum -y install epel-release
+yum -y install nginx
+
 --nginx rpm安装
 cd /usr/local/tools
 wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
 rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 yum info nginx
-yum install nginx
+yum search nginx
+yum -y install nginx
 /etc/nginx/nginx.conf
-
-http://vault.centos.org/
-http://rpm.pbone.net/
-rpm -Uvh *.rpm --nodeps --force
+/etc/nginx/conf.d
 
 --nginx源码安装
 yum -y install gcc gcc-c++
@@ -137,17 +148,41 @@ libverto-devel-0.2.5-4.el7.x86_64.rpm
 openssl-devel-1.0.2k-19.el7.x86_64.rpm
 libselinux-devel-2.5-15.el7.x86_64.rpm
 
+http://vault.centos.org/
+http://rpm.pbone.net/
+rpm -Uvh *.rpm --nodeps --force
+
 cd /usr/local/tools
 wget http://nginx.org/download/nginx-1.16.1.tar.gz
 tar -zxvf nginx-1.16.1.tar.gz
 cd nginx-1.16.1
 #./configure --prefix=/usr/local/nginx
 ./configure && make && make install
-cd /usr/local/nginx
-cd sbin
+cd /usr/local/nginx/sbin
 ./nginx -c /usr/local/nginx/conf/nginx.conf
 ./nginx -s reload
 ./nginx -s quit
+
+-开机启动
+vi /usr/lib/systemd/system/nginx.service
+或
+vi /lib/systemd/system/nginx.service
+############################
+[Unit]
+Description=nginx
+After=network.target
+  
+[Service]
+Type=forking
+ExecStart=/usr/local/nginx/sbin/nginx
+ExecReload=/usr/local/nginx/sbin/nginx -s reload
+ExecStop=/usr/local/nginx/sbin/nginx -s quit
+PrivateTmp=true
+  
+[Install]
+WantedBy=multi-user.target
+############################
+systemctl enable nginx.service
 
 
 --redis安装

@@ -203,6 +203,23 @@ src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
 ps -aux | grep redis
 kill -9 port
 
+-开机启动
+vi /lib/systemd/system/redis.service
+############################
+[Unit]
+Description=redis
+After=network.target
+  
+[Service]
+Type=forking
+ExecStart=/usr/local/tools/redis-4.0.9/src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
+PrivateTmp=true
+  
+[Install]
+WantedBy=multi-user.target
+############################
+systemctl enable redis.service
+
 
 --rabbitmq packagecloud安装
 curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash

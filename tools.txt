@@ -6,6 +6,20 @@ nginx -s reload
 nginx -s quit
 
 -nginx.conf
+location /html {
+	root   D://test;
+	index  index.html index.htm;
+}
+http://localhost:8079/html/1.jpg
+==>D:\test\html\1.jpg
+
+location /test {
+	alias  D://test//html;
+	index  index.html index.htm;
+}
+http://localhost:8079/test/1.jpg
+==>D:\test\html\1.jpg
+
 192.168.1.123:80/static/a.html
 location /static {
 	proxy_pass  192.168.2.321:81

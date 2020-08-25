@@ -28,9 +28,6 @@ varchar2 可变长度 4000
 --guid
 select rawtohex(sys_guid()) from dual
 
---find_in_set
-instr(','||NAME||',', ','||#{name}||',') != 0
-
 --为null字段设置默认值
 --表示：如果expr1不为null，则返回expr1。如果expr1为null，则返回expr2。
 nvl(expr1, expr2)
@@ -105,6 +102,9 @@ select substr('hello world', 0, 5) from dual
 
 --判断字符串中是否包含某个字符串
 select instr('abcdefg', 'bcd') from dual
+
+--find_in_set
+instr(','||NAME||',', ','||#{name}||',') != 0
 
 --替换字符串
 select replace('１９８１123abc', '１９８１', '1981') from dual

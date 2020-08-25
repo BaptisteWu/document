@@ -2,15 +2,19 @@
 FinalShell http://www.hostbuf.com/
 
 
--上传nginx-1.16.1.tar.gz
+--上传nginx-1.16.1.tar.gz
 psftp
 open 192.168.10.114
 put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
 或
-pscp D:\tools\nginx-1.16.1.tar.gz root@192.168.10.114:/usr/local/tools
+pscp -P 22 D:\tools\linux\mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar root@192.168.10.100:/usr/local/tools
 
 
 --指令
+cat /proc/version
+uname -a
+cat /etc/redhat-release
+cat /etc/issue
 reboot
 mkdir tools
 rm -rf tools
@@ -33,6 +37,10 @@ systemctl status [unit type]
 -开机启动
 chkconfig [服务] on
 chkconfig [服务] off
+
+-是否开机启动，2、3、4、5启动，代表开机启动
+chkconfig --list
+chkconfig mysqld --list
 
 systemctl enable [unit type]
 systemctl disable [unit type]
@@ -219,6 +227,57 @@ PrivateTmp=true
 WantedBy=multi-user.target
 ############################
 systemctl enable redis.service
+
+
+--mysql安装
+https://repo.mysql.com/
+-卸载自带的mariadb
+rpm -qa | grep mariadb
+rpm -e --nodeps mariadb-libs-5.5.65-1.el7.x86_64
+
+cd /usr/local/tools
+wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar
+mkdir mysql-8.0.20
+tar -xvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
+-必须安装
+rpm -ivh mysql-community-common-8.0.20-1.el7.x86_64.rpm
+rpm -ivh mysql-community-libs-8.0.20-1.el7.x86_64.rpm
+rpm -ivh mysql-community-client-8.0.20-1.el7.x86_64.rpm
+rpm -ivh mysql-community-server-8.0.20-1.el7.x86_64.rpm
+-全部安装
+rpm -Uvh *.rpm --nodeps --force
+-初始化
+mysqld --initialize --console
+-目录授权
+chmod -R 777 /var/lib/mysql
+-启动服务
+systemctl start mysqld.service
+-查看服务
+systemctl status mysqld.service
+-查看密码
+cat /var/log/mysqld.log | grep password
+-登录
+mysql -u root -p
+-修改密码
+alter user 'root'@'localhost' identified by 'root';
+alter user 'root'@'localhost' identified with mysql_native_password by 'root';
+alter user 'root'@'%' identified with caching_sha2_password by 'root';
+-远程授权
+show databases;
+use mysql;
+select host, user, authentication_string, plugin from user;
+update user set host = "%" where user='root';
+flush privileges;
+或
+grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option;
+flush privileges;
+-修改端口
+vi /etc/selinux/config
+SELINUX=enforcing -> SELINUX=disabled
+vi /etc/my.cnf
+port=13306
+reboot
+systemctl restart mysqld.service
 
 
 --rabbitmq packagecloud安装

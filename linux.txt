@@ -15,11 +15,16 @@ cat /proc/version
 uname -a
 cat /etc/redhat-release
 cat /etc/issue
+
 reboot
 mkdir tools
 rm -rf tools
 ps -e | grep XX
 ps -aux | grep XX
+kill -9 port
+
+-后台运行
+java -jar xxx.jar &
 
 
 --服务
@@ -122,11 +127,13 @@ yum -y install nginx
 cd /usr/local/tools
 wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
 rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
-yum info nginx
-yum search nginx
-yum -y install nginx
+-配置文件
 /etc/nginx/nginx.conf
 /etc/nginx/conf.d
+-程序
+/usr/sbin/nginx
+-网页
+/usr/share/nginx/html
 
 --nginx源码安装
 yum -y install gcc gcc-c++
@@ -227,6 +234,11 @@ PrivateTmp=true
 WantedBy=multi-user.target
 ############################
 systemctl enable redis.service
+
+
+--java安装
+cd /usr/local/tools
+
 
 
 --mysql安装

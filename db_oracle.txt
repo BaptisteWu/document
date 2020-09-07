@@ -51,6 +51,9 @@ select to_char(0.0) from dual // 0
 select to_char(1.0) from dual // 1
 select to_char(0.1) from dual // .1
 
+--字符串转数字
+to_number()
+
 --时间转字符串
 select to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') from dual
 select to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss.ff') from dual

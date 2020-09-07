@@ -13,6 +13,7 @@ location /html {
 http://localhost:8079/html/1.jpg
 ==>D:\test\html\1.jpg
 
+alias 后面最好有/
 location /test {
 	alias  D://test//html;
 	index  index.html index.htm;

@@ -1,3 +1,20 @@
+--js相关
+-添加
+arrayObj. push();
+arrayObj.unshift();
+-删除
+arrayObj.pop();
+arrayObj.shift();
+arrayObj.splice(deletePos, deleteCount);
+-排序
+arrayObj.sort();
+arrayObj.reverse();
+-转字符串
+arrayObj.join(separator);
+-数组的拷贝
+arrayObj.slice(0);
+arrayObj.concat();
+
 --vscode相关
 https://code.visualstudio.com/docs/editor/portable
 -ESLint
@@ -25,14 +42,20 @@ nvm use 版本号
 npm -v
 npm config list --json
 npm config set registry https://registry.npm.taobao.org
+
+-查看全局依赖模块安装路径
 npm root -g
+-查看当前项目的依赖模块
+npm ls --depth 0
+-查看全局依赖模块
+npm ls -g --depth 0
 
 npm i vue
 -S --save 不指定默认-S
 -D --save-dev
 
 --vue相关
--vue2.x脚手架
+-vue旧版本脚手架
 npm i -g vue-cli
 vue -V
 -初始化项目
@@ -40,12 +63,16 @@ vue init webpack demo
 cd demo
 npm run dev
 
+-vue脚手架
+npm i -g @vue/cli
+vue --version
+
 npm i element-ui -S
 npm i js-cookie -S
 npm i axios
 npm i qs
 npm i echarts
-npm i el-tree-select
+npm i el-select-tree
 npm i @smallwei/avue
 
 -ie兼容Promise

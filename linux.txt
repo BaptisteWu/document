@@ -7,7 +7,7 @@ psftp
 open 192.168.10.114
 put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
 或
-pscp -P 22 D:\tools\linux\mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar root@192.168.10.100:/usr/local/tools
+pscp -P 22 D:\tools\linux\jdk-8u261-linux-x64.rpm root@192.168.10.123:/usr/local/tools
 
 
 --指令
@@ -24,7 +24,24 @@ ps -aux | grep XX
 kill -9 port
 
 -后台运行
-java -jar xxx.jar &
+nohup java -jar xxx.jar &
+
+############################
+[Unit]
+Description=myapp
+After=syslog.target
+
+[Service]
+User=myapp
+ExecStart=/var/myapp/myapp.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+############################
+
+ln -s /home/user/xxx.jar /etc/init.d/xxx
+chkconfig --add xxx
 
 
 --服务
@@ -111,7 +128,13 @@ systemctl status sshd.service
 service sshd start
 
 
---nginx epel安装
+--java安装
+cd /usr/local/tools
+rpm -ivh jdk-8u261-linux-x64.rpm
+java -version
+
+
+--epel安装
 rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 或
 cd /usr/local/tools
@@ -163,6 +186,7 @@ libverto-devel-0.2.5-4.el7.x86_64.rpm
 openssl-devel-1.0.2k-19.el7.x86_64.rpm
 libselinux-devel-2.5-15.el7.x86_64.rpm
 
+http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
 http://vault.centos.org/
 http://rpm.pbone.net/
 rpm -Uvh *.rpm --nodeps --force
@@ -236,11 +260,6 @@ WantedBy=multi-user.target
 systemctl enable redis.service
 
 
---java安装
-cd /usr/local/tools
-
-
-
 --mysql安装
 https://repo.mysql.com/
 -卸载自带的mariadb
@@ -251,15 +270,11 @@ cd /usr/local/tools
 wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar
 mkdir mysql-8.0.20
 tar -xvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
--必须安装
-rpm -ivh mysql-community-common-8.0.20-1.el7.x86_64.rpm
-rpm -ivh mysql-community-libs-8.0.20-1.el7.x86_64.rpm
-rpm -ivh mysql-community-client-8.0.20-1.el7.x86_64.rpm
-rpm -ivh mysql-community-server-8.0.20-1.el7.x86_64.rpm
--全部安装
+cd mysql-8.0.20
 rpm -Uvh *.rpm --nodeps --force
--初始化
-mysqld --initialize --console
+-修改配置文件
+vi /etc/my.cnf
+port=13306
 -目录授权
 chmod -R 777 /var/lib/mysql
 -启动服务
@@ -267,7 +282,7 @@ systemctl start mysqld.service
 -查看服务
 systemctl status mysqld.service
 -查看密码
-cat /var/log/mysqld.log | grep password
+grep 'temporary password' /var/log/mysqld.log
 -登录
 mysql -u root -p
 -修改密码
@@ -283,13 +298,9 @@ flush privileges;
 或
 grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option;
 flush privileges;
--修改端口
+-修改端口可能需要
 vi /etc/selinux/config
 SELINUX=enforcing -> SELINUX=disabled
-vi /etc/my.cnf
-port=13306
-reboot
-systemctl restart mysqld.service
 
 
 --rabbitmq packagecloud安装

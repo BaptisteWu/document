@@ -271,6 +271,11 @@ wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bund
 mkdir mysql-8.0.20
 tar -xvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
 cd mysql-8.0.20
+-查看
+rpm -qpl mysql-community-server-8.0.20-1.el7.x86_64.rpm
+-安装
+yum install mysql-community-{server,client,common,libs}-*
+或
 rpm -Uvh *.rpm --nodeps --force
 -修改配置文件
 vi /etc/my.cnf

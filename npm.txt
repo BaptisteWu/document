@@ -15,12 +15,14 @@ arrayObj.join(separator);
 arrayObj.slice(0);
 arrayObj.concat();
 
+
 --vscode相关
 https://code.visualstudio.com/docs/editor/portable
 -ESLint
 -Vetur
 -Path Intellisense
 -npm Intellisense
+
 
 --nvm相关
 -修改nvm/settings.txt
@@ -38,6 +40,7 @@ nvm list available
 nvm install 版本号
 nvm use 版本号
 
+
 --npm相关
 npm -v
 npm config list --json
@@ -54,8 +57,9 @@ npm i vue
 -S --save 不指定默认-S
 -D --save-dev
 
+
 --vue相关
--vue旧版本脚手架
+-vue脚手架v2
 npm i -g vue-cli
 vue -V
 -初始化项目
@@ -66,19 +70,28 @@ npm run dev
 -vue脚手架
 npm i -g @vue/cli
 vue --version
+-创建项目
+vue create test
+cd test
+npm run serve
 
+npm i vue-router
+npm i vuex
 npm i element-ui -S
+npm i el-select-tree
 npm i js-cookie -S
 npm i axios
 npm i qs
 npm i echarts
-npm i el-select-tree
-npm i @smallwei/avue
+npm i nprogress
+
+npm install --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
 
 -ie兼容Promise
 npm i babel-polyfill
 -ie兼容URLSearchParams
 npm i url-search-params-polyfill
+
 
 --react native相关
 -脚手架
@@ -93,6 +106,7 @@ react-native init demo
 设置 distributionUrl=https\://services.gradle.org/distributions/gradle-6.0.1-all.zip
 cd demo
 react-native run-android
+
 
 --webpack相关
 npm init
@@ -124,6 +138,7 @@ npm i -D less-loader
 npm i -D stylus
 npm i -D stylus-loader
 npm i -D html-loader
+
 
 --electron相关
 npm init

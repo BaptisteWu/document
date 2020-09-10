@@ -2,42 +2,35 @@
 e:
 cd E:\nginx-1.16.0
 start nginx
+start nginx -c E:\nginx-1.16.0\conf\nginx2.conf
 nginx -s reload
 nginx -s quit
+nginx -s stop
 
 -nginx.conf
-location /html {
-	root   D://test;
-	index  index.html index.htm;
-}
 http://localhost:8079/html/1.jpg
 ==>D:\test\html\1.jpg
-
-alias 后面最好有/
-location /test {
-	alias  D://test//html;
+1.
+location /html {
+	root   D:/test;
 	index  index.html index.htm;
 }
-http://localhost:8079/test/1.jpg
-==>D:\test\html\1.jpg
+2.
+location /html 后面加 /
+alias  D:/test/html 后面也要加 /
+location /html {
+	alias  D:/test/html;
+	index  index.html index.htm;
+}
 
+location /static 后面加不加 / 都一样
 192.168.1.123:80/static/a.html
 location /static {
 	proxy_pass  192.168.2.321:81
 }
 ==>192.168.2.321:81/static/a.html
 
-location /static/ {
-	proxy_pass  192.168.2.321:81
-}
-==>192.168.2.321:81/static/a.html
-
 location /static {
-	proxy_pass  192.168.2.321:81/
-}
-==>192.168.2.321:81/a.html
-
-location /static/ {
 	proxy_pass  192.168.2.321:81/
 }
 ==>192.168.2.321:81/a.html
@@ -89,6 +82,42 @@ GRADLE_USER_HOME
 maven { url 'https://maven.aliyun.com/repository/public/' }
 compile files('lib/ojdbc-14.jar')
 compile fileTree(dir: 'libs', include: ['*.jar'])
+
+
+--mysql
+-解压
+-添加到环境变量Path
+如：D:\mysql-8.0.20-winx64\bin
+-创建D:\mysql-8.0.20-winx64\my.ini文件
+正斜杠 / 或两个反斜杠 \\
+[mysqld]
+basedir=D:/mysql-8.0.20-winx64
+datadir=D:/mysql-8.0.20-winx64/data
+-创建D:\mysql-8.0.20-winx64\data目录
+-初始化数据目录
+mysqld --defaults-file=D:\mysql-8.0.20-winx64\my.ini --initialize --console
+-启动服务
+mysqld --console
+-停止服务
+mysqladmin -u root shutdown
+-安装Windows服务
+mysqld --install MySQL --defaults-file=D:\mysql-8.0.20-winx64\my.ini
+-启动Windows服务
+sc start MySQL
+或
+net start MySQL
+-停止Windows服务
+sc stop MySQL
+或
+net stop MySQL
+-删除Windows服务
+sc delete mysql
+或
+mysqld --remove
+-登录
+mysql -u root -p
+-修改密码
+alter user 'root'@'localhost' identified by 'root';
 
 
 --RocketMQ

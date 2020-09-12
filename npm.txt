@@ -75,6 +75,9 @@ vue create test
 cd test
 npm run serve
 
+-桥接
+npm install -g @vue/cli-init
+
 npm i vue-router
 npm i vuex
 npm i element-ui -S

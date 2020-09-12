@@ -12,6 +12,7 @@ select INSTANCE_NAME from v$instance;
 exp fzxs/123456@orcl file=d:\fzxs.dmp
 --导入数据
 imp ybsb/123456@114.115.204.60/orcl file=D:\xxx.dmp full=y
+imp kggcw/123456@47.98.108.183/orcl file=D:\ruoyi.dmp full=y
 imp x/xx@orcl fromuser=x touser=xx file=D:\app\Administrator\admin\orcl\dpdump\xxx.dmp
 
 --用户解锁

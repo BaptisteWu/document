@@ -1,4 +1,5 @@
 --js相关
+-数组
 -添加
 arrayObj. push();
 arrayObj.unshift();
@@ -14,6 +15,12 @@ arrayObj.join(separator);
 -数组的拷贝
 arrayObj.slice(0);
 arrayObj.concat();
+-
+JSON.stringify(list, null, 4)
+-
+eval()
+-
+void()
 
 
 --vscode相关
@@ -80,13 +87,13 @@ npm install -g @vue/cli-init
 
 npm i vue-router
 npm i vuex
-npm i element-ui -S
-npm i el-select-tree
-npm i js-cookie -S
+npm i element-ui
+npm i js-cookie
 npm i axios
 npm i qs
-npm i echarts
 npm i nprogress
+npm i el-select-tree
+npm i echarts
 
 npm install --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
 

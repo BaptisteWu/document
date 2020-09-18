@@ -20,6 +20,61 @@ sqlplus / as sysdba
 alter user scott account unlock;
 alter profile default limit failed_login_attempts unlimited;
 
+--创建用户
+create user "ybsb" identified by "123456";
+--授权
+grant connect, resource, dba to test;
+
+--创建序列
+create sequence SEQ_T_PASS
+increment by 1
+start with 1;
+
+--创建触发器
+create or replace trigger TRIGGER_T_PASS
+before insert on T_PASS
+for each row
+begin
+select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
+end;
+
+--表注释
+comment on table xx is '用户表';
+--列注释
+comment on column xx.id is '序号';
+
+--主键约束
+alter table xx add constraint pk_xx primary key (id);
+--外键约束
+alter table yy add constraint fk_yy_xx foreign key(xid) references xx(id) [on delete cascade, on delete set null];
+--唯一约束
+alter table xx add constraint uq_xx_name unique(name);
+--默认约束
+alter table xx add constraint df_password default('123456') for password;
+--检查约束
+alter table xx add constraint ck_age check(age between 15 and 40)
+
+--复制表结构和数据
+create table a as select * from b;
+--复制表结构
+create table a as select * from b where 1= 2;
+
+--复杂更新
+update a set a.name = (select b.name from b where a.id = b.id);
+merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age;
+
+--关联更新
+update T_ZF_SL_CL a
+set a.SCJG = 1, a.BREAK = '123'
+where a.MC = '出线柜' and a.GG = 'GCS-K-11'
+and exists (
+select GC_ID from T_ZF_GC b
+where a.ZF_ID = b.ZF_ID and b.GC_ID = 567
+)
+
+--union all后排序
+select * from emp where deptno = 20 union all  select * from emp where deptno =30 order by 5
+
 --数据类型
 varchar 固定长度 2000
 varchar2 可变长度 4000
@@ -140,61 +195,6 @@ select regexp_instr('张三12李四ab', '[[:alpha:]]') from dual
 SELECT * FROM "T_ZH_ZTJX_SYGS"
 where regexp_like(GS, 'e')
 
---创建用户
-create user "ybsb" identified by "123456";
---授权
-grant connect, resource, dba to test;
-
---创建序列
-create sequence SEQ_T_PASS
-increment by 1
-start with 1;
-
---创建触发器
-create or replace trigger TRIGGER_T_PASS
-before insert on T_PASS
-for each row
-begin
-select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
-end;
-
---表注释
-comment on table xx is '用户表';
---列注释
-comment on column xx.id is '序号';
-
---主键约束
-alter table xx add constraint pk_xx primary key (id);
---外键约束
-alter table yy add constraint fk_yy_xx foreign key(xid) references xx(id) [on delete cascade, on delete set null];
---唯一约束
-alter table xx add constraint uq_xx_name unique(name);
---默认约束
-alter table xx add constraint df_password default('123456') for password;
---检查约束
-alter table xx add constraint ck_age check(age between 15 and 40)
-
---复制表结构和数据
-create table a as select * from b;
---复制表结构
-create table a as select * from b where 1= 2;
-
---复杂更新
-update a set a.name = (select b.name from b where a.id = b.id);
-merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age;
-
---关联更新
-update T_ZF_SL_CL a
-set a.SCJG = 1, a.BREAK = '123'
-where a.MC = '出线柜' and a.GG = 'GCS-K-11'
-and exists (
-select GC_ID from T_ZF_GC b
-where a.ZF_ID = b.ZF_ID and b.GC_ID = 567
-)
-
---union all后排序
-select * from emp where deptno = 20 union all  select * from emp where deptno =30 order by 5
-
 --递归查询
 with dept as (
 select 1 id, 0 parent_id,'全国' name from dual union all
@@ -212,6 +212,11 @@ connect by parent_id = prior id
 select * from dept
 start with id = 5
 connect by id = prior parent_id
+-where条件递归后起作用
+select * from dept
+where name = '越城'
+start with parent_id = 0
+connect by parent_id = prior id
 -
 select d.*, prior name parent_name,
 sys_connect_by_path(d.name, '/') path

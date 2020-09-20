@@ -4,20 +4,17 @@ https://www.lfd.uci.edu/~gohlke/pythonlibs/
 
 pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
-pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
-pip instal opencv-contrib-python
-pip install matplotlib -i https://mirrors.aliyun.com/pypi/simple/
-pip install scipy -i https://mirrors.aliyun.com/pypi/simple/
-pip install imutils -i https://mirrors.aliyun.com/pypi/simple/
-
 pip install cx_Oracle -i https://mirrors.aliyun.com/pypi/simple/
 pip install SQLAlchemy -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
+pip instal opencv-contrib-python -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install fastapi -i https://mirrors.aliyun.com/pypi/simple/
 pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
 pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
-
-pip install tensorflow -i https://mirrors.aliyun.com/pypi/simple/
 
 --pip
 pip list

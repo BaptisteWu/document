@@ -25,6 +25,7 @@ void()
 
 --vscode相关
 https://code.visualstudio.com/docs/editor/portable
+-open in browser
 -ESLint
 -Vetur
 -Path Intellisense

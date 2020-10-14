@@ -75,6 +75,11 @@ where a.ZF_ID = b.ZF_ID and b.GC_ID = 567
 --union all后排序
 select * from emp where deptno = 20 union all  select * from emp where deptno =30 order by 5
 
+--连接查询
+inner join ... on = left join 和 right join 的交集
+full join ... on = left join 和 right join 的并集
+cross join 笛卡尔积
+
 --数据类型
 varchar 固定长度 2000
 varchar2 可变长度 4000

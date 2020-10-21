@@ -2,12 +2,13 @@ https://pypi.tuna.tsinghua.edu.cn/simple
 https://mirrors.aliyun.com/pypi/simple/
 https://www.lfd.uci.edu/~gohlke/pythonlibs/
 
-pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
+pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install cx_Oracle -i https://mirrors.aliyun.com/pypi/simple/
 pip install SQLAlchemy -i https://mirrors.aliyun.com/pypi/simple/
 
-pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
+pip install requests
+pip install beautifulsoup4
 
 pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
 pip instal opencv-contrib-python -i https://mirrors.aliyun.com/pypi/simple/
@@ -15,6 +16,8 @@ pip instal opencv-contrib-python -i https://mirrors.aliyun.com/pypi/simple/
 pip install fastapi -i https://mirrors.aliyun.com/pypi/simple/
 pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
 pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
 --pip
 pip list

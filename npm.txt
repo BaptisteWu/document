@@ -109,7 +109,7 @@ npm i el-select-tree
 npm i js-cookie
 npm i nprogress
 npm i echarts
-npm i vue-baidu-map
+npm i file-saver
 
 npm install --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
 

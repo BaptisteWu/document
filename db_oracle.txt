@@ -1,13 +1,3 @@
-乱码
-select userenv('language') from dual;
-新建一个环境变量：NLS_LANG
-值：AMERICAN_AMERICA.ZHS16GBK
-
---查看版本
-select * from v$version;
---查看实例
-select INSTANCE_NAME from v$instance;
-
 --导出数据
 exp fzxs/123456@orcl file=d:\fzxs.dmp
 --导入数据
@@ -20,15 +10,25 @@ sqlplus / as sysdba
 alter user scott account unlock;
 alter profile default limit failed_login_attempts unlimited;
 
+乱码
+select userenv('language') from dual
+新建一个环境变量：NLS_LANG
+值：AMERICAN_AMERICA.ZHS16GBK
+
+--查看版本
+select * from v$version
+--查看实例
+select INSTANCE_NAME from v$instance
+
 --创建用户
-create user "ybsb" identified by "123456";
+create user "ybsb" identified by "123456"
 --授权
-grant connect, resource, dba to test;
+grant connect, resource, dba to test
 
 --创建序列
 create sequence SEQ_T_PASS
 increment by 1
-start with 1;
+start with 1
 
 --创建触发器
 create or replace trigger TRIGGER_T_PASS
@@ -36,40 +36,45 @@ before insert on T_PASS
 for each row
 begin
 select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
-end;
+end
+
+--创建视图
+create or replace view VIEW_T_PASS
+as
+select * from T_PASS
+
+--删除视图
+drop view VIEW_T_PASS
 
 --表注释
-comment on table xx is '用户表';
+comment on table xx is '用户表'
 --列注释
-comment on column xx.id is '序号';
+comment on column xx.id is '序号'
 
 --主键约束
-alter table xx add constraint pk_xx primary key (id);
+alter table xx add constraint pk_xx primary key (id)
 --外键约束
-alter table yy add constraint fk_yy_xx foreign key(xid) references xx(id) [on delete cascade, on delete set null];
+alter table yy add constraint fk_yy_xx foreign key(xid) references xx(id) [on delete cascade, on delete set null]
 --唯一约束
-alter table xx add constraint uq_xx_name unique(name);
+alter table xx add constraint uq_xx_name unique(name)
 --默认约束
-alter table xx add constraint df_password default('123456') for password;
+alter table xx add constraint df_password default('123456') for password
 --检查约束
 alter table xx add constraint ck_age check(age between 15 and 40)
 
 --复制表结构和数据
-create table a as select * from b;
+create table a as select * from b
 --复制表结构
-create table a as select * from b where 1= 2;
+create table a as select * from b where 1= 2
 
 --复杂更新
-update a set a.name = (select b.name from b where a.id = b.id);
-merge into a using b on a.id = b.id when matched then update set a.name = b.name, a.age=b.age;
+update a set a.name = (select b.name from b where a.id = b.id)
+merge into a using b on a.id = b.id when matched then update set a.name = b.name,  a.age = b.age
 
 --关联更新
-update T_ZF_SL_CL a
-set a.SCJG = 1, a.BREAK = '123'
-where a.MC = '出线柜' and a.GG = 'GCS-K-11'
-and exists (
-select GC_ID from T_ZF_GC b
-where a.ZF_ID = b.ZF_ID and b.GC_ID = 567
+update a set a.name = '', a.age = 18
+where exists (
+select id from b where a.id = b.id and b.name = ''
 )
 
 --union all后排序
@@ -87,6 +92,7 @@ varchar2 可变长度 4000
 --between前后都是闭区间
 
 --guid
+select sys_guid() from dual
 select rawtohex(sys_guid()) from dual
 
 --为null字段设置默认值
@@ -173,12 +179,12 @@ instr(','||NAME||',', ','||#{name}||',') != 0
 --替换字符串
 select replace('１９８１123abc', '１９８１', '1981') from dual
 
---提取字符串
+--替换字符串
 select translate('123.456tom', '0123456789.', ' ') from dual
 
 --wm_concat()
-select wm_concat(id) from wubin;
-select name, wm_concat(id) from wubin group by name;
+select wm_concat(id) from wubin
+select name, wm_concat(id) from wubin group by name
 
 --正则
 select regexp_replace('张三12李四ab', '\d', 'a') from dual
@@ -188,17 +194,21 @@ select regexp_replace('张三12李四ab', '[0-9a-zA-Z]') from dual
 select regexp_replace('张三12李四ab', '[^0-9a-zA-Z]') from dual
 select regexp_instr('张三12李四ab', '[[:alpha:]]') from dual
 
-[:alphanum:] 可以匹配字符 0-9、A-Z、a-z
-[:alpha:]可以匹配字符 A-Z、a-z
-[:blank:]可以匹配空格或者tab键
-[:digit:]可以匹配数字 0-9
-[:gragh:]可以匹配非空字符
-[:punct:]可以匹配 . , ' " 等标点符号
+[:alpha:]可以匹配字符 A-Z、a-z、汉字
 [:upper:]可以匹配字符 A-Z
 [:lower:]可以匹配字符 a-z
+[:digit:]可以匹配数字 0-9
+[:blank:]可以匹配空格
+[:punct:]可以匹配 . , ' " 等标点符号
 
-SELECT * FROM "T_ZH_ZTJX_SYGS"
-where regexp_like(GS, 'e')
+regexp_like
+
+oracle11g
+select regexp_count('abc;def', ';') from dual
+
+--一条记录分多条
+select regexp_substr('abc;def', '[^;]+', 1, level) from dual
+connect by level <= length('abc;def') - length(replace('abc;def', ';', '')) + 1
 
 --递归查询
 with dept as (

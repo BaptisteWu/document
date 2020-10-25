@@ -210,6 +210,40 @@ select regexp_count('abc;def', ';') from dual
 select regexp_substr('abc;def', '[^;]+', 1, level) from dual
 connect by level <= length('abc;def') - length(replace('abc;def', ';', '')) + 1
 
+-创建类型
+create or replace type TYPE_STR_SPLIT is table of varchar2(4000);
+
+-创建函数
+create or replace function FUNCTION_SPLIT_STR(v_str in varchar2, v_split in varchar2)
+return TYPE_STR_SPLIT pipelined
+as
+len int;
+begin
+  len := length(v_str) - length(replace(v_str, v_split, '')) + 1;
+  for i in 1 .. len loop
+    pipe row(regexp_substr(v_str, '[^' || v_split || ']+', 1, i));
+  end loop;
+  return;
+end;
+
+select * from table(FUNCTION_SPLIT_STR('abc;def', ';'))
+
+create or replace function FUNCTION_COMPARE_STR(v_str1 in varchar2, v_str2 in varchar2, v_split in varchar2)
+return int
+as
+begin
+  for i in (select * from table (FUNCTION_SPLIT_STR(v_str1, v_split))) loop
+    for j in (select * from table (FUNCTION_SPLIT_STR(v_str2, v_split))) loop
+      if i.column_value = j.column_value then
+        return 1;
+      end if;
+    end loop;
+  end loop;
+  return 0;
+end;
+
+select FUNCTION_COMPARE_STR('abc;def', 'def;ghi', ';') from dual
+
 --递归查询
 with dept as (
 select 1 id, 0 parent_id,'全国' name from dual union all

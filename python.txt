@@ -43,7 +43,7 @@ pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
 
 
 --venv
--cd 到项目文件夹目录下
+-cd到项目文件夹下
 -创建虚拟环境
 python -m venv .
 
@@ -61,7 +61,7 @@ pip3 install pipenv -i https://mirrors.aliyun.com/pypi/simple/
 变量名：WORKON_HOME
 变量值：D:\.virtualenvs
 
--cd 到项目文件夹目录下
+-cd到项目文件夹下
 -创建虚拟环境
 pipenv install
 或

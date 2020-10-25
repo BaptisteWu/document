@@ -36,6 +36,32 @@ location /static {
 ==>192.168.2.321:81/a.html
 
 
+--git
+-
+创建文件夹
+打开文件夹
+git init
+git remote add origin https://gitee.com/hlf890112/intelligent-dispensing.git
+git pull origin master
+git push -u origin master
+
+-
+git clone https://gitee.com/hlf890112/intelligent-dispensing.git
+git push
+
+-
+查看本地仓库分支，-a 查看本地仓库分支和远程仓库分支
+git branch -a
+根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后不切换
+git branch fa origin/fa
+切换到fa分支
+git checkout fa
+根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后进行切换
+git checkout -b fa origin/fa
+根据远程仓库的fa分支创建一个本地仓库的fa分支
+git checkout -t origin/fa
+
+
 --maven
 -配置setting.xml文件
 <localRepository>D:/apache/maven</localRepository>
@@ -263,6 +289,84 @@ cd D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin
 mongod --config D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg
 
 
+--solr
+在solr-7.7.2/server/solr目录下新建new_core文件夹
+将solr-7.7.2/server/solr/configsets/_default目录下的conf文件夹拷贝到new_core下
+
+cd到solr-7.7.2\bin
+solr create -c mycollection
+
+-ik分词器
+<dependency>
+    <groupId>com.github.magese</groupId>
+    <artifactId>ik-analyzer</artifactId>
+    <version>8.3.0</version>
+</dependency>
+
+将jar包放入solr-7.7.2/server/solr-webapp/webapp/WEB-INF/lib目录下
+
+配置solr-7.7.2/server/solr/mycollection/conf目录下managed-schema文件
+	<!-- ik分词器 -->
+	<fieldType name="text_ik" class="solr.TextField">
+	  <analyzer type="index">
+		<tokenizer class="org.wltea.analyzer.lucene.IKTokenizerFactory" useSmart="false" conf="ik.conf"/>
+		<filter class="solr.LowerCaseFilterFactory"/>
+	  </analyzer>
+	  <analyzer type="query">
+		<tokenizer class="org.wltea.analyzer.lucene.IKTokenizerFactory" useSmart="true" conf="ik.conf"/>
+		<filter class="solr.LowerCaseFilterFactory"/>
+	  </analyzer>
+	</fieldType>
+
+-dataimport
+将solr-7.7.2\dist目录下solr-dataimporthandler-7.7.2.jar和solr-dataimporthandler-extras-7.7.2.jar，复制到solr-7.7.2\server\solr-webapp\webapp\WEB-INF\lib目录下
+
+将mysql-connector-java-5.1.46.jar复制到solr-7.7.2\server\solr-webapp\webapp\WEB-INF\lib目录下
+
+配置solr-7.7.2/server/solr/mycollection/conf目录下solrconfig.xml文件
+  <!-- 数据库配置 -->
+  <requestHandler name="/dataimport" class="org.apache.solr.handler.dataimport.DataImportHandler"> 
+	<lst name="defaults">  
+	  <str name="config">data-config.xml</str>  
+	</lst>  
+  </requestHandler>
+
+在solr-7.7.2\server\solr\corename\conf目录下新建data-config.xml文件
+<?xml version="1.0" encoding="UTF-8"?>
+<dataConfig>
+    <dataSource driver="com.mysql.jdbc.Driver"
+				url="jdbc:mysql://localhost:3306/test?useSSL=false"
+				user="root"
+				password="root"/>
+    <document>
+        <entity name="user" pk="id"
+				query="select * from tb_user"
+				deltaImportQuery="select * from tb_user where id = '${dataimporter.delta.id}'"
+				deltaQuery="select id from tb_user where create_time > '${dataimporter.last_index_time}'">
+            <field column="id" name="id"/>
+            <field column="username" name="user_username"/>
+            <field column="password" name="user_password"/>
+            <field column="create_time" name="user_create_time"/>
+        </entity>
+    </document>
+</dataConfig>
+
+配置solr-7.7.2/server/solr/mycollection/conf目录下managed-schema文件
+    <field name="user_username" type="string" indexed="true" stored="true"/>
+    <field name="user_password" type="string" indexed="true" stored="true"/>
+    <field name="user_create_time" type="pdate" indexed="true" stored="true"/>
+
+-删除
+<delete><id>1</id></delete>
+<commit/>
+
+<delete><query>id:1</query></delete>
+<commit/>
+
+<delete><query>*:*</query></delete>
+<commit/>
+
+
 --spring-boot-cli
 -配置环境变量
 spring --version
@@ -284,17 +388,6 @@ nc -z -v 123.157.138.86 3306
 nc -z -v 114.115.204.60 21008-21020
 
 
---tesseract
-tesseract --list-langs
--cmd输出
-tesseract D:\test\en.jpg stdout
-tesseract D:\test\en.jpg stdout digits
-tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
-tesseract D:\test\num.png stdout -l chi_sim --psm 6
--文件输出
-tesseract D:\test\ch.jpg result -l chi_sim
-
-
 --ffmpeg
 -格式转换
 ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
@@ -312,15 +405,18 @@ ffplay.exe rtmp://localhost:1935/myapp/test
 ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
 
 
---虚拟机
-https://download3.vmware.com/software/wkst/file/VMware-workstation-full-15.5.0-14665864.exe
-UY758-0RXEQ-M81WP-8ZM7Z-Y3HDA
-VF750-4MX5Q-488DQ-9WZE9-ZY2D6
-UU54R-FVD91-488PP-7NNGC-ZFAX6
-YC74H-FGF92-081VZ-R5QNG-P6RY4
-YC34H-6WWDK-085MQ-JYPNX-NZRA2
+--tesseract
+tesseract --list-langs
+-cmd输出
+tesseract D:\test\en.jpg stdout
+tesseract D:\test\en.jpg stdout digits
+tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
+tesseract D:\test\num.png stdout -l chi_sim --psm 6
+-文件输出
+tesseract D:\test\ch.jpg result -l chi_sim
 
-https://mirrors.aliyun.com/centos
+
+
 
 
 

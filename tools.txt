@@ -378,7 +378,7 @@ spring init --build=maven --java-version=1.8 --dependencies=web --packaging=jar 
 
 --netcat
 e:
-cd E:\netcat-1.11
+cd E:\tools\netcat-1.11
 nc 114.115.204.60 21012 -v
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}

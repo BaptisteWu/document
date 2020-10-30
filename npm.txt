@@ -35,15 +35,20 @@ eval()
 void()
 
 
+--
+http://jmesnil.net/stomp-websocket/doc/
+https://cryptojs.gitbook.io/docs/
+
+
 --vscode相关
 https://code.visualstudio.com/docs/editor/portable
 -open in browser
--ESLint
--Vetur
 -npm Intellisense
 -Path Intellisense
 -Auto Close Tag
 -Auto Rename Tag
+-ESLint
+-Vetur
 
 
 --nvm相关
@@ -63,6 +68,10 @@ nvm install 版本号
 nvm use 版本号
 
 
+--node.js相关
+node -v
+
+
 --npm相关
 npm -v
 npm config list --json
@@ -75,63 +84,12 @@ npm ls --depth 0
 -查看全局依赖模块
 npm ls -g --depth 0
 
-npm i vue
--S --save 不指定默认-S
+-安装
+npm install vue
+-S --save 默认
 -D --save-dev
-
-
---vue相关
--vue脚手架v2
-npm i -g vue-cli
-vue -V
--初始化项目
-vue init webpack demo
-cd demo
-npm run dev
-
--vue脚手架
-npm i -g @vue/cli
-vue --version
--创建项目
-vue create test
-cd test
-npm run serve
-
--桥接
-npm install -g @vue/cli-init
-
-npm i vue-router
-npm i vuex
-npm i axios
-npm i qs
-npm i element-ui
-npm i el-select-tree
-npm i js-cookie
-npm i nprogress
-npm i echarts
-npm i file-saver
-
-npm install --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
-
--ie兼容Promise
-npm i babel-polyfill
--ie兼容URLSearchParams
-npm i url-search-params-polyfill
-
-
---react native相关
--脚手架
-npm i -g react-native-cli
-react-native -v
-react-native -h
-设置环境变量 GRADLE_USER_HOME
--初始化项目
-react-native init demo
-在 demo\android 目录下新建 local.properties 文件，设置 sdk.dir=D:/Android/SDK
-修改 demo\android\gradle\wrapper 目录下 gradle-wrapper.properties 文件，
-设置 distributionUrl=https\://services.gradle.org/distributions/gradle-6.0.1-all.zip
-cd demo
-react-native run-android
+-卸载
+npm uninstall vue
 
 
 --webpack相关
@@ -141,7 +99,6 @@ npm i -D webpack@3
 npm i -D webpack-cli
 npm i -D webpack-dev-server@2
 npm i -D cross-env
-npm i vue
 npm i -D vue-loader
 npm i -D vue-template-compiler
 npm i -D css-loader@0
@@ -159,17 +116,97 @@ npm i -D babel-preset-env
 npm i -D babel-plugin-transform-vue-jsx
 npm i -D babel-helper-vue-jsx-merge-props
 npm i -D babel-plugin-syntax-jsx
-npm i -D less
-npm i -D less-loader
-npm i -D stylus
-npm i -D stylus-loader
 npm i -D html-loader
+
+
+--vue相关
+-vue脚手架v2
+npm i -g vue-cli
+vue -V
+-创建项目
+vue init webpack demo
+cd demo
+npm run dev
+
+-vue脚手架
+npm i -g @vue/cli
+vue --version
+-创建项目
+vue create test
+cd test
+npm run serve
+
+-桥接
+npm i -g @vue/cli-init
+
+npm i vue-router
+npm i vuex
+npm i axios
+npm i qs
+npm i element-ui
+npm i el-select-tree
+npm i js-cookie
+npm i nprogress
+npm i echarts
+npm i file-saver
+
+npm i --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
+
+-ie兼容Promise
+npm i babel-polyfill
+-ie兼容URLSearchParams
+npm i url-search-params-polyfill
+
+
+--react相关
+-脚手架
+npm i -g create-react-app
+create-react-app --version
+-创建项目
+create-react-app demo
+cd demo
+npm start
+-
+npx create-react-app demo
+cd demo
+npm start
+
+
+--react native相关
+设置环境变量 GRADLE_USER_HOME
+-脚手架
+npm i -g react-native-cli
+react-native -v
+react-native -h
+-创建项目
+react-native init demo
+在 demo\android 目录下新建 local.properties 文件，设置 sdk.dir=D:/Android/SDK
+修改 demo\android\gradle\wrapper 目录下 gradle-wrapper.properties 文件，
+设置 distributionUrl=https\://services.gradle.org/distributions/gradle-6.0.1-all.zip
+cd demo
+react-native run-android
+-
+npx react-native init demo
 
 
 --electron相关
 npm init
 npm install --save-dev electron
 electron-packager ./ wubin --win --arch=x64 --out ./exe --electron-version 6.0.2 --overwrite --icon=./app.ico --ignore=node_modules
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

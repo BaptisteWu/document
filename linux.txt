@@ -13,6 +13,12 @@ https://mirrors.aliyun.com/centos
 FinalShell http://www.hostbuf.com/
 
 
+--网站
+http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
+http://vault.centos.org/
+http://rpm.pbone.net/
+
+
 --上传nginx-1.16.1.tar.gz
 psftp
 open 192.168.10.114
@@ -145,18 +151,6 @@ rpm -ivh jdk-8u261-linux-x64.rpm
 java -version
 
 
---epel安装
-rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-或
-cd /usr/local/tools
-wget http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm
-rpm -ivh epel-release-7-12.noarch.rpm
-yum clean all && yum makecache
-yum repolist
-
-yum -y install epel-release
-yum -y install nginx
-
 --nginx rpm安装
 cd /usr/local/tools
 wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
@@ -196,11 +190,6 @@ libsepol-devel-2.5-10.el7.x86_64.rpm
 libverto-devel-0.2.5-4.el7.x86_64.rpm
 openssl-devel-1.0.2k-19.el7.x86_64.rpm
 libselinux-devel-2.5-15.el7.x86_64.rpm
-
-http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
-http://vault.centos.org/
-http://rpm.pbone.net/
-rpm -Uvh *.rpm --nodeps --force
 
 cd /usr/local/tools
 wget http://nginx.org/download/nginx-1.16.1.tar.gz

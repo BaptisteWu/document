@@ -121,10 +121,16 @@ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 -生成缓存
-yum clean all && yum makecache
+yum makecache
+
+-
 yum repolist
 
--yum查看是否已安装
+-查看
+yum search nginx
+yum list nginx
+
+-查看是否已安装
 yum list installed | grep openssh-server
 
 

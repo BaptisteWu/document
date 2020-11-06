@@ -93,30 +93,25 @@ npm uninstall vue
 
 
 --webpack相关
-npm init
-npm i -D webpack@3
--webpack4+需要webpack-cli
-npm i -D webpack-cli
-npm i -D webpack-dev-server@2
-npm i -D cross-env
-npm i -D vue-loader
-npm i -D vue-template-compiler
-npm i -D css-loader@0
-npm i -D style-loader@0
-npm i -D url-loader@0
-npm i -D file-loader@1
-npm i -D html-webpack-plugin@2
-npm i -D extract-text-webpack-plugin
+npm init -y
+npm i -D webpack webpack-cli
+npm i -D style-loader css-loader
+npm i -D file-loader
+npm i -D html-webpack-plugin
+npm i -D clean-webpack-plugin
+npm i -D webpack-dev-server
+npm i -D babel-loader @babel/core @babel/preset-env
 
-npm i -D postcss-loader
-npm i -D autoprefixer
-npm i -D babel-loader
-npm i -D babel-core
-npm i -D babel-preset-env
-npm i -D babel-plugin-transform-vue-jsx
-npm i -D babel-helper-vue-jsx-merge-props
-npm i -D babel-plugin-syntax-jsx
-npm i -D html-loader
+npm i -D vue-loader vue-template-compiler
+
+
+--eslint相关
+npm i -D eslint
+npx eslint --init
+npx eslint .
+npx eslint . --fix
+
+npm i -D eslint-plugin-vue
 
 
 --vue相关
@@ -149,8 +144,6 @@ npm i js-cookie
 npm i nprogress
 npm i echarts
 npm i file-saver
-
-npm i --save-dev eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node
 
 -ie兼容Promise
 npm i babel-polyfill
@@ -193,8 +186,8 @@ npx react-native init demo
 
 
 --electron相关
-npm init
-npm install --save-dev electron
+npm init -y
+npm i -D electron
 electron-packager ./ wubin --win --arch=x64 --out ./exe --electron-version 6.0.2 --overwrite --icon=./app.ico --ignore=node_modules
 
 

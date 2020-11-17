@@ -1,16 +1,27 @@
+--工具
+FinalShell http://www.hostbuf.com/
+
+
+--上传nginx-1.16.1.tar.gz
+psftp
+open 192.168.10.114
+put D:/tools/nginx-1.16.1.tar.gz /usr/local/nginx-1.16.1.tar.gz
+或
+pscp -P 22 -pw 123 D:\tools\linux\centos8\mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz root@192.168.10.131:/usr/local
+
+
 --虚拟机
+-下载地址
 https://download3.vmware.com/software/wkst/file/VMware-workstation-full-15.5.0-14665864.exe
+-激活码
 UY758-0RXEQ-M81WP-8ZM7Z-Y3HDA
 VF750-4MX5Q-488DQ-9WZE9-ZY2D6
 UU54R-FVD91-488PP-7NNGC-ZFAX6
 YC74H-FGF92-081VZ-R5QNG-P6RY4
 YC34H-6WWDK-085MQ-JYPNX-NZRA2
-
+-镜像下载
 https://mirrors.aliyun.com/centos
-
-
---工具
-FinalShell http://www.hostbuf.com/
+https://mirrors.aliyun.com/centos/7.8.2003/isos/x86_64/
 
 
 --网站
@@ -19,102 +30,16 @@ http://vault.centos.org/
 http://rpm.pbone.net/
 
 
---上传nginx-1.16.1.tar.gz
-psftp
-open 192.168.10.114
-put D:/tools/nginx-1.16.1.tar.gz /usr/local/tools/nginx-1.16.1.tar.gz
-或
-pscp -P 22 D:\tools\linux\jdk-8u261-linux-x64.rpm root@192.168.10.123:/usr/local/tools
+--网络
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+ONBOOT=yes
+service network restart
+ip addr
 
 
---指令
-cat /proc/version
-uname -a
-cat /etc/redhat-release
-cat /etc/issue
-
-reboot
-mkdir tools
-rm -rf tools
-ps -e | grep XX
-ps -aux | grep XX
-kill -9 port
-
--后台运行
-nohup java -jar xxx.jar &
-
-############################
-[Unit]
-Description=myapp
-After=syslog.target
-
-[Service]
-User=myapp
-ExecStart=/var/myapp/myapp.jar
-SuccessExitStatus=143
-
-[Install]
-WantedBy=multi-user.target
-############################
-
-ln -s /home/user/xxx.jar /etc/init.d/xxx
-chkconfig --add xxx
-
-
---服务
--启动
-service [服务] start
-service [服务] stop
-service [服务] restart
-service [服务] status
-
-systemctl start [unit type]
-systemctl stop [unit type]
-systemctl restart [unit type]
-systemctl status [unit type]
-
--开机启动
-chkconfig [服务] on
-chkconfig [服务] off
-
--是否开机启动，2、3、4、5启动，代表开机启动
-chkconfig --list
-chkconfig mysqld --list
-
-systemctl enable [unit type]
-systemctl disable [unit type]
-
--是否启动
-systemctl is-active [unit type]
--是否开机启动
-systemctl is-enabled [unit type]
-
--重新加载某个服务的配置文件
-systemctl reload [unit type]
--重新加载所有服务的配置文件
-systemctl daemon-reload
-
-systemctl list-units | grep sshd
-systemctl list-units --all | grep sshd
-systemctl list-unit-files | grep sshd
-
-
---防火墙
-systemctl status firewalld.service
-service firewalld start
-
-firewall-cmd --list-all
--查看端口是否开放
-firewall-cmd --query-port=80/tcp
--开放端口
-firewall-cmd --permanent --add-port=80/tcp
--移除端口
-firewall-cmd --permanent --remove-port=8080/tcp
--重启防火墙
-firewall-cmd --reload
-
-
---centos7 yum 更换源
+--yum
+-更换镜像
+https://developer.aliyun.com/mirror/centos
 -备份
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 -下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/
@@ -123,51 +48,159 @@ wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-
 -生成缓存
 yum makecache
 
--
+-指令
 yum repolist
-
--查看
 yum search nginx
 yum list nginx
+yum list extras
+yum list installed | grep nginx
 
--查看是否已安装
-yum list installed | grep openssh-server
-
-
---wget安装，-y表示不询问安装
+-安装，-y表示不询问安装
 yum -y install wget
 
-
---ifconfig安装
 yum -y install net-tools
 ifconfig
 
-
---ssh安装
 yum -y install openssh-server
 
-ps -aux | grep sshd
-systemctl status sshd.service
-service sshd start
+
+--基本指令
+cat /proc/version
+uname -a
+cat /etc/redhat-release
+cat /etc/issue
+
+reboot
+mkdir test
+rm -rf test
+ps -e | grep XX
+ps -aux | grep XX
+netstat -lnp | grep 8080
+kill -9 port
+find / -name nginx.conf
+vi /etc/profile
+nohup java -jar XX.jar &
+
+
+--服务
+-
+service -help
+service [服务] start
+service [服务] stop
+service [服务] restart
+service [服务] reload
+service [服务] status
+
+chkconfig --help
+-添加
+chkconfig --add XX
+-开机启动
+chkconfig [服务] on
+chkconfig [服务] off
+
+-是否开机启动，2、3、4、5启动，代表开机启动
+chkconfig --list
+chkconfig XX --list
+
+-
+systemctl start [unit type]
+systemctl stop [unit type]
+systemctl restart [unit type]
+systemctl reload [unit type]
+systemctl status [unit type]
+
+-是否启动
+systemctl is-active [unit type]
+
+-重新加载所有服务的配置文件
+systemctl daemon-reload
+
+-开机启动
+systemctl enable [unit type]
+systemctl disable [unit type]
+
+-是否开机启动
+systemctl is-enabled [unit type]
+
+-启动的unit
+systemctl list-units | grep sshd
+-所有的unit
+systemctl list-units --all | grep sshd
+-所有的unit-file
+systemctl list-unit-files | grep sshd
+
+
+--防火墙
+service firewalld start
+
+firewall-cmd --list-all
+-查看端口是否开放
+firewall-cmd --query-port=80/tcp
+-开放端口，需要重启防火墙
+firewall-cmd --permanent --add-port=80/tcp
+-重启防火墙
+firewall-cmd --reload
+-移除端口
+firewall-cmd --permanent --remove-port=8080/tcp
 
 
 --java安装
-cd /usr/local/tools
+cd /usr/local
 rpm -ivh jdk-8u261-linux-x64.rpm
 java -version
 
 
---nginx rpm安装
-cd /usr/local/tools
-wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
-rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
+--nginx yum安装
+yum install yum-utils
+vi /etc/yum.repos.d/nginx.repo
+############################
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+############################
+yum install nginx
+
+nginx -v
+ps -aux | grep nginx
+nginx
+nginx -s reload
+nginx -s quit
+
+-应用程序
+/usr/sbin/nginx
 -配置文件
 /etc/nginx/nginx.conf
 /etc/nginx/conf.d
--程序
-/usr/sbin/nginx
--网页
+-默认首页
 /usr/share/nginx/html
+
+-
+/etc/sysconfig/nginx
+/etc/logrotate.d/nginx
+/etc/nginx
+/var/log/nginx
+/var/cache/nginx
+/usr/sbin/nginx
+/usr/lib64/nginx
+/usr/share/nginx
+/usr/libexec/initscripts/legacy-actions/nginx
+
+--nginx rpm安装
+cd /usr/local
+wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
+rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 
 --nginx源码安装
 yum -y install gcc gcc-c++
@@ -197,12 +230,12 @@ libverto-devel-0.2.5-4.el7.x86_64.rpm
 openssl-devel-1.0.2k-19.el7.x86_64.rpm
 libselinux-devel-2.5-15.el7.x86_64.rpm
 
-cd /usr/local/tools
+cd /usr/local
 wget http://nginx.org/download/nginx-1.16.1.tar.gz
 tar -zxvf nginx-1.16.1.tar.gz
 cd nginx-1.16.1
 #./configure --prefix=/usr/local/nginx
-./configure && make && make install
+./configure && make
 cd /usr/local/nginx/sbin
 ./nginx -c /usr/local/nginx/conf/nginx.conf
 ./nginx -s reload
@@ -231,9 +264,9 @@ systemctl enable nginx.service
 
 
 --redis安装
-cd /usr/local/tools
+cd /usr/local
 wget http://download.redis.io/releases/redis-4.0.9.tar.gz
-tar -zxvf redis-4.0.9.tar.gz
+tar xzf redis-4.0.9.tar.gz
 cd redis-4.0.9
 make
 -修改redis.conf
@@ -243,7 +276,7 @@ vi redis.conf
 -注释掉bind 127.0.0.1
 -设置密码requirepass 123456
 -启动redis
-src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
+src/redis-server /usr/local/redis-4.0.9/redis.conf
 -关闭redis
 ps -aux | grep redis
 kill -9 port
@@ -257,7 +290,7 @@ After=network.target
   
 [Service]
 Type=forking
-ExecStart=/usr/local/tools/redis-4.0.9/src/redis-server /usr/local/tools/redis-4.0.9/redis.conf
+ExecStart=/usr/local/redis-4.0.9/src/redis-server /usr/local/redis-4.0.9/redis.conf
 PrivateTmp=true
   
 [Install]
@@ -272,7 +305,60 @@ https://repo.mysql.com/
 rpm -qa | grep mariadb
 rpm -e --nodeps mariadb-libs-5.5.65-1.el7.x86_64
 
-cd /usr/local/tools
+-添加用户组
+groupadd test
+-查看用户组
+cat /etc/group
+-删除用户组
+groupdel test
+-添加用户
+useradd -r -g test test
+-修改密码
+passwd test
+-查看用户
+cat /etc/passwd
+-删除用户，包括/home目录
+userdel -r test
+
+-
+groupadd mysql
+useradd -r -g mysql -s /bin/false mysql
+-
+cd /usr/local
+tar zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz
+ln -s /usr/local/mysql-5.7.30-linux-glibc2.12-x86_64 mysql
+export PATH=$PATH:/usr/local/mysql/bin
+-
+cd mysql
+mkdir mysql-files
+chown mysql:mysql mysql-files
+chmod 750 mysql-files
+-初始化
+bin/mysqld --initialize --user=mysql
+bin/mysqld --defaults-file=/etc/my.cnf --initialize --user=mysql
+-创建默认的SSL和RSA文件，如需要
+bin/mysql_ssl_rsa_setup
+-启动
+bin/mysqld_safe --user=mysql &
+-开机自启
+cp support-files/mysql.server /etc/init.d/mysql
+chmod +x /etc/init.d/mysql
+chkconfig --add mysql
+-查看
+chkconfig mysql --list
+-可能需要
+chkconfig --level 345 mysql on
+-报错：mysql: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+yum install libncurses*
+-登录
+mysql -u root -p
+-修改密码
+alter user 'root'@'localhost' identified by '123';
+-开放端口，远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+
+-
+cd /usr/local
 wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar
 mkdir mysql-8.0.20
 tar -xvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
@@ -281,37 +367,34 @@ cd mysql-8.0.20
 rpm -qpl mysql-community-server-8.0.20-1.el7.x86_64.rpm
 -安装
 yum install mysql-community-{server,client,common,libs}-*
-或
-rpm -Uvh *.rpm --nodeps --force
--修改配置文件
-vi /etc/my.cnf
-port=13306
--目录授权
-chmod -R 777 /var/lib/mysql
 -启动服务
-systemctl start mysqld.service
+systemctl start mysqld
 -查看服务
-systemctl status mysqld.service
+systemctl status mysqld
 -查看密码
 grep 'temporary password' /var/log/mysqld.log
 -登录
 mysql -u root -p
 -修改密码
-alter user 'root'@'localhost' identified by 'root';
-alter user 'root'@'localhost' identified with mysql_native_password by 'root';
-alter user 'root'@'%' identified with caching_sha2_password by 'root';
--远程授权
+alter user 'root'@'localhost' identified by 'Wubin930722#';
+caching_sha2_password
+mysql_native_password
+-开放端口，远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+或
 show databases;
 use mysql;
-select host, user, authentication_string, plugin from user;
-update user set host = "%" where user='root';
+select host, user, plugin from user;
+update user set host = '%' where user='root';
 flush privileges;
-或
-grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option;
-flush privileges;
--修改端口可能需要
+
+-修改配置文件
+cat /etc/my.cnf
+vi /etc/my.cnf
+port=13306
+-修改端口需要
 vi /etc/selinux/config
-SELINUX=enforcing -> SELINUX=disabled
+SELINUX=disabled
 
 
 --rabbitmq packagecloud安装
@@ -321,7 +404,7 @@ yum -y install erlang
 yum -y install rabbitmq-server
 
 chkconfig rabbitmq-server on
-systemctl status rabbitmq-server.service
+service rabbitmq-server status
 service rabbitmq-server start
 
 rabbitmq-plugins enable rabbitmq_management
@@ -336,7 +419,7 @@ rabbitmqctl delete_user username
 rabbitmqctl oldPassword username newPassword
 
 --rabbitmq rpm安装
-cd /usr/local/tools
+cd /usr/local
 wget https://github.com/rabbitmq/erlang-rpm/releases/download/v22.3.4.5/erlang-22.3.4.5-1.el7.x86_64.rpm
 wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.6/rabbitmq-server-3.8.6-1.el7.noarch.rpm
 

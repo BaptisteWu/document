@@ -121,6 +121,7 @@ basedir=D:/mysql-8.0.20-winx64
 datadir=D:/mysql-8.0.20-winx64/data
 -创建D:\mysql-8.0.20-winx64\data目录
 -初始化数据目录
+mysqld --initialize --console
 mysqld --defaults-file=D:\mysql-8.0.20-winx64\my.ini --initialize --console
 -启动服务
 mysqld --console
@@ -144,6 +145,8 @@ mysqld --remove
 mysql -u root -p
 -修改密码
 alter user 'root'@'localhost' identified by 'root';
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
 
 
 --RocketMQ

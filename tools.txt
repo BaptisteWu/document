@@ -373,10 +373,11 @@ solr create -c mycollection
 --spring-boot-cli
 -配置环境变量
 spring --version
+spring --help init
 -创建项目
 d:
 cd D:\project\java\springboot2
-spring init --build=maven --java-version=1.8 --dependencies=web --packaging=jar --boot-version=2.1.5.RELEASE --groupId=com.example --artifactId=quartz --version=0.0.1-SNAPSHOT --name=quartz quartz
+spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId=com.wubin --artifactId=demo --version=0.0.1-SNAPSHOT --name=demo --packaging=jar --java-version=1.8 --dependencies=web demo
 
 
 --netcat

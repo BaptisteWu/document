@@ -99,8 +99,11 @@ full join ... on = left join 和 right join 的并集
 cross join 笛卡尔积
 
 --数据类型
-varchar 固定长度 2000
-varchar2 可变长度 4000
+varchar(4000)
+varchar2(4000) 一个汉字两个字节
+nvarchar2(2000) 一个汉字一个字节
+to_char()
+to_nchar()
 
 --between前后都是闭区间
 

@@ -18,6 +18,18 @@ show global variables
 show global variables like 'wait_timeout'
 set global wait_timeout=28800
 
+--查询插入
+INSERT INTO tb_user_copy1(id, username, password, create_time)
+SELECT id, username, password, create_time FROM tb_user
+WHERE id > 80
+
+--关联更新
+UPDATE goods a
+LEFT JOIN category b
+ON a.category_id = b.id
+SET a.name = '苹果2'
+WHERE a.id = 2 and b.name = '水果'
+
 --为NULL字段设置默认值
 SELECT IFNULL(NULL, 0)
 SELECT COALESCE(NULL, 0)
@@ -40,6 +52,8 @@ SELECT CONVERT('010', SIGNED)
 有符号整数：SIGNED
 无符号整数：UNSIGNED
 
+--数字转字符串
+
 --字符串转数字
 SELECT '010.010' + 0
 
@@ -47,6 +61,7 @@ SELECT '010.010' + 0
 SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
 SELECT DATE_FORMAT(NOW(), '%Y-%c-%e %h:%i:%s')
 SELECT DATE_FORMAT(NOW(6), '%Y-%m-%d %T.%f')
+
 --字符串转时间
 SELECT STR_TO_DATE('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s')
 
@@ -194,6 +209,18 @@ WHERE b.create_time <= a.create_time
 FROM wubin a
 GROUP BY create_time
 
+--创建临时表
+CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT)
+
+--根据某个字段把一条记录分成多条
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
+(
+SELECT 1 auto_incre_id
+UNION ALL SELECT 2 auto_incre_id
+UNION ALL SELECT 3 auto_incre_id
+) a
+WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1)
+
 --索引
 --创建索引
 CREATE INDEX index_username ON user(username)
@@ -261,30 +288,6 @@ EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time = '2019-12-09 
 EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND age = 12 AND username = 'tom'
 EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time < '2019-12-09 14:42:40' AND age = 12 //范围条件后的索引失效
 
---创建临时表
-CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT)
-
---根据某个字段把一条记录分成多条
-SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
-(
-SELECT 1 auto_incre_id
-UNION ALL SELECT 2 auto_incre_id
-UNION ALL SELECT 3 auto_incre_id
-) a
-WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1)
-
---一张表数据插入另一张表
-INSERT INTO tb_user_copy1(id, username, password, create_time)
-SELECT id, username, password, create_time FROM tb_user
-WHERE id > 80
-
---关联更新
-update goods a
-left join category b
-on a.category_id = b.id
-set a.name = '苹果2'
-where a.id = 2 and b.name = '水果'
-
 --前10条记录中，每隔5条取1条
 SELECT * FROM
 (
@@ -292,7 +295,6 @@ SELECT *, @rownum := @rownum + 1 AS rowno FROM tb_user, (SELECT @rownum := 0) t
 ORDER BY id DESC LIMIT 0, 10
 ) a 
 WHERE MOD(a.rowno, 5) = 1
-
 
 
 

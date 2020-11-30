@@ -32,27 +32,6 @@ create user "ybsb" identified by "123456"
 --授权
 grant connect, resource, dba to test
 
---创建序列
-create sequence SEQ_T_PASS
-increment by 1
-start with 1
-
---创建触发器
-create or replace trigger TRIGGER_T_PASS
-before insert on T_PASS
-for each row
-begin
-select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
-end
-
---创建视图
-create or replace view VIEW_T_PASS
-as
-select * from T_PASS
-
---删除视图
-drop view VIEW_T_PASS
-
 --表注释
 comment on table xx is '用户表'
 --列注释
@@ -98,6 +77,61 @@ inner join ... on = left join 和 right join 的交集
 full join ... on = left join 和 right join 的并集
 cross join 笛卡尔积
 
+--创建序列
+create sequence SEQ_T_PASS
+increment by 1
+start with 1
+
+--创建触发器
+create or replace trigger TRIGGER_T_PASS
+before insert on T_PASS
+for each row
+begin
+select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
+end
+
+--创建视图
+create or replace view VIEW_T_PASS
+as
+select * from T_PASS
+
+--删除视图
+drop view VIEW_T_PASS
+
+--创建类型
+create or replace type TYPE_STR_SPLIT is table of varchar2(4000);
+
+--创建函数
+create or replace function FUNCTION_SPLIT_STR(v_str in varchar2, v_split in varchar2)
+return TYPE_STR_SPLIT pipelined
+as
+len int;
+begin
+  len := length(v_str) - length(replace(v_str, v_split, '')) + 1;
+  for i in 1 .. len loop
+    pipe row(regexp_substr(v_str, '[^' || v_split || ']+', 1, i));
+  end loop;
+  return;
+end;
+
+select * from table(FUNCTION_SPLIT_STR('abc;def', ';'))
+
+create or replace function FUNCTION_COMPARE_STR(v_str1 in varchar2, v_str2 in varchar2, v_split in varchar2)
+return int
+as
+begin
+  for i in (select * from table (FUNCTION_SPLIT_STR(v_str1, v_split))) loop
+    for j in (select * from table (FUNCTION_SPLIT_STR(v_str2, v_split))) loop
+      if i.column_value = j.column_value then
+        return 1;
+      end if;
+    end loop;
+  end loop;
+  return 0;
+end;
+
+select FUNCTION_COMPARE_STR('abc;def', 'def;ghi', ';') from dual
+
 --数据类型
 varchar(4000)
 varchar2(4000) 一个汉字两个字节
@@ -140,10 +174,13 @@ to_number()
 --时间转字符串
 select to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss') from dual
 select to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss.ff') from dual
+
 --字符串转时间date
 select to_date('2019-08-08 18:18:18', 'yyyy-mm-dd hh24:mi:ss') from dual
+
 --字符串转时间timestamp
 select to_timestamp('2020-02-02 20:20:02.0202', 'yyyy-mm-dd hh24:mi:ss.ff') from dual
+
 --timestamp转date
 select systimestamp + 0 from dual
 select cast(systimestamp as date) from dual
@@ -180,6 +217,7 @@ select trunc(add_months(sysdate, -12), 'y') from dual
 
 --字符串拼接
 select 'hello'||'world' from dual
+
 --字符串拼接数字
 select 123||'hello world' from dual
 
@@ -223,43 +261,9 @@ regexp_like
 oracle11g
 select regexp_count('abc;def', ';') from dual
 
---一条记录分多条
+--根据某个字段把一条记录分成多条
 select regexp_substr('abc;def', '[^;]+', 1, level) from dual
 connect by level <= length('abc;def') - length(replace('abc;def', ';', '')) + 1
-
--创建类型
-create or replace type TYPE_STR_SPLIT is table of varchar2(4000);
-
--创建函数
-create or replace function FUNCTION_SPLIT_STR(v_str in varchar2, v_split in varchar2)
-return TYPE_STR_SPLIT pipelined
-as
-len int;
-begin
-  len := length(v_str) - length(replace(v_str, v_split, '')) + 1;
-  for i in 1 .. len loop
-    pipe row(regexp_substr(v_str, '[^' || v_split || ']+', 1, i));
-  end loop;
-  return;
-end;
-
-select * from table(FUNCTION_SPLIT_STR('abc;def', ';'))
-
-create or replace function FUNCTION_COMPARE_STR(v_str1 in varchar2, v_str2 in varchar2, v_split in varchar2)
-return int
-as
-begin
-  for i in (select * from table (FUNCTION_SPLIT_STR(v_str1, v_split))) loop
-    for j in (select * from table (FUNCTION_SPLIT_STR(v_str2, v_split))) loop
-      if i.column_value = j.column_value then
-        return 1;
-      end if;
-    end loop;
-  end loop;
-  return 0;
-end;
-
-select FUNCTION_COMPARE_STR('abc;def', 'def;ghi', ';') from dual
 
 --递归查询
 with dept as (
@@ -274,22 +278,31 @@ select 6 id, 2 parent_id,'杭州' name from dual
 select * from dept
 start with parent_id = 0
 connect by parent_id = prior id
+
 -通过子找父
 select * from dept
 start with id = 5
 connect by id = prior parent_id
+
+-排序
+select * from dept
+start with parent_id = 0
+connect by parent_id = prior id
+order siblings by id desc
+
 -where条件递归后起作用
 select * from dept
 where name = '越城'
 start with parent_id = 0
 connect by parent_id = prior id
--
+
+-递归相关函数
 select d.*, prior name parent_name,
-sys_connect_by_path(d.name, '/') path
+sys_connect_by_path(name, '/') path,
+connect_by_isleaf isleaf, level
 from dept d
 start with parent_id = 0
 connect by parent_id = prior id
-order siblings by d.id desc
 
 --
 select wm_concat(hour) hour from

@@ -38,32 +38,44 @@ location /static {
 
 --git
 -
-创建文件夹
-打开文件夹
 git init
-git remote add origin https://gitee.com/hlf890112/intelligent-dispensing.git
+git remote add origin git@gitee.com:hlf890112/intelligent-dispensing.git
 git pull origin master
 git push -u origin master
+-多个分支再git pull
 
 -
 git clone https://gitee.com/hlf890112/intelligent-dispensing.git
 git push
 
--
-查看本地仓库分支，-a 查看本地仓库分支和远程仓库分支
+-强行让本地分支覆盖远程分支
+git push origin master -f
+-查看本地仓库分支
+git branch
+-查看远程仓库分支
+git branch -r
+-查看本地仓库分支和远程仓库分支
 git branch -a
-根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后不切换
+-根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后不切换
 git branch fa origin/fa
-切换到fa分支
+-切换到fa分支
 git checkout fa
-根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后进行切换
+-根据远程仓库的fa分支创建一个本地仓库的fa分支，创建完成之后进行切换
 git checkout -b fa origin/fa
-根据远程仓库的fa分支创建一个本地仓库的fa分支
+-根据远程仓库的fa分支创建一个本地仓库的fa分支
 git checkout -t origin/fa
 
 
 --maven
--配置setting.xml文件
+-环境变量
+M2_HOME
+
+-Path
+%M2_HOME%\bin
+
+mvn -v
+
+-配置文件setting.xml
 <localRepository>D:/apache/maven</localRepository>
 
 <offline>true</offline>
@@ -103,11 +115,46 @@ mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId
 
 
 --gradle
+-环境变量
 GRADLE_HOME
 GRADLE_USER_HOME
+gradle -v
+gradle init
+gradle run
+
+distributionUrl=https\://services.gradle.org/distributions/gradle-5.6.4-bin.zip
+distributionUrl=file\:/D:/tools/gradle-5.6.4-bin.zip
+gradlew run
+
 maven { url 'https://maven.aliyun.com/repository/public/' }
 compile files('lib/ojdbc-14.jar')
 compile fileTree(dir: 'libs', include: ['*.jar'])
+
+
+--spring-boot-cli
+-配置环境变量
+spring --version
+spring --help init
+-创建项目
+d:
+cd D:\project\java\springboot2
+spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId=com.rmyy --artifactId=print --version=0.0.1-SNAPSHOT --name=print --packaging=jar --java-version=1.8 --dependencies=web print
+
+
+--android cmdline-tools
+-ANDROID_SDK_HOME
+.android文件夹位置
+-
+sdkmanager --version --sdk_root=D:\Android\sdk
+sdkmanager --list --sdk_root=D:\Android\sdk
+sdkmanager "platforms;android-28" --sdk_root=D:\Android\sdk
+sdkmanager "cmdline-tools;latest" --sdk_root=D:\Android\sdk
+sdkmanager --uninstall "platforms;android-28" --sdk_root=D:\Android\sdk
+-
+cmdline-tools/latest/bin/...
+cmdline-tools/latest/lib/...
+cmdline-tools/latest/NOTICE.txt
+cmdline-tools/latest/source.properties
 
 
 --mysql
@@ -368,16 +415,6 @@ solr create -c mycollection
 
 <delete><query>*:*</query></delete>
 <commit/>
-
-
---spring-boot-cli
--配置环境变量
-spring --version
-spring --help init
--创建项目
-d:
-cd D:\project\java\springboot2
-spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId=com.wubin --artifactId=demo --version=0.0.1-SNAPSHOT --name=demo --packaging=jar --java-version=1.8 --dependencies=web demo
 
 
 --netcat

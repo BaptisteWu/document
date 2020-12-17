@@ -13,6 +13,7 @@ pscp -P 22 -pw 123 D:\tools\linux\centos8\mysql-5.7.30-linux-glibc2.12-x86_64.ta
 --虚拟机
 -下载地址
 https://download3.vmware.com/software/wkst/file/VMware-workstation-full-15.5.0-14665864.exe
+https://download3.vmware.com/software/wkst/file/VMware-workstation-full-15.5.7-17171714.exe
 -激活码
 UY758-0RXEQ-M81WP-8ZM7Z-Y3HDA
 VF750-4MX5Q-488DQ-9WZE9-ZY2D6
@@ -28,40 +29,6 @@ https://mirrors.aliyun.com/centos/7.8.2003/isos/x86_64/
 http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
 http://vault.centos.org/
 http://rpm.pbone.net/
-
-
---网络
-vi /etc/sysconfig/network-scripts/ifcfg-ens33
-ONBOOT=yes
-service network restart
-ip addr
-
-
---yum
--更换镜像
-https://developer.aliyun.com/mirror/centos
--备份
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
--下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/
-curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
--生成缓存
-yum makecache
-
--指令
-yum repolist
-yum search nginx
-yum list nginx
-yum list extras
-yum list installed | grep nginx
-
--安装，-y表示不询问安装
-yum -y install wget
-
-yum -y install net-tools
-ifconfig
-
-yum -y install openssh-server
 
 
 --基本指令
@@ -80,6 +47,55 @@ kill -9 port
 find / -name nginx.conf
 vi /etc/profile
 nohup java -jar XX.jar &
+
+
+--网络
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+ONBOOT=yes
+service network restart
+ip addr
+
+
+--rpm
+-安装
+rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
+-升级
+rpm -Uvh *.rpm
+-卸载
+rpm -e nginx-1.16.1-1.el7.ngx.x86_64.rpm
+-是否安装
+rpm -q nginx
+-所有安装
+rpm -qa | grep nginx
+-详细信息
+rpm -qi nginx
+
+
+--yum
+-更换镜像
+https://developer.aliyun.com/mirror/centos
+-备份
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+-下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+-生成缓存
+yum makecache
+
+-指令
+yum repolist
+yum search nginx
+yum list nginx
+yum info nginx
+yum list extras
+yum list installed | grep nginx
+
+-安装，-y表示不询问安装
+yum -y install net-tools
+ifconfig
+
+-卸载
+yum remove net-tools
 
 
 --服务
@@ -349,6 +365,8 @@ chkconfig mysql --list
 -可能需要
 chkconfig --level 345 mysql on
 -报错：mysql: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+ln -s libncurses.so.5.6 /lib64/libtinfo.so.5
+ln -s libncurses.so.5.6 /lib/libtinfo.so.5
 yum install libncurses*
 -登录
 mysql -u root -p

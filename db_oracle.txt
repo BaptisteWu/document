@@ -1,15 +1,30 @@
+jdbc:oracle:thin:@localhost:1521:SID
+jdbc:oracle:thin:@localhost:1521/服务名
+
 --导出数据
 exp fzxs/123456@192.168.1.1:1521/orcl file=D:\fzxs.dmp full=y
+exp fzxs/123456@192.168.1.1:1521/orcl file=D:\fzxs.dmp tables=a,b
 --导入数据
 imp kggcw/123456@47.98.108.183:1521/orcl file=D:\ruoyi.dmp full=y
 
---用户解锁
+--
 sqlplus / as sysdba
+-用户解锁
 alter user scott account unlock;
+select * from dba_profiles where profile='DEFAULT' and resource_name='FAILED_LOGIN_ATTEMPTS'
 alter profile default limit failed_login_attempts unlimited;
+-用户密码过期
+alter user test identified by "123456"
+select * from dba_profiles where profile='DEFAULT' and resource_name='PASSWORD_LIFE_TIME'
+alter profile default limit password_life_time unlimited;
 
 --乱码解决
 select userenv('language') from dual
+
+select * from NLS_DATABASE_PARAMETERS
+where PARAMETER in ('NLS_LANGUAGE', 'NLS_TERRITORY', 'NLS_CHARACTERSET')
+
+SIMPLIFIED CHINESE_CHINA.ZHS16GBK
 新建环境变量：NLS_LANG = AMERICAN_AMERICA.ZHS16GBK
 
 --查看版本
@@ -20,6 +35,8 @@ select * from v$instance
 select * from v$session
 select * from v$process
 select * from v$parameter
+--查用户
+select * from dba_users
 
 --
 alter system set sessions=1105 scope=spfile
@@ -28,9 +45,10 @@ scope=memory 立即生效，重启后失效
 scope=both
 
 --创建用户
-create user "ybsb" identified by "123456"
+create user test identified by "123456"
 --授权
 grant connect, resource, dba to test
+grant all privileges to test
 
 --表注释
 comment on table xx is '用户表'

@@ -1,6 +1,4 @@
 --nginx
-e:
-cd E:\nginx-1.16.0
 start nginx
 start nginx -c E:\nginx-1.16.0\conf\nginx2.conf
 nginx -s reload
@@ -34,6 +32,8 @@ location /static {
 	proxy_pass  192.168.2.321:81/
 }
 ==>192.168.2.321:81/a.html
+
+try_files $uri $uri/ /index.html;
 
 
 --git
@@ -141,6 +141,12 @@ cd D:\project\java\springboot2
 spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId=com.rmyy --artifactId=print --version=0.0.1-SNAPSHOT --name=print --packaging=jar --java-version=1.8 --dependencies=web print
 
 
+--
+myapp.xml
+myapp.exe install
+myapp.exe start
+
+
 --android cmdline-tools
 -ANDROID_SDK_HOME
 .android文件夹位置
@@ -203,37 +209,31 @@ set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX
 -->
 rem set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"
 set "JAVA_OPT=%JAVA_OPT% -server -Xms256m -Xmx512m"
+
 -启动NameServer，日志在 用户\logs\rocketmqlogs 下
-e:
-cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
 start mqnamesrv.cmd
 或双击 mqnamesrv.cmd
+
 -修改 bin\runbroker.cmd
 set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g"
 -->
 rem set "JAVA_OPT=%JAVA_OPT% -server -Xms2g -Xmx2g -Xmn1g"
 set "JAVA_OPT=%JAVA_OPT% -server -Xms256m -Xmx512m"
+
 -启动Broker，日志在 用户\logs\rocketmqlogs 下
-e:
-cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
 start mqbroker.cmd -n localhost:9876 autoCreateTopicEnable=true
 或修改 mqbroker.cmd
 在 call "%ROCKETMQ_HOME%\bin\runbroker.cmd" org.apache.rocketmq.broker.BrokerStartup %* 之前添加
 set "NAMESRV_ADDR=localhost:9876"
 双击 mqbroker.cmd
+
 -启动消费者
-e:
-cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
 set NAMESRV_ADDR=localhost:9876
 tools.cmd org.apache.rocketmq.example.quickstart.Consumer
 -启动生产者
-e:
-cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
 set NAMESRV_ADDR=localhost:9876
 tools.cmd org.apache.rocketmq.example.quickstart.Producer
 -关闭服务
-e:
-cd E:\mq\rocketmq-all-4.7.0-bin-release\bin
 mqshutdown.cmd broker
 mqshutdown.cmd namesrv
 
@@ -244,34 +244,21 @@ dataDir=D:/apache/kafka/tmp/zookeeper
 -修改 config\server.properties
 log.dirs=D:/apache/kafka/tmp/kafka-logs
 -启动自带 zookeeper 服务
-e:
-cd E:\mq\kafka_2.11-2.2.0
 bin\windows\zookeeper-server-start.bat config\zookeeper.properties
 -启动 kafka 服务
-e:
-cd E:\mq\kafka_2.11-2.2.0
 bin\windows\kafka-server-start.bat config\server.properties
 -创建 topic
-e:
-cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 -查看 topic
-e:
-cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-topics.bat --list --zookeeper localhost:2181
 -启动生产者
-e:
-cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-console-producer.bat --broker-list localhost:9092 --topic test
 -启动消费者
-e:
-cd E:\mq\kafka_2.11-2.2.0\bin\windows
 kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
 
 
 --RabbitMQ
 -启动监控管理
-cd sbin
 rabbitmq-plugins enable rabbitmq_management
 重启rabbitmq服务
 http://localhost:15672
@@ -284,7 +271,6 @@ http://localhost:8161/
 用户名admin
 密码admin
 -启动服务
-E:\mq\apache-activemq-5.15.12\bin\win64
 双击activemq.bat
 
 
@@ -293,12 +279,8 @@ http://localhost:18083/
 用户名admin
 密码public
 -启动服务
-e:
-cd E:\mq\emqx\bin
 emqx start
 -关闭服务
-e:
-cd E:\mq\emqx\bin
 emqx stop
 
 
@@ -307,16 +289,10 @@ emqx stop
 dataDir=D:\apache/zookeeper/data
 dataLogDir=D:\apache/zookeeper/log
 -启动服务
-e:
-cd E:\zookeeper\zookeeper-3.4.14\bin
 zkServer.cmd
 -启动客户端
-e:
-cd E:\zookeeper\zookeeper-3.4.14\bin
 zkCli.cmd
 -启动第三方客户端
-e:
-cd E:\zookeeper\ZooInspector\build
 java -jar zookeeper-dev-ZooInspector.jar
 
 
@@ -334,8 +310,6 @@ net:
   bindIp: 127.0.0.1
   port: 27017
 -启动服务
-d:
-cd D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin
 mongod --config D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg
 
 
@@ -418,9 +392,7 @@ solr create -c mycollection
 
 
 --netcat
-e:
-cd E:\tools\netcat-1.11
-nc 114.115.204.60 21012 -v
+nc -v 114.115.204.60 21012
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
 
@@ -437,10 +409,8 @@ ffplay.exe -i C:\tools\video\012715-793-carib.rmvb
 
 
 --rtmp
-cd C:\apache\nginx-1.7.11.3-Gryphon
 nginx.exe -c conf\nginx-win-rtmp.conf
 
-cd C:\apache\ffmpeg-20190426-4b7166c-win64-static\bin
 ffmpeg.exe -re -i C:\doa\video.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/myapp/test
 ffplay.exe rtmp://localhost:1935/myapp/test
 ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
@@ -455,6 +425,13 @@ tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
 tesseract D:\test\num.png stdout -l chi_sim --psm 6
 -文件输出
 tesseract D:\test\ch.jpg result -l chi_sim
+
+
+
+
+
+
+
 
 
 

@@ -39,17 +39,20 @@ try_files $uri $uri/ /index.html;
 --git
 -
 git init
+git add .
+git commit -m 'init'
 git remote add origin git@gitee.com:hlf890112/intelligent-dispensing.git
-git pull origin master
+-若远程仓库里有文件（如README.md），要先把远程仓库里的文件pull下来
+git pull origin master --allow-unrelated-histories
 git push -u origin master
+-强行让本地分支覆盖远程分支
+git push origin master -f
 -多个分支再git pull
 
 -
 git clone https://gitee.com/hlf890112/intelligent-dispensing.git
 git push
 
--强行让本地分支覆盖远程分支
-git push origin master -f
 -查看本地仓库分支
 git branch
 -查看远程仓库分支

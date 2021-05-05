@@ -7,15 +7,26 @@ pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
 pip install cx_Oracle -i https://mirrors.aliyun.com/pypi/simple/
 pip install SQLAlchemy -i https://mirrors.aliyun.com/pypi/simple/
 
-pip install requests
-pip install beautifulsoup4
+pip install requests -i https://mirrors.aliyun.com/pypi/simple/
+pip install beautifulsoup4 -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install opencv-python -i https://mirrors.aliyun.com/pypi/simple/
 pip instal opencv-contrib-python -i https://mirrors.aliyun.com/pypi/simple/
 
+pip install PyQt5 -i https://mirrors.aliyun.com/pypi/simple/
+pip install pyinstaller  -i https://mirrors.aliyun.com/pypi/simple/
+-打包在当前文件夹下
+pyinstaller -F -w demo1.py
+pyinstaller -F -w D:\project\python\assort\love\rose.py
+pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
+pyinstaller -F -w -p C:\Windows\System32\downlevel demo2.py
+
 pip install fastapi -i https://mirrors.aliyun.com/pypi/simple/
 pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
 pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install Pillow -i https://mirrors.aliyun.com/pypi/simple/
+pip install VideoCapture-0.9.5-cp38-cp38-win_amd64.whl
 
 pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
@@ -34,12 +45,6 @@ pip install -r requirements.txt
 下载turtle-0.0.2.tar.gz
 修改setup.py文件，第40行加括号：except (ValueError, ve)
 pip install -e D:\wubin\python\turtle-0.0.2
-
--pyinstaller
-pip install pyinstaller
--打包在当前文件夹下
-pyinstaller -F -w D:\project\python\assort\love\rose.py
-pyinstaller -F -w -i rose.ico -n rose D:\project\python\assort\love\rose.py
 
 
 --venv

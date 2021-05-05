@@ -26,6 +26,10 @@ str.substring(from, to)
 JSON.stringify(list, null, 4)
 
 -遍历数组
+for (let i = 0; i < arr.length; i++) {
+}
+for (let key in arr) {
+}
 for (let value of arr) {
 }
 
@@ -37,6 +41,52 @@ for (propertyName in obj) {
 eval()
 -
 void()
+
+
+display: flex;
+/* 上下 */
+align-items: center;
+/* 左右 */
+justify-content: center;
+
+--------------------------------------
+this.$router.push({path: '/test/1'})
+this.$router.push('/test/1')
+
+{
+path: '/test/:id',
+name: '测试',
+component: () => import('@/Test')
+}
+
+this.$route.params.id
+--------------------------------------
+this.$router.push({
+name: '测试',
+params: {id: 1}
+})
+
+{
+path: '/test',
+name: '测试',
+component: () => import('@/Test')
+}
+
+this.$route.params.id
+--------------------------------------
+this.$router.push({
+path: '/test',
+query: {id: 1}
+})
+
+{
+path: '/test',
+name: '测试',
+component: () => import('@/Test')
+}
+
+this.$route.query.id
+--------------------------------------
 
 
 --

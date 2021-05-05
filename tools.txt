@@ -33,11 +33,20 @@ location /static {
 }
 ==>192.168.2.321:81/a.html
 
-try_files $uri $uri/ /index.html;
+location / {
+  try_files $uri $uri/ /index.html;
+}
 
 
 --git
 -
+添加.gitignore文件
+/**/.idea/
+/**/.mvn/
+/**/target/
+/**/*.iml
+/**/node_modules/
+/**/dist/
 git init
 git add .
 git commit -m 'init'
@@ -119,8 +128,8 @@ mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId
 
 --gradle
 -环境变量
-GRADLE_HOME
-GRADLE_USER_HOME
+GRADLE_HOME		E:\gradle-5.6.4
+GRADLE_USER_HOME	D:\repository\gradle
 gradle -v
 gradle init
 gradle run
@@ -409,6 +418,8 @@ nc -z -v 114.115.204.60 21008-21020
 ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
 -播放
 ffplay.exe -i C:\tools\video\012715-793-carib.rmvb
+ffmpeg.exe -f image2 -i D:\test\test1\%03d.jpg -vcodec libx264 -r 1 test.mp4
+ffmpeg.exe -i 0.mp4 -f gif 00.gif
 
 
 --rtmp

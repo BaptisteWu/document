@@ -1,0 +1,95 @@
+:war 发布
+:war exploded 开发
+
+生成服务器密匙文件
+keytool -genkey -alias test -keyalg RSA -keysize 2048 -validity 36500 -keystore D:/test.keystore -storetype PKCS12
+您的名字与姓氏 www.wubin.com 是域名
+
+导出证书
+keytool -export -alias test -storepass 123456 -file D:/test.cer -keystore D:/test.keystore
+
+证书导入到jdk信任库
+keytool -import -alias cas -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -file D:/cas.cer -trustcacerts
+
+查看证书
+keytool -list -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -alias cas
+
+
+-------------------------------------------------------------------------------------------------
+1.
+@ServletComponentScan
+@WebFilter(urlPatterns = "/*")
+@WebListener
+@WebServlet(urlPatterns = "/test")
+
+2.
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        servletContext.addServlet("my1", MyServlet.class).addMapping("/test");
+        servletContext.addFilter("myFilter1", MyFilter1.class)
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        servletContext.addFilter("myFilter2", MyFilter2.class)
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        servletContext.addListener(MyListener.class);
+    }
+
+3.
+
+-------------------------------------------------------------------------------------------------
+PropertySource注解，只支持properties文件
+1.
+@PropertySource(value = "classpath:config/myConfig.properties")
+@EnableConfigurationProperties(MyConfig.class)
+public class ConfigApplication {
+
+@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+public class MyConfig {
+
+2.
+@PropertySource(value = "classpath:config/myConfig.properties")
+public class ConfigApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigApplication.class, args);
+    }
+
+    @Bean
+    @ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+    public MyConfig myConfig() {
+        MyConfig myConfig = new MyConfig();
+        return myConfig;
+    }
+}
+
+3.
+@PropertySource(value = "classpath:config/myConfig.properties")
+public class ConfigApplication {
+
+@Configuration
+@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+public class MyConfig {
+
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

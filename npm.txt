@@ -25,6 +25,9 @@ str.substring(from, to)
 -转json字符串
 JSON.stringify(list, null, 4)
 
+list.join(',')
+str.split(',')
+
 -遍历数组
 for (let i = 0; i < arr.length; i++) {
 }

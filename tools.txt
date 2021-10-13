@@ -60,7 +60,11 @@ git push origin master -f
 
 -
 git clone https://gitee.com/hlf890112/intelligent-dispensing.git
-git push
+
+-
+git reflog
+q退出
+git reset --hard 40a9a83
 
 -查看本地仓库分支
 git branch
@@ -416,10 +420,28 @@ nc -z -v 114.115.204.60 21008-21020
 --ffmpeg
 -格式转换
 ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
--播放
-ffplay.exe -i C:\tools\video\012715-793-carib.rmvb
 ffmpeg.exe -f image2 -i D:\test\test1\%03d.jpg -vcodec libx264 -r 1 test.mp4
 ffmpeg.exe -i 0.mp4 -f gif 00.gif
+
+ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
+
+ffmpeg -i http://baiduav.luya9.com/20200101/nQt46xNX/index.m3u8 D:\test\m3u8\Downloads\TXq3oOcX8h7jdisK.ts
+
+-播放
+ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
+ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
+ffplay.exe -i D:\test\camera\060212-038-carib.rmvb
+ffplay.exe -i D:\test\camera\082313-414-carib.rmvb
+ffplay.exe -i D:\test\camera\090916_379-1pon-1080p[1].rmvb
+ffplay.exe -i D:\test\camera\111114-733-carib-1080p.rmvb
+ffplay.exe -i D:\test\camera\111914_925-1pon.rmvb
+ffplay.exe -i D:\test\camera\121115_445-carib.rmvb
+ffplay.exe -i D:\test\camera\carib-070811_746.rmvb
+ffplay.exe -i D:\test\camera\heyzo_hd_0797_full_2.rmvb
+ffplay.exe -i D:\test\camera\heyzo_hd_1469_full.rmvb
+ffplay.exe -i D:\test\camera\heyzo_lt_0198_full.rmvb
+ffplay.exe -i D:\test\camera\heyzo_lt_0517_full.rmvb
+ffplay.exe -i D:\test\m3u8\Downloads\yapmMlVcRxNZHk8G.ts
 
 
 --rtmp
@@ -441,11 +463,10 @@ tesseract D:\test\num.png stdout -l chi_sim --psm 6
 tesseract D:\test\ch.jpg result -l chi_sim
 
 
-
-
-
-
-
+--
+WMIC
+Product list
+msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0} /q
 
 
 

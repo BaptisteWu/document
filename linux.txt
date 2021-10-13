@@ -33,6 +33,9 @@ http://rpm.pbone.net/
 
 --基本指令
 cat /proc/version
+cat /proc/cpuinfo | grep physical | uniq -c
+lscpu
+cat /proc/meminfo
 uname -a
 cat /etc/redhat-release
 cat /etc/issue

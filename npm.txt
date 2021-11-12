@@ -109,14 +109,13 @@ https://code.visualstudio.com/docs/editor/portable
 
 
 --nvm相关
-NVM_HOME
-NVM_SYMLINK
--修改nvm/settings.txt
-root: D:\nodejs\nvm
-path: D:\nodejs\nodejs
-node_mirror: https://npm.taobao.org/mirrors/node/
-npm_mirror: https://npm.taobao.org/mirrors/npm/
+NVM_HOME	=D:\nodejs\nvm
+NVM_SYMLINK	=D:\nodejs\nodejs
+settings.txt
 -指令
+nvm root D:\nodejs\nvm
+nvm node_mirror https://npm.taobao.org/mirrors/node/
+nvm npm_mirror https://npm.taobao.org/mirrors/npm/
 安装的nodejs版本
 nvm list
 可以安装的nodejs版本
@@ -124,8 +123,6 @@ nvm list available
 nvm install <version> [arch]
 nvm uninstall <version>
 nvm use <version> [arch]
-nvm node_mirror https://npm.taobao.org/mirrors/node/
-nvm npm_mirror https://npm.taobao.org/mirrors/npm/
 
 
 --node.js相关
@@ -135,13 +132,9 @@ node -v
 --npm相关
 npm -v
 npm config list --json
+npm config get registry
 npm config set registry https://registry.npm.taobao.org
-npm config set python "C:\\Users\\wubin\\.windows-build-tools\\python27\\python.exe"
-npm config get python
-npm config delete python
-npm config set msvs_version 2017
-npm config get msvs_version
-npm config delete msvs_version
+npm config delete registry
 
 -查看全局依赖模块安装路径
 npm root -g

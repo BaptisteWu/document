@@ -132,8 +132,8 @@ mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId
 
 --gradle
 -环境变量
-GRADLE_HOME		E:\gradle-5.6.4
-GRADLE_USER_HOME	D:\repository\gradle
+GRADLE_HOME		=E:\gradle-5.6.4
+GRADLE_USER_HOME	=D:\repository\gradle
 gradle -v
 gradle init
 gradle run
@@ -428,19 +428,8 @@ ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c c
 ffmpeg -i http://baiduav.luya9.com/20200101/nQt46xNX/index.m3u8 D:\test\m3u8\Downloads\TXq3oOcX8h7jdisK.ts
 
 -播放
-ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
 ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
-ffplay.exe -i D:\test\camera\060212-038-carib.rmvb
-ffplay.exe -i D:\test\camera\082313-414-carib.rmvb
-ffplay.exe -i D:\test\camera\090916_379-1pon-1080p[1].rmvb
-ffplay.exe -i D:\test\camera\111114-733-carib-1080p.rmvb
-ffplay.exe -i D:\test\camera\111914_925-1pon.rmvb
-ffplay.exe -i D:\test\camera\121115_445-carib.rmvb
-ffplay.exe -i D:\test\camera\carib-070811_746.rmvb
-ffplay.exe -i D:\test\camera\heyzo_hd_0797_full_2.rmvb
-ffplay.exe -i D:\test\camera\heyzo_hd_1469_full.rmvb
-ffplay.exe -i D:\test\camera\heyzo_lt_0198_full.rmvb
-ffplay.exe -i D:\test\camera\heyzo_lt_0517_full.rmvb
+ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
 ffplay.exe -i D:\test\m3u8\Downloads\yapmMlVcRxNZHk8G.ts
 
 
@@ -453,22 +442,31 @@ ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
 
 
 --tesseract
+tesseract源码下载：https://github.com/tesseract-ocr/tesseract
+tesseract安装包下载：https://digi.bib.uni-mannheim.de/tesseract
+tesseract语言包下载：https://github.com/tesseract-ocr/tessdata
+jTessBoxEditor下载：https://sourceforge.net/projects/vietocr/files/jTessBoxEditor
+
+tesseract --version
 tesseract --list-langs
 -cmd输出
 tesseract D:\test\en.jpg stdout
+-文件输出
+tesseract D:\test\en.jpg result
+-数字
 tesseract D:\test\en.jpg stdout digits
+-中文
+tesseract D:\test\ch.png stdout -l chi_sim
 tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
 tesseract D:\test\num.png stdout -l chi_sim --psm 6
--文件输出
-tesseract D:\test\ch.jpg result -l chi_sim
 
 
 --
 WMIC
 Product list
-msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0} /q
 
-
+rem SQL Server 2019 Database Engine Shared
+msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0}
 
 
 

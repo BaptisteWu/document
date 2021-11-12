@@ -1,3 +1,5 @@
+python --version
+
 https://pypi.tuna.tsinghua.edu.cn/simple
 https://mirrors.aliyun.com/pypi/simple/
 https://www.lfd.uci.edu/~gohlke/pythonlibs/
@@ -26,8 +28,14 @@ pip install uvicorn -i https://mirrors.aliyun.com/pypi/simple/
 pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install Pillow -i https://mirrors.aliyun.com/pypi/simple/
-pip install VideoCapture-0.9.5-cp38-cp38-win_amd64.whl
 
+https://gitlab.gnome.org/World/OpenPaperwork/pyocr
+pip install pyocr -i https://mirrors.aliyun.com/pypi/simple/
+
+https://github.com/breezedeus/cnocr
+pip install cnocr -i https://mirrors.aliyun.com/pypi/simple/
+
+pip install VideoCapture-0.9.5-cp38-cp38-win_amd64.whl
 pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
 --pip

@@ -1,0 +1,130 @@
+--启动服务
+e:
+cd E:\Redis-x64-3.2.100
+redis-server.exe redis.windows.conf
+
+--安装成 Windows Service
+e:
+cd E:\Redis-x64-3.2.100
+redis-server --service-install redis.windows-service.conf --loglevel verbose [--service-name redisService1]
+redis-server --service-uninstall [--service-name redisService1]
+
+--集群
+e:
+cd E:\Redis-x64-3.2.100
+redis-server.exe redis.conf
+redis-server.exe redis6380.conf
+redis-server.exe redis6381.conf
+
+--哨兵
+e:
+cd E:\Redis-x64-3.2.100
+redis-server.exe sentinel.conf --sentinel
+redis-server.exe sentinel26479.conf --sentinel
+redis-server.exe sentinel26579.conf --sentinel
+
+--启动客户端
+e:
+cd E:\Redis-x64-3.2.100
+redis-cli.exe -h localhost -p 6379
+info replication
+info sentinel
+
+--key的个数
+dbsize
+
+--删除当前数据库中的所有key
+flushdb
+
+--删除所有数据库中的key
+flushall
+
+--获取 redis 中所有的 key
+keys *
+
+--订阅
+subscribe
+
+--发布
+publish
+
+--lua脚本
+eval "return redis.call('set','test','test')" 0
+
+eval "return redis.call('set',KEYS[2],ARGV[2])" 3 wubin1 wubin2 wubin3 wubin4 wubin5
+
+script load "return redis.call('set',KEYS[1],ARGV[1])"
+evalsha c686f316aaf1eb01d5a4de1b0b63cd233010e63d 1 tom tom
+
+script exists
+script flush
+script kill
+
+
+--linux安装
+-下载
+cd /usr/local
+wget http://download.redis.io/releases/redis-4.0.9.tar.gz
+
+-解压安装
+tar xzf redis-4.0.9.tar.gz
+cd redis-4.0.9
+make
+
+-修改redis.conf
+vi redis.conf
+-修改端口port
+-后台启动daemonize no 改成 daemonize yes
+-注释掉bind 127.0.0.1
+-设置密码requirepass 123456
+
+-启动
+src/redis-server /usr/local/redis-4.0.9/redis.conf
+
+-关闭
+ps -aux | grep redis
+kill -9 port
+
+-开机启动
+vi /lib/systemd/system/redis.service
+############################
+[Unit]
+Description=redis
+After=network.target
+  
+[Service]
+Type=forking
+ExecStart=/usr/local/redis-4.0.9/src/redis-server /usr/local/redis-4.0.9/redis.conf
+PrivateTmp=true
+  
+[Install]
+WantedBy=multi-user.target
+############################
+systemctl enable redis.service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,24 @@
+--linux rpm安装
+cd /usr/local
+rpm -ivh jdk-8u311-linux-x64.rpm
+java -version
+
+
+--linux tar安装
+cd /usr/local
+mkdir java
+tar zxvf jdk-8u311-linux-x64.tar.gz -C java
+
+vim /etc/profile
+export JAVA_HOME=/usr/local/java
+export PATH=$PATH:$JAVA_HOME/bin
+
+source /etc/profile
+
+java -version
+
+
+-------------------------------------------------------------------------------------------------
 :war 发布
 :war exploded 开发
 

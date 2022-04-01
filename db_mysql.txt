@@ -9,8 +9,13 @@ show variables like 'binlog_format';
 show binlog events in 'bin-log.000001';
 mysqlbinlog --base64-output=decode-rows -v C:\mysql-5.7.13-winx64\data\bin-log.000004
 
---登录
-mysql -uroot -proot
+--
+select @@sql_mode;
+select @@GLOBAL.sql_mode;
+select @@SESSION.sql_mode;
+set sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set global sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 
 --
 show variables
@@ -34,10 +39,6 @@ WHERE a.id = 2 and b.name = '水果'
 SELECT IFNULL(NULL, 0)
 SELECT COALESCE(NULL, 0)
 
---保留小数
-SELECT ROUND(100.3465, 2), ROUND(100, 2), ROUND(0.6, 2), ROUND(114.6, -1) // 四舍五入
-SELECT TRUNCATE(100.3465, 2), TRUNCATE(100, 2), TRUNCATE(0.6, 2), TRUNCATE(114.6, -1) // 舍
-
 --数据类型转换
 SELECT CAST(10 AS CHAR)
 SELECT CAST(10 AS CHAR(1))
@@ -51,6 +52,12 @@ SELECT CONVERT('010', SIGNED)
 浮点数：DECIMAL
 有符号整数：SIGNED
 无符号整数：UNSIGNED
+
+--保留小数
+SELECT ROUND(100.3465, 2), ROUND(100, 2), ROUND(0.6, 2), ROUND(114.6, -1) // 四舍五入
+SELECT TRUNCATE(100.3465, 2), TRUNCATE(100, 2), TRUNCATE(0.6, 2), TRUNCATE(114.6, -1) // 舍
+SELECT CEIL(32.1) // 向上取整
+SELECT FLOOR(32.1) // 向下取整
 
 --数字转字符串
 
@@ -145,12 +152,20 @@ SELECT TIMESTAMPDIFF(MINUTE, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
 SELECT TIMESTAMPDIFF(SECOND, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
 
 --字符串长度
+varchar(int)类型，int是字符数，而不是字节数
 --LENGTH()一个汉字三个字符，CHAR_LENGTH()一个汉字一个字符
 SELECT LENGTH('吴彬')
 SELECT CHAR_LENGTH('吴彬')
 
 --字符串拼接
 SELECT CONCAT('%', 'wubin', '%')
+
+--字符串截取
+select UPPER(SUBSTRING('db098ee7e5bcdf5efb266be68be83d33', 9, 16)) = 'E5BCDF5EFB266BE6'
+
+--
+SELECT FIND_IN_SET('b', 'a,b,c,d') //2
+SELECT FIND_IN_SET('e', 'a,b,c,d') //0
 
 --取顺序第一个逗号前面的字符串
 SELECT SUBSTRING_INDEX('123,456,789,0', ',', 1) //123
@@ -161,8 +176,17 @@ SELECT SUBSTRING_INDEX('123,456,789,0', ',', -1) //0
 
 SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('123,456,789,0', ',', 2), ',', -1) //456
 
-SELECT FIND_IN_SET('b', 'a,b,c,d') //2
-SELECT FIND_IN_SET('e', 'a,b,c,d') //0
+--根据某个字段把一条记录分成多条
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
+(
+SELECT 1 auto_incre_id
+UNION ALL SELECT 2 auto_incre_id
+UNION ALL SELECT 3 auto_incre_id
+) a
+WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1)
+
+--创建临时表
+CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT)
 
 --GROUP_CONCAT一般与GROUP BY同时使用
 SELECT GROUP_CONCAT(id) FROM wubin
@@ -208,18 +232,6 @@ WHERE b.create_time <= a.create_time
 ) ltec
 FROM wubin a
 GROUP BY create_time
-
---创建临时表
-CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT)
-
---根据某个字段把一条记录分成多条
-SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
-(
-SELECT 1 auto_incre_id
-UNION ALL SELECT 2 auto_incre_id
-UNION ALL SELECT 3 auto_incre_id
-) a
-WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1)
 
 --索引
 --创建索引
@@ -297,21 +309,196 @@ ORDER BY id DESC LIMIT 0, 10
 WHERE MOD(a.rowno, 5) = 1
 
 
+--
+select
+@num := @num + 1,
+date_format( adddate( CURDATE(), INTERVAL @num - 30 DAY ), '%Y-%m-%d' ) as date 
+from
+yw_person_info,(
+select
+@num := 0 
+) t 
+where
+adddate( CURDATE(), INTERVAL @num - 30 DAY ) < CURDATE()
 
 
+--
+START TRANSACTION;
+SET @num := 100000;
+UPDATE yw_person_info SET password = (@num := @num + 1);
+COMMIT;
 
 
+--windows安装
+-下载
+https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-winx64.zip
+
+-添加到环境变量Path
+如：D:\mysql-8.0.20-winx64\bin
+
+-创建D:\mysql-8.0.20-winx64\my.ini文件
+正斜杠 / 或两个反斜杠 \\
+[mysqld]
+basedir=D:/mysql-8.0.20-winx64
+datadir=D:/mysql-8.0.20-winx64/data
+
+-初始化数据目录
+mysqld --initialize --console
+mysqld --defaults-file=D:\mysql-8.0.20-winx64\my.ini --initialize --console
+
+-启动服务
+mysqld --console
+
+-停止服务
+mysqladmin -u root shutdown
+
+-安装Windows服务
+mysqld --install MySQL --defaults-file=D:\mysql-8.0.20-winx64\my.ini
+
+-启动Windows服务
+sc start MySQL
+或
+net start MySQL
+
+-停止Windows服务
+sc stop MySQL
+或
+net stop MySQL
+
+-删除Windows服务
+sc delete mysql
+或
+mysqld --remove
+
+-登录
+mysql -u root -p
+
+-修改密码
+alter user 'root'@'localhost' identified by 'root';
+caching_sha2_password
+mysql_native_password
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+或
+show databases;
+use mysql;
+select host, user, plugin from user;
+update user set host = '%' where user='root';
+flush privileges;
 
 
+--centos7 rpm安装
+https://repo.mysql.com/
+-下载
+cd /usr/local
+wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar
+
+-解压
+mkdir mysql-8.0.20
+tar zxvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
+
+-查看
+cd mysql-8.0.20
+rpm -qpl mysql-community-server-8.0.20-1.el7.x86_64.rpm
+
+-安装
+yum install mysql-community-{server,client,common,libs}-*
+
+-启动
+systemctl start mysqld
+systemctl stop mysqld
+systemctl restart mysqld
+systemctl reload mysqld
+systemctl status mysqld
+-是否启动
+systemctl is-active mysqld
+-开机启动
+systemctl enable mysqld
+systemctl disable mysqld
+-是否开机启动
+systemctl is-enabled mysqld
+
+-查看密码
+grep 'temporary password' /var/log/mysqld.log
+
+-登录
+mysql -u root -p
+
+-修改密码
+alter user 'root'@'localhost' identified by 'root';
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+
+-修改配置文件
+cat /etc/my.cnf
+vi /etc/my.cnf
+port=13306
+-修改端口需要
+vi /etc/selinux/config
+SELINUX=disabled
 
 
+-centos8 mysql5.7安装
+-卸载其它mysql
+-依赖
+yum search libaio
+yum install libaio
+yum search libnuma
+yum install libnuma
 
+-报错：mysql: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+ln -s libncurses.so.5.6 /lib64/libtinfo.so.5
+ln -s libncurses.so.5.6 /lib/libtinfo.so.5
 
+-创建用户和用户组
+groupadd mysql
+useradd -r -g mysql -s /bin/false mysql
 
+-下载
+cd /usr/local
+wget https://cdn.mysql.com/archives/mysql-5.7/mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz
 
+-解压
+mkdir mysql-5.7.30
+tar zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz -C mysql-5.7.30
 
+-
+cd mysql-5.7.30
+mkdir mysql-files
+chown mysql:mysql mysql-files
+chmod 750 mysql-files
 
+-初始化数据目录
+bin/mysqld --initialize --user=mysql
+bin/mysqld --defaults-file=/etc/my.cnf --initialize --user=mysql
 
+-创建默认的SSL和RSA文件，如需要
+bin/mysql_ssl_rsa_setup
+
+-启动服务
+bin/mysqld_safe --user=mysql &
+
+-开机自启
+cp support-files/mysql.server /etc/init.d/mysql
+chmod +x /etc/init.d/mysql
+chkconfig --add mysql
+
+-查看
+chkconfig mysql --list
+
+-可能需要
+chkconfig --level 345 mysql on
+
+-登录
+mysql -u root -p
+
+-修改密码
+alter user 'root'@'localhost' identified by '123';
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
 
 
 

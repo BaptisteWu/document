@@ -1,43 +1,3 @@
---nginx
-start nginx
-start nginx -c E:\nginx-1.16.0\conf\nginx2.conf
-nginx -s reload
-nginx -s quit
-nginx -s stop
-
--nginx.conf
-http://localhost:8079/html/1.jpg
-==>D:\test\html\1.jpg
-1.
-location /html {
-	root   D:/test;
-	index  index.html index.htm;
-}
-2.
-location /html 后面加 /
-alias  D:/test/html 后面也要加 /
-location /html {
-	alias  D:/test/html;
-	index  index.html index.htm;
-}
-
-location /static 后面加不加 / 都一样
-192.168.1.123:80/static/a.html
-location /static {
-	proxy_pass  192.168.2.321:81
-}
-==>192.168.2.321:81/static/a.html
-
-location /static {
-	proxy_pass  192.168.2.321:81/
-}
-==>192.168.2.321:81/a.html
-
-location / {
-  try_files $uri $uri/ /index.html;
-}
-
-
 --git
 -
 添加.gitignore文件
@@ -147,6 +107,24 @@ compile files('lib/ojdbc-14.jar')
 compile fileTree(dir: 'libs', include: ['*.jar'])
 
 
+--android cmdline-tools
+-ANDROID_SDK_HOME
+.android文件夹位置
+-
+sdkmanager --help --sdk_root=D:\Android\rn\sdk
+sdkmanager --version --sdk_root=D:\Android\rn\sdk
+sdkmanager --list --sdk_root=D:\Android\rn\sdk
+sdkmanager --list_installed --sdk_root=D:\Android\rn\sdk
+sdkmanager "platforms;android-28" --sdk_root=D:\Android\rn\sdk
+sdkmanager --install "ndk;20.1.5948944" --sdk_root=D:\Android\rn\sdk
+sdkmanager --uninstall "platforms;android-28" --sdk_root=D:\Android\rn\sdk
+-
+cmdline-tools/latest/bin/...
+cmdline-tools/latest/lib/...
+cmdline-tools/latest/NOTICE.txt
+cmdline-tools/latest/source.properties
+
+
 --spring-boot-cli
 -配置环境变量
 spring --version
@@ -161,61 +139,6 @@ spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId
 myapp.xml
 myapp.exe install
 myapp.exe start
-
-
---android cmdline-tools
--ANDROID_SDK_HOME
-.android文件夹位置
--
-sdkmanager --version --sdk_root=D:\Android\sdk
-sdkmanager --list --sdk_root=D:\Android\sdk
-sdkmanager "platforms;android-28" --sdk_root=D:\Android\sdk
-sdkmanager "cmdline-tools;latest" --sdk_root=D:\Android\sdk
-sdkmanager --uninstall "platforms;android-28" --sdk_root=D:\Android\sdk
--
-cmdline-tools/latest/bin/...
-cmdline-tools/latest/lib/...
-cmdline-tools/latest/NOTICE.txt
-cmdline-tools/latest/source.properties
-
-
---mysql
--解压
--添加到环境变量Path
-如：D:\mysql-8.0.20-winx64\bin
--创建D:\mysql-8.0.20-winx64\my.ini文件
-正斜杠 / 或两个反斜杠 \\
-[mysqld]
-basedir=D:/mysql-8.0.20-winx64
-datadir=D:/mysql-8.0.20-winx64/data
--创建D:\mysql-8.0.20-winx64\data目录
--初始化数据目录
-mysqld --initialize --console
-mysqld --defaults-file=D:\mysql-8.0.20-winx64\my.ini --initialize --console
--启动服务
-mysqld --console
--停止服务
-mysqladmin -u root shutdown
--安装Windows服务
-mysqld --install MySQL --defaults-file=D:\mysql-8.0.20-winx64\my.ini
--启动Windows服务
-sc start MySQL
-或
-net start MySQL
--停止Windows服务
-sc stop MySQL
-或
-net stop MySQL
--删除Windows服务
-sc delete mysql
-或
-mysqld --remove
--登录
-mysql -u root -p
--修改密码
-alter user 'root'@'localhost' identified by 'root';
--远程授权
-rename user 'root'@'localhost' to 'root'@'%';
 
 
 --RocketMQ
@@ -420,12 +343,16 @@ nc -z -v 114.115.204.60 21008-21020
 --ffmpeg
 -格式转换
 ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
+
 ffmpeg.exe -f image2 -i D:\test\test1\%03d.jpg -vcodec libx264 -r 1 test.mp4
+
 ffmpeg.exe -i 0.mp4 -f gif 00.gif
 
-ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
+ffmpeg -i https://videomy.yongaomy.com/20211017/CxMO3WwJ/index.m3u8 D:\test\b.mp4
 
-ffmpeg -i http://baiduav.luya9.com/20200101/nQt46xNX/index.m3u8 D:\test\m3u8\Downloads\TXq3oOcX8h7jdisK.ts
+ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
+ffmpeg -f concat -safe 0 -i D:\test\m3u8\Downloads\京香julia\7\filelist.txt -c copy D:\test\m3u8\Downloads\京香julia\7\output.mp4
+
 
 -播放
 ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
@@ -467,6 +394,15 @@ Product list
 
 rem SQL Server 2019 Database Engine Shared
 msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0}
+
+
+--
+cmd /k "cd /d E:\tools\putty&&java -jar xxx.jar"
+
+
+
+
+
 
 
 

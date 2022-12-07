@@ -351,14 +351,12 @@ ffmpeg.exe -i 0.mp4 -f gif 00.gif
 ffmpeg -i https://videomy.yongaomy.com/20211017/CxMO3WwJ/index.m3u8 D:\test\b.mp4
 
 ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
-ffmpeg -f concat -safe 0 -i D:\test\m3u8\Downloads\京香julia\7\filelist.txt -c copy D:\test\m3u8\Downloads\京香julia\7\output.mp4
-
+ffmpeg -f concat -safe 0 -i D:\test\m3u8\Downloads\京香julia\6\filelist.txt -c copy D:\test\m3u8\Downloads\京香julia\6\output.mp4
 
 -播放
 ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
 ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
 ffplay.exe -i D:\test\m3u8\Downloads\yapmMlVcRxNZHk8G.ts
-
 
 --rtmp
 nginx.exe -c conf\nginx-win-rtmp.conf

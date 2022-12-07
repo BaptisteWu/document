@@ -64,6 +64,7 @@ component: () => import('@/Test')
 
 this.$route.params.id
 --------------------------------------
+刷新回退会消失
 this.$router.push({
 name: '测试',
 params: {id: 1}

@@ -12,29 +12,133 @@ tar zxvf jdk-8u311-linux-x64.tar.gz -C java
 vim /etc/profile
 export JAVA_HOME=/usr/local/java
 export PATH=$PATH:$JAVA_HOME/bin
-
 source /etc/profile
 
 java -version
 
 
+tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+go version
+
+
+############################
+[Unit]
+Description=huimin
+After=network-online.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/java -jar /usr/local/project/huimin/huimin-1.0-SNAPSHOT.jar
+
+[Install]
+WantedBy=multi-user.target
+############################
+
+
 -------------------------------------------------------------------------------------------------
-:war 发布
-:war exploded 开发
+if (endDate != null) {
+    endDate = DateUtil.endOfDay(endDate);
+}
 
-生成服务器密匙文件
-keytool -genkey -alias test -keyalg RSA -keysize 2048 -validity 36500 -keystore D:/test.keystore -storetype PKCS12
-您的名字与姓氏 www.wubin.com 是域名
+<if test="startDate != null">
+    and a.transfer_time1 > #{startDate}
+</if>
+<if test="endDate != null">
+    and #{endDate} > a.transfer_time1
+</if>
 
-导出证书
-keytool -export -alias test -storepass 123456 -file D:/test.cer -keystore D:/test.keystore
+-------------------------------------------------------------------------------------------------
+Map<Integer, List<User>> map = list.stream().collect(Collectors.groupingBy(User::getId));
 
-证书导入到jdk信任库
-keytool -import -alias cas -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -file D:/cas.cer -trustcacerts
+-------------------------------------------------------------------------------------------------
+User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-查看证书
-keytool -list -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -alias cas
+-------------------------------------------------------------------------------------------------
+@JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
 
+-------------------------------------------------------------------------------------------------
+@Autowired
+private ObjectMapper jacksonObjectMapper;
+
+@ApiImplicitParam(paramType = "form", name = "detailJson", value = "详情Json", dataType = "string", required = true)
+@RequestParam String detailJson
+
+List<Arrange> detailList = jacksonObjectMapper.readValue(detailJson,
+                jacksonObjectMapper.getTypeFactory().constructCollectionLikeType(List.class, Arrange.class));
+
+-------------------------------------------------------------------------------------------------
+@Configuration
+@EnableScheduling
+public class ReconciliationDailyTask {
+
+    @Scheduled(cron = "0 0 1 * * ?")
+//    @Scheduled(fixedRate = 5000)
+    private void configureTasks() {
+        System.out.println(new Date());
+    }
+
+}
+
+-------------------------------------------------------------------------------------------------
+<![CDATA[
+]]>
+
+-------------------------------------------------------------------------------------------------
+原符号	替换符号
+<	&lt;
+<=	&lt;=
+>	&gt;
+>=	&gt;=
+&	&amp;
+’	&apos;
+"	&quot;
+
+-------------------------------------------------------------------------------------------------
+spring.profiles.active=dev
+spring.profiles.active=prod
+@Profile("dev")
+@Profile("prod")
+
+-------------------------------------------------------------------------------------------------
+读取配置文件
+my.name=wubin
+my.age=11
+my.sex=man
+my.like.sports=basketball
+my.like.football-enable=false
+
+PropertySource注解，只支持properties文件
+1.
+@Component
+@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+@PropertySource(value = "classpath:config/myConfig.properties")
+public class MyConfig {
+
+2.
+@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+public class MyConfig {
+
+@Component
+@EnableConfigurationProperties(MyConfig.class)
+@PropertySource(value = "classpath:config/myConfig.properties")
+public class Config {
+}
+
+3.
+public class MyConfig {
+
+@Component
+@PropertySource(value = "classpath:config/myConfig.properties")
+public class Config {
+
+    @Bean
+    @ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
+    public MyConfig myConfig() {
+        return new MyConfig();
+    }
+
+}
 
 -------------------------------------------------------------------------------------------------
 1.
@@ -57,43 +161,24 @@ keytool -list -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/ca
 3.
 
 -------------------------------------------------------------------------------------------------
-PropertySource注解，只支持properties文件
-1.
-@PropertySource(value = "classpath:config/myConfig.properties")
-@EnableConfigurationProperties(MyConfig.class)
-public class ConfigApplication {
+:war 发布
+:war exploded 开发
 
-@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
-public class MyConfig {
+生成服务器密匙文件
+keytool -genkey -alias test -keyalg RSA -keysize 2048 -validity 36500 -keystore D:/test.keystore -storetype PKCS12
+您的名字与姓氏 www.wubin.com 是域名
 
-2.
-@PropertySource(value = "classpath:config/myConfig.properties")
-public class ConfigApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ConfigApplication.class, args);
-    }
+导出证书
+keytool -export -alias test -storepass 123456 -file D:/test.cer -keystore D:/test.keystore
 
-    @Bean
-    @ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
-    public MyConfig myConfig() {
-        MyConfig myConfig = new MyConfig();
-        return myConfig;
-    }
-}
+证书导入到jdk信任库
+keytool -import -alias cas -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -file D:/cas.cer -trustcacerts
 
-3.
-@PropertySource(value = "classpath:config/myConfig.properties")
-public class ConfigApplication {
-
-@Configuration
-@ConfigurationProperties(ignoreUnknownFields = false, prefix = "my")
-public class MyConfig {
-
--------------------------------------------------------------------------------------------------
+查看证书
+keytool -list -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/cacerts -alias cas
 
 
-
-
+;encrypt=false;trustServerCertificate=false
 
 
 

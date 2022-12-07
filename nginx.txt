@@ -27,11 +27,27 @@ location /static {
 	proxy_pass  192.168.2.321:81/
 }
 
--vue路由
-location / {
-  try_files $uri $uri/ /index.html;
+--windows文件服务器
+server {
+	listen 3030;
+	server_name localhost;
+	charset utf-8,gbk;
+	location / {
+		root D:/test;
+		autoindex on;
+		autoindex_exact_size on;
+		autoindex_localtime on;
+	}
 }
 
+--vue路由
+location / {
+	try_files $uri $uri/ /index.html;
+}
+
+--413 Request Entity Too Large
+http{} 或 server{} 或 location{} 节点下添加
+client_max_body_size 100m;
 
 --windows安装
 -下载
@@ -48,6 +64,7 @@ nginx -s quit
 nginx -s reload
 nginx -s reopen
 nginx -v
+nginx -t
 
 
 --centos7 rpm安装
@@ -209,6 +226,22 @@ KillSignal=SIGQUIT
 TimeoutStopSec=5
 KillMode=process
 PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+############################
+[Unit]
+Description=nginx - high performance web server
+Documentation=http://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/nginx.pid
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target

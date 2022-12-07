@@ -1,14 +1,3 @@
---开启binlog
-  server-id = 1
-  log-bin = bin-log
-  binlog-format = Row
-
---查看binlog格式
-show variables like 'binlog_format';
---查看指定binlog文件的内容
-show binlog events in 'bin-log.000001';
-mysqlbinlog --base64-output=decode-rows -v C:\mysql-5.7.13-winx64\data\bin-log.000004
-
 --
 select @@sql_mode;
 select @@GLOBAL.sql_mode;
@@ -23,310 +12,356 @@ show global variables
 show global variables like 'wait_timeout'
 set global wait_timeout=28800
 
+--
+show processlist
+kill 12345
+show status like 'Threads%'
+show variables like '%max_connection%'
+
+--
+-登录
+mysql -u root -p
+a94b00bc5614eb8a
+
+-创建用户并授权
+create user 'rmyyyfjz' identified by 'rmyyyfjz';
+grant all on `sxrmyyznpy`.* to 'rmyyyfjz';
+grant all on `sxrmyyfyj`.* to 'rmyyyfjz';
+
+grant all on *.* to 'wl-reagent';
+
+exit
+
+-查看用户权限
+select * from mysql.user;
+show grants for root;
+
 --查询插入
-INSERT INTO tb_user_copy1(id, username, password, create_time)
-SELECT id, username, password, create_time FROM tb_user
-WHERE id > 80
+insert into tb_user_copy1(id, username, password, create_time)
+select id, username, password, create_time from tb_user
+where id > 80
 
 --关联更新
-UPDATE goods a
-LEFT JOIN category b
-ON a.category_id = b.id
-SET a.name = '苹果2'
-WHERE a.id = 2 and b.name = '水果'
+update goods a
+left join category b
+on a.category_id = b.id
+set a.name = '苹果2'
+where a.id = 2 and b.name = '水果'
 
 --为NULL字段设置默认值
-SELECT IFNULL(NULL, 0)
-SELECT COALESCE(NULL, 0)
+select ifnull(null, 0)
+select coalesce(null, 0)
 
 --数据类型转换
-SELECT CAST(10 AS CHAR)
-SELECT CAST(10 AS CHAR(1))
-SELECT CAST('010' AS SIGNED)
-SELECT CONVERT('010', SIGNED)
+select cast(10 as char)
+select cast(10 as char(1))
+select cast('010' as signed)
+select convert('010', signed)
 
-字符型，可带参数：CHAR()
-日期：DATE
-时间：TIME
-日期时间型：DATETIME
-浮点数：DECIMAL
-有符号整数：SIGNED
-无符号整数：UNSIGNED
+字符型，可带参数：char()
+日期：date
+时间：time
+日期时间型：datetime
+浮点数：decimal
+有符号整数：signed
+无符号整数：unsigned
 
 --保留小数
-SELECT ROUND(100.3465, 2), ROUND(100, 2), ROUND(0.6, 2), ROUND(114.6, -1) // 四舍五入
-SELECT TRUNCATE(100.3465, 2), TRUNCATE(100, 2), TRUNCATE(0.6, 2), TRUNCATE(114.6, -1) // 舍
-SELECT CEIL(32.1) // 向上取整
-SELECT FLOOR(32.1) // 向下取整
+select round(100.3465, 2), round(100, 2), round(0.6, 2), round(114.6, -1) // 四舍五入
+select truncate(100.3465, 2), truncate(100, 2), truncate(0.6, 2), truncate(114.6, -1) // 舍
+select cell(32.1) // 向上取整
+select floor(32.1) // 向下取整
 
 --数字转字符串
 
 --字符串转数字
-SELECT '010.010' + 0
+select '010.010' + 0
 
 --时间转字符串
-SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
-SELECT DATE_FORMAT(NOW(), '%Y-%c-%e %h:%i:%s')
-SELECT DATE_FORMAT(NOW(6), '%Y-%m-%d %T.%f')
+select date_format(now(), '%Y-%m-%d %H:%i:%s')
+select date_format(now(), '%Y-%c-%e %h:%i:%s')
+select date_format(now(6), '%Y-%m-%d %T.%f')
 
 --字符串转时间
-SELECT STR_TO_DATE('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s')
+select str_to_date('2018-01-18 18:18:18', '%Y-%m-%d %H:%i:%s')
 
 --时间转时间戳
-SELECT UNIX_TIMESTAMP(NOW())
+select unix_timestamp(now())
 --时间戳转时间
-SELECT FROM_UNIXTIME(1539238971)
+select from_unixtime(1539238971)
 
 --年月日时分秒格式化成年月日
-SELECT DATE(NOW())
+select date(now())
 
-SELECT NOW() // 年月日时分秒
-SELECT NOW(6) // 年月日时分秒毫秒
-SELECT CURDATE() // 年月日
-SELECT CURTIME() // 时分秒
-SELECT CURTIME(6) // 时分秒毫秒
+select now() // 年月日时分秒
+select now(6) // 年月日时分秒毫秒
+select curdate() // 年月日
+select curtime() // 时分秒
+select curtime(6) // 时分秒毫秒
 
-SELECT CURRENT_DATE() // 年月日
-SELECT CURRENT_TIME() // 时分秒
-SELECT CURRENT_TIME(6) // 时分秒毫秒
-SELECT CURRENT_TIMESTAMP() // 年月日时分秒
-SELECT CURRENT_TIMESTAMP(6) // 年月日时分秒毫秒
+select current_date() // 年月日
+select current_time() // 时分秒
+select current_time(6) // 时分秒毫秒
+select current_timestamp() // 年月日时分秒
+select current_timestamp(6) // 年月日时分秒毫秒
 
 --一年当中的第几天
-SELECT DAYOFYEAR(CURDATE())
+select dayofyear(curdate())
 --一月当中的第几天
-SELECT DAYOFMONTH(CURDATE())
+select dayofmonth(curdate())
 --一周当中的第几天（周日第一天）
-SELECT DAYOFWEEK(CURDATE())
+select dayofweek(curdate())
 --一周当中的索引位置（0=周一）
-SELECT WEEKDAY(CURDATE())
+select weekday(curdate())
 
 --几几年
-SELECT YEAR(NOW())
+select year(now())
 --几月
-SELECT MONTH(NOW())
+select month(now())
 --几周
-SELECT WEEK(NOW())
+select week(now())
 --几号
-SELECT DAY(NOW())
+select day(now())
 --几时
-SELECT HOUR(NOW())
+select hour(now())
 --几分
-SELECT MINUTE(NOW())
+select minute(now())
 --几秒
-SELECT SECOND(NOW())
+select second(now())
 
 --时间加减
-SELECT DATE_ADD(CURDATE(), INTERVAL -1 DAY)
-SELECT DATE_SUB(CURDATE(), INTERVAL -1 YEAR)
+select date_add(curdate(), interval -1 day)
+select date_sub(curdate(), interval -1 year)
 
 --当天0点
-SELECT CURDATE()
+select curdate()
 --昨天0点
-SELECT DATE_ADD(CURDATE(), INTERVAL -1 DAY)
+select date_add(curdate(), interval -1 day)
 --当周周一0点
-SELECT DATE_ADD(CURDATE(), INTERVAL -WEEKDAY(CURDATE()) DAY)
+select date_add(curdate(), interval -weekday(curdate()) day)
 --当月1号0点
-SELECT DATE_ADD(CURDATE(), INTERVAL -DAY(CURDATE()) + 1 DAY)
+select date_add(curdate(), interval -day(curdate()) + 1 day)
 --上月1号0点
-SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL -1 MONTH)
+select date_add(curdate() - day(curdate()) + 1, interval -1 month)
 --下月1号0点
-SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH)
+select date_add(curdate() - day(curdate()) + 1, interval 1 month)
 --当月最后一天0点
-SELECT lASt_DAY(CURDATE())
+select last_day(curdate())
 ----当年1月1号0点
-SELECT DATE_ADD(CURDATE(), INTERVAL -DAYOFYEAR(CURDATE()) + 1 DAY)
+select date_add(curdate(), interval -dayofyear(curdate()) + 1 day)
 --去年1月1号0点
-SELECT DATE_ADD(CURDATE() - DAYOFYEAR(CURDATE()) + 1, INTERVAL -1 YEAR)
+select date_add(curdate() - dayofyear(curdate()) + 1, interval -1 year)
 
 --比较时分秒
-SELECT TIMEDIFF('1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timediff('1993-07-22 08:08:08', '1993-07-20 06:06:06')
 --比较天数
-SELECT DATEDIFF('1993-07-22 06:06:06', '1993-07-20 08:08:08')
+select datediff('1993-07-22 06:06:06', '1993-07-20 08:08:08')
 --比较时间
-SELECT TIMESTAMPDIFF(YEAR, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
-SELECT TIMESTAMPDIFF(MONTH, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
-SELECT TIMESTAMPDIFF(DAY, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
-SELECT TIMESTAMPDIFF(HOUR, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
-SELECT TIMESTAMPDIFF(MINUTE, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
-SELECT TIMESTAMPDIFF(SECOND, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(year, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(month, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(day, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(hour, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(minute, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+select timestampdiff(second, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
+
+--根据经纬度算距离
+select st_distance_sphere(point(longitude, latitude), point(#{longitude}, #{latitude})) distance
+select round(st_distance(point(null, null), point(null, null)) * 111195, 1) distance
+round(6378.138 * 2 * asin(sqrt(pow(sin((#{latitude} * pi() / 180 - latitude * pi() / 180) / 2), 2) + cos(#{latitude} * pi() / 180) * cos(latitude * pi() / 180) * pow(sin((#{longitude} * pi() / 180 - longitude * pi() / 180) / 2), 2))) * 1000) distance
+
+--随机数
+select floor(rand() * 1000000)
 
 --字符串长度
 varchar(int)类型，int是字符数，而不是字节数
---LENGTH()一个汉字三个字符，CHAR_LENGTH()一个汉字一个字符
-SELECT LENGTH('吴彬')
-SELECT CHAR_LENGTH('吴彬')
+--length()一个汉字三个字符，char_length()一个汉字一个字符
+select length('吴彬')
+select char_length('吴彬')
 
 --字符串拼接
-SELECT CONCAT('%', 'wubin', '%')
+select concat('%', 'wubin', '%')
 
 --字符串截取
-select UPPER(SUBSTRING('db098ee7e5bcdf5efb266be68be83d33', 9, 16)) = 'E5BCDF5EFB266BE6'
+select upper(substring('db098ee7e5bcdf5efb266be68be83d33', 9, 16)) = 'E5BCDF5EFB266BE6'
 
 --
-SELECT FIND_IN_SET('b', 'a,b,c,d') //2
-SELECT FIND_IN_SET('e', 'a,b,c,d') //0
+select find_in_set('b', 'a,b,c,d') //2
+select find_in_set('e', 'a,b,c,d') //0
 
 --取顺序第一个逗号前面的字符串
-SELECT SUBSTRING_INDEX('123,456,789,0', ',', 1) //123
+select substring_index('123,456,789,0', ',', 1) //123
 --取顺序第二个逗号前面的字符串
-SELECT SUBSTRING_INDEX('123,456,789,0', ',', 2) //123,456
+select substring_index('123,456,789,0', ',', 2) //123,456
 --取倒序第一个逗号后面的字符串
-SELECT SUBSTRING_INDEX('123,456,789,0', ',', -1) //0
+select substring_index('123,456,789,0', ',', -1) //0
 
-SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('123,456,789,0', ',', 2), ',', -1) //456
+select substring_index(substring_index('123,456,789,0', ',', 2), ',', -1) //456
 
 --根据某个字段把一条记录分成多条
-SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('82,83,84,85,86', ',', auto_incre_id), ',', -1) AS id FROM 
+select substring_index(substring_index('82,83,84,85,86', ',', auto_incre_id), ',', -1) as id from 
 (
-SELECT 1 auto_incre_id
-UNION ALL SELECT 2 auto_incre_id
-UNION ALL SELECT 3 auto_incre_id
+select 1 auto_incre_id
+union all select 2 auto_incre_id
+union all select 3 auto_incre_id
 ) a
-WHERE auto_incre_id <= (LENGTH('82,83,84,85,86') - LENGTH(REPLACE('82,83,84,85,86', ',', '')) + 1)
+where auto_incre_id <= (length('82,83,84,85,86') - length(replace('82,83,84,85,86', ',', '')) + 1)
 
 --创建临时表
-CREATE TEMPORARY TABLE IF NOT EXISTS incre_table (auto_incre_id INT)
+create temporary table if not exists incre_table (auto_incre_id int)
 
---GROUP_CONCAT一般与GROUP BY同时使用
-SELECT GROUP_CONCAT(id) FROM wubin
-SELECT name,GROUP_CONCAT(id) FROM wubin GROUP BY name
+--group_concat一般与group by同时使用
+select group_concat(id) from wubin
+select name,group_concat(id) from wubin group by name
 
---COUNT()函数有条件
-SELECT COUNT(CASE WHEN charge_type = 2 THEN charge_type END) FROM chargerecord_8
-SELECT COUNT(charge_type = 2 OR NULL) FROM chargerecord_8
+--count()函数有条件
+select count(case when charge_type = 2 then charge_type end) from chargerecord_8
+select count(charge_type = 2 or null) from chargerecord_8
 
 --分组求最大值，并取最大值所在的行
-SELECT a.* FROM wubin a
-LEFT JOIN wubin b
-ON a.name = b.name AND a.amount < b.amount
-WHERE b.name IS NULL
+select a.* from wubin a
+left join wubin b
+on a.name = b.name and a.amount < b.amount
+where b.name is null
 
-SELECT b.* FROM
+select b.* from
 (
-SELECT name, MAX(amount) amount
-FROM wubin
-GROUP BY name
+select name, max(amount) amount
+from wubin
+group by name
 ) a
-LEFT JOIN wubin b
-ON a.amount = b.amount AND a.name = b.name
+left join wubin b
+on a.amount = b.amount and a.name = b.name
 
-SELECT * FROM wubin
-WHERE amount IN (
-SELECT MAX(amount) FROM wubin
-GROUP BY name
+select * from wubin
+where amount in (
+select max(amount) from wubin
+group by name
 )
 
-SELECT * FROM wubin a
-WHERE amount = (
-SELECT MAX(amount) FROM wubin b
-WHERE a.name = b.name
+select * from wubin a
+where amount = (
+select max(amount) from wubin b
+where a.name = b.name
 )
 
 --自连接
-SELECT create_time, COUNT(*) c,
+select create_time, count(*) c,
 (
-SELECT COUNT(*) 
-FROM wubin b 
-WHERE b.create_time <= a.create_time
+select count(*) 
+from wubin b 
+where b.create_time <= a.create_time
 ) ltec
-FROM wubin a
-GROUP BY create_time
+from wubin a
+group by create_time
 
 --索引
 --创建索引
-CREATE INDEX index_username ON user(username)
-ALTER TABLE user ADD INDEX index_username (username)
-CREATE INDEX index_user ON user(username, create_time, age)
+create index index_username on user(username)
+alter table user add index index_username (username)
+create index index_user on user(username, create_time, age)
 
 --删除索引
-DROP INDEX index_username ON user
-ALTER TABLE user DROP INDEX index_username
+drop index index_username on user
+alter table user drop index index_username
 
 --索引字段名不要是关键字
 --结果超过一半，索引无效
 
---IS NULL，索引有效；IS NOT NULL，索引无效
-EXPLAIN SELECT * FROM user WHERE username IS NULL
-EXPLAIN SELECT * FROM user WHERE username IS NOT NULL
+--is null，索引有效；is not null，索引无效
+explain select * from user where username is null
+explain select * from user where username is not null
 
---IN 小于等于两个，索引有效；大于两个，索引无效
-EXPLAIN SELECT * FROM user WHERE username IN ('tom', 'mary')
-EXPLAIN SELECT * FROM user WHERE username IN ('tom', 'mary', 'wubin')
+--in 小于等于两个，索引有效；大于两个，索引无效
+explain select * from user where username in ('tom', 'mary')
+explain select * from user where username in ('tom', 'mary', 'wubin')
 
---LIKE 以%开头，索引无效；不以%开头，索引有效
-EXPLAIN SELECT * FROM user WHERE username LIKE '%t%'
-EXPLAIN SELECT * FROM user WHERE username LIKE 't%'
+--like 以%开头，索引无效；不以%开头，索引有效
+explain select * from user where username like '%t%'
+explain select * from user where username like 't%'
 
 --OR语句
-EXPLAIN SELECT * FROM user WHERE age = 23 OR age = 24 //结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE age < 12 OR age > 12 //结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE username = 'tom' OR username = 'jack' //结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 15:33:00' OR create_time = '2019-12-09 15:33:01' //结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 10:07:08' OR create_time > '2020-02-04 10:47:50' //结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE username = 'wubin' OR age = 54 //每个字段结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE username = 'wubin' OR realname = 'wer' //每个字段结果<=1，索引有效
+explain select * from user where age = 23 or age = 24 //结果<=1，索引有效
+explain select * from user where age < 12 or age > 12 //结果<=1，索引有效
+explain select * from user where username = 'tom' or username = 'jack' //结果<=1，索引有效
+explain select * from user where create_time = '2019-12-09 15:33:00' or create_time = '2019-12-09 15:33:01' //结果<=1，索引有效
+explain select * from user where create_time < '2019-12-09 10:07:08' or create_time > '2020-02-04 10:47:50' //结果<=1，索引有效
+explain select * from user where username = 'wubin' or age = 54 //每个字段结果<=1，索引有效
+explain select * from user where username = 'wubin' or realname = 'wer' //每个字段结果<=1，索引有效
 
 --<>，!=主键索引有效，非主键索引结果<=1，索引有效
-EXPLAIN SELECT * FROM user WHERE id != 12
-EXPLAIN SELECT * FROM user WHERE age != 12 //结果<=1，索引有效
+explain select * from user where id != 12
+explain select * from user where age != 12 //结果<=1，索引有效
 
 --数据类型隐式转化（不包括时间类型）
-EXPLAIN SELECT * FROM user WHERE username = '123'
-EXPLAIN SELECT * FROM user WHERE username = 123 //索引无效
-EXPLAIN SELECT * FROM user WHERE username = CAST(123 AS char)
+explain select * from user where username = '123'
+explain select * from user where username = 123 //索引无效
+explain select * from user where username = cast(123 as char)
 
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' //索引有效
-EXPLAIN SELECT * FROM user WHERE create_time < '2019-12-09 14:42:40' //索引有效
-EXPLAIN SELECT * FROM user WHERE create_time < CAST('2019-12-09 14:42:40' AS DATETIME) //索引有效
-EXPLAIN SELECT * FROM user WHERE create_time < STR_TO_DATE('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s') //索引有效
+explain select * from user where create_time = '2019-12-09 14:42:40' //索引有效
+explain select * from user where create_time < '2019-12-09 14:42:40' //索引有效
+explain select * from user where create_time < cast('2019-12-09 14:42:40' as datetime) //索引有效
+explain select * from user where create_time < str_to_date('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s') //索引有效
 
 --对索引字段进行计算，索引无效
-EXPLAIN SELECT * FROM user WHERE age - 1 = 1 //索引无效
-EXPLAIN SELECT * FROM user WHERE age = 23 + 1 //索引有效
+explain select * from user where age - 1 = 1 //索引无效
+explain select * from user where age = 23 + 1 //索引有效
 
 --对索引字段使用函数，索引无效
-EXPLAIN SELECT * FROM user WHERE LENGTH(username) = 8
+explain select * from user where length(username) = 8
 
 --组合索引 最佳左前缀法则
-EXPLAIN SELECT * FROM user WHERE username = 'tom'
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' //索引无效
-EXPLAIN SELECT * FROM user WHERE age = 12 //索引无效
-EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time = '2019-12-09 14:42:40'
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND username = 'tom'
-EXPLAIN SELECT * FROM user WHERE username = 'tom' AND age = 12
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND age = 12 //索引无效
-EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time = '2019-12-09 14:42:40' AND age = 12
-EXPLAIN SELECT * FROM user WHERE create_time = '2019-12-09 14:42:40' AND age = 12 AND username = 'tom'
-EXPLAIN SELECT * FROM user WHERE username = 'tom' AND create_time < '2019-12-09 14:42:40' AND age = 12 //范围条件后的索引失效
+explain select * from user where username = 'tom'
+explain select * from user where create_time = '2019-12-09 14:42:40' //索引无效
+explain select * from user where age = 12 //索引无效
+explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40'
+explain select * from user where create_time = '2019-12-09 14:42:40' and username = 'tom'
+explain select * from user where username = 'tom' and age = 12
+explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 //索引无效
+explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40' and age = 12
+explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 and username = 'tom'
+explain select * from user where username = 'tom' and create_time < '2019-12-09 14:42:40' and age = 12 //范围条件后的索引失效
 
 --前10条记录中，每隔5条取1条
-SELECT * FROM
+select * from
 (
-SELECT *, @rownum := @rownum + 1 AS rowno FROM tb_user, (SELECT @rownum := 0) t
-ORDER BY id DESC LIMIT 0, 10
+select *, @rownum := @rownum + 1 as rowno from tb_user, (select @rownum := 0) t
+order by id desc limit 0, 10
 ) a 
-WHERE MOD(a.rowno, 5) = 1
-
+where mod(a.rowno, 5) = 1
 
 --
 select
 @num := @num + 1,
-date_format( adddate( CURDATE(), INTERVAL @num - 30 DAY ), '%Y-%m-%d' ) as date 
+date_format(adddate(curdate(), interval @num - 30 day), '%Y-%m-%d') as date 
 from
 yw_person_info,(
 select
 @num := 0 
 ) t 
 where
-adddate( CURDATE(), INTERVAL @num - 30 DAY ) < CURDATE()
-
+adddate(curdate(), interval @num - 30 day) < curdate()
 
 --
-START TRANSACTION;
-SET @num := 100000;
-UPDATE yw_person_info SET password = (@num := @num + 1);
-COMMIT;
+start transaction;
+set @num := 100000;
+update yw_person_info set password = (@num := @num + 1);
+commit;
+
+
+--开启binlog
+[mysqld]
+server_id = 1
+log_bin = mysql-bin
+binlog_format = Row
+expire_logs_days = 30
+
+show variables like 'log_bin';
+
+show binlog events in 'mysql-bin.000001';
+
+mysqlbinlog --no-defaults mysql-bin.000001
+mysqlbinlog --no-defaults --base64-output=decode-rows -v D:\mysql-5.7.13-winx64\data\mysql-bin.000001
+mysqlbinlog --no-defaults --base64-output=decode-rows -v D:\mysql-5.7.13-winx64\data\mysql-bin.000001 > D:/1.sql
 
 
 --windows安装
@@ -388,7 +423,16 @@ update user set host = '%' where user='root';
 flush privileges;
 
 
---centos7 rpm安装
+--centos7 mysql8 rpm安装
+-卸载其它mysql
+rpm -qa | grep mariadb
+yum list installed | grep mariadb
+rpm -e --nodeps mariadb*
+yum remove mariadb*
+
+rpm -qa | grep mysql
+yum list installed | grep mysql
+
 https://repo.mysql.com/
 -下载
 cd /usr/local
@@ -396,7 +440,7 @@ wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-1.el7.x86_64.rpm-bund
 
 -解压
 mkdir mysql-8.0.20
-tar zxvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
+tar xvf mysql-8.0.20-1.el7.x86_64.rpm-bundle.tar -C mysql-8.0.20
 
 -查看
 cd mysql-8.0.20
@@ -440,11 +484,54 @@ vi /etc/selinux/config
 SELINUX=disabled
 
 
+--centos7 mysql5.7 rpm安装
+-解压
+mkdir mysql-5.7.30
+tar xvf mysql-5.7.30-1.el7.x86_64.rpm-bundle.tar -C mysql-5.7.30
+
+-查看
+cd mysql-5.7.30
+rpm -qpl mysql-community-server-5.7.30-1.el7.x86_64.rpm
+
+-安装
+yum install mysql-community-{server,client,common,libs}-* mysql-5.*-
+yum install mysql-community-{server,client,common,libs}-*
+
+-启动
+systemctl start mysqld
+systemctl stop mysqld
+systemctl restart mysqld
+systemctl reload mysqld
+systemctl status mysqld
+-是否启动
+systemctl is-active mysqld
+-开机启动
+systemctl enable mysqld
+systemctl disable mysqld
+-是否开机启动
+systemctl is-enabled mysqld
+
+-查看密码
+grep 'temporary password' /var/log/mysqld.log
+
+-登录
+mysql -u root -p
+smBJgsyD(0>5
+
+-修改密码
+alter user 'root'@'localhost' identified by 'qweQWE123!@#';
+alter user 'root'@'localhost' identified by 'HHhx2022!';
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+exit;
+
+
 -centos8 mysql5.7安装
--卸载其它mysql
 -依赖
 yum search libaio
 yum install libaio
+yum install libaio.x86_64
 yum search libnuma
 yum install libnuma
 
@@ -499,10 +586,6 @@ alter user 'root'@'localhost' identified by '123';
 
 -远程授权
 rename user 'root'@'localhost' to 'root'@'%';
-
-
-
-
 
 
 

@@ -161,6 +161,12 @@ public class Config {
 3.
 
 -------------------------------------------------------------------------------------------------
+java -jar -Xmx1G -Xms1G -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/www cro-1.0-SNAPSHOT.jar &
+java -jar -Xmx2G -Xms2G cro-1.0-SNAPSHOT.jar &
+jmap -dump:live,format=b,file=cro.hprof 6534
+jmap -histo:live 6534 | head -20
+
+-------------------------------------------------------------------------------------------------
 :war 发布
 :war exploded 开发
 

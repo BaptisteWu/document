@@ -294,7 +294,32 @@ docker rm $(docker ps -a -q)
 -停止所有容器
 docker stop $(docker ps -a -q)
 
--创建
+-字体
+docker ps
+docker exec -i -t c2e4f086e0e2 /bin/bash
+cd /usr/share/fonts/
+rm -rf *
+cd /var/www/onlyoffice/documentserver/core-fonts/
+rm -rf *
+Ctrl+D退出容器
+
+docker cp /www/Fonts2/ c2e4f086e0e2:/usr/share/fonts/truetype/custom
+docker exec -i -t c2e4f086e0e2 /bin/bash
+fc-cache -f -v
+/usr/bin/documentserver-generate-allfonts.sh
+supervisorctl restart all
+
+docker stop c2e4f086e0e2
+sudo docker run -i -t -d -p 8070:80 --restart=always \
+    -v /app/onlyoffice/DocumentServer/logs:/var/log/onlyoffice  \
+    -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data  \
+    -v /app/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
+    -v /app/onlyoffice/DocumentServer/db:/var/lib/postgresql -e JWT_SECRET=my_jwt_secret onlyoffice/documentserver
+
+docker cp efa27a1ccbdd:/usr/share/fonts/ /www/fonts/
+docker cp efa27a1ccbdd:/var/www/onlyoffice/documentserver/core-fonts/ /www/core-fonts/
+
+-docker安装oracle
 docker search oracle
 docker pull truevoly/oracle-12c
 docker run -d -p 1521:1521 --name oracle12c truevoly/oracle-12c

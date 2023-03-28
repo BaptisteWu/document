@@ -24,10 +24,8 @@ mysql -u root -p
 a94b00bc5614eb8a
 
 -创建用户并授权
-create user 'rmyyyfjz' identified by 'rmyyyfjz';
-grant all on `sxrmyyznpy`.* to 'rmyyyfjz';
-grant all on `sxrmyyfyj`.* to 'rmyyyfjz';
-
+create user 'zmg-education' identified by 'zmg-education!@#';
+grant all on `zmg-education`.* to 'zmg-education';
 grant all on *.* to 'wl-reagent';
 
 exit
@@ -48,9 +46,15 @@ on a.category_id = b.id
 set a.name = '苹果2'
 where a.id = 2 and b.name = '水果'
 
---为NULL字段设置默认值
+--null设置默认值
 select ifnull(null, 0)
 select coalesce(null, 0)
+
+--保留小数
+select round(100.3465, 2), round(100, 2), round(0.6, 2), round(114.6, -1) //四舍五入
+select truncate(100.3465, 2), truncate(100, 2), truncate(0.6, 2), truncate(114.6, -1) //舍
+select cell(32.1) //向上取整
+select floor(32.1) //向下取整
 
 --数据类型转换
 select cast(10 as char)
@@ -58,21 +62,16 @@ select cast(10 as char(1))
 select cast('010' as signed)
 select convert('010', signed)
 
-字符型，可带参数：char()
+字符，可带参数：char()
 日期：date
 时间：time
-日期时间型：datetime
+日期时间：datetime
 浮点数：decimal
 有符号整数：signed
 无符号整数：unsigned
 
---保留小数
-select round(100.3465, 2), round(100, 2), round(0.6, 2), round(114.6, -1) // 四舍五入
-select truncate(100.3465, 2), truncate(100, 2), truncate(0.6, 2), truncate(114.6, -1) // 舍
-select cell(32.1) // 向上取整
-select floor(32.1) // 向下取整
-
 --数字转字符串
+select concat(10.010, '')
 
 --字符串转数字
 select '010.010' + 0
@@ -93,17 +92,17 @@ select from_unixtime(1539238971)
 --年月日时分秒格式化成年月日
 select date(now())
 
-select now() // 年月日时分秒
-select now(6) // 年月日时分秒毫秒
-select curdate() // 年月日
-select curtime() // 时分秒
-select curtime(6) // 时分秒毫秒
+select now() //年月日时分秒
+select now(6) //年月日时分秒毫秒
+select curdate() //年月日
+select curtime() //时分秒
+select curtime(6) //时分秒毫秒
 
-select current_date() // 年月日
-select current_time() // 时分秒
-select current_time(6) // 时分秒毫秒
-select current_timestamp() // 年月日时分秒
-select current_timestamp(6) // 年月日时分秒毫秒
+select current_date() //年月日
+select current_time() //时分秒
+select current_time(6) //时分秒毫秒
+select current_timestamp() //年月日时分秒
+select current_timestamp(6) //年月日时分秒毫秒
 
 --一年当中的第几天
 select dayofyear(curdate())
@@ -182,11 +181,17 @@ select char_length('吴彬')
 select concat('%', 'wubin', '%')
 
 --字符串截取
-select upper(substring('db098ee7e5bcdf5efb266be68be83d33', 9, 16)) = 'E5BCDF5EFB266BE6'
+select substring('db098ee7e5bcdf5efb266be68be83d33', 9, 16)
 
---
-select find_in_set('b', 'a,b,c,d') //2
-select find_in_set('e', 'a,b,c,d') //0
+--字符串大小写
+select upper('abc')
+select lower('ABC')
+
+--字符串包含
+select locate('bc', 'abcdefg')
+select instr('abcdefg', 'bc')
+select position('bc' in 'abcdefg')
+select find_in_set('b', 'a,b,c,d')
 
 --取顺序第一个逗号前面的字符串
 select substring_index('123,456,789,0', ',', 1) //123

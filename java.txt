@@ -22,10 +22,12 @@ export PATH=$PATH:/usr/local/go/bin
 go version
 
 
+/usr/lib/systemd/system/huimin.service
 ############################
 [Unit]
 Description=huimin
 After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
 
 [Service]
 Type=simple
@@ -37,22 +39,14 @@ WantedBy=multi-user.target
 
 
 -------------------------------------------------------------------------------------------------
-if (endDate != null) {
-    endDate = DateUtil.endOfDay(endDate);
-}
-
-<if test="startDate != null">
-    and a.transfer_time1 > #{startDate}
-</if>
-<if test="endDate != null">
-    and #{endDate} > a.transfer_time1
-</if>
-
--------------------------------------------------------------------------------------------------
 Map<Integer, List<User>> map = list.stream().collect(Collectors.groupingBy(User::getId));
 
 -------------------------------------------------------------------------------------------------
 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+-------------------------------------------------------------------------------------------------
+ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+HttpServletRequest request = attributes.getRequest();
 
 -------------------------------------------------------------------------------------------------
 @JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
@@ -79,6 +73,10 @@ public class ReconciliationDailyTask {
     }
 
 }
+
+-------------------------------------------------------------------------------------------------
+List<Map<String, Object>> yearCount(@Param("type2") String type2);
+只有一个参数，用到<if test="type2 != null and type2 != ''">，需要加@Param("type2")
 
 -------------------------------------------------------------------------------------------------
 <![CDATA[

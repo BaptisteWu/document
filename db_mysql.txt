@@ -1,31 +1,15 @@
 --
-select @@sql_mode;
-select @@GLOBAL.sql_mode;
-select @@SESSION.sql_mode;
-set sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-set global sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-
---
-show variables
-show global variables
-show global variables like 'wait_timeout'
-set global wait_timeout=28800
-
---
-show processlist
-kill 12345
-show status like 'Threads%'
-show variables like '%max_connection%'
-
---
 -登录
 mysql -u root -p
-a94b00bc5614eb8a
+HHhx2022!
 
 -创建用户并授权
-create user 'zmg-education' identified by 'zmg-education!@#';
-grant all on `zmg-education`.* to 'zmg-education';
+create user 'sxzyy-huimin' identified by 'sxzyy-huiminQWE456!@#';
+grant all on `sxzyy-huimin`.* to 'sxzyy-huimin';
+
+create user 'sxzyy-huimin'@'%' identified by 'sxzyy-huiminQWE456!@#';
+grant all on `sxzyy-huimin`.* to 'sxzyy-huimin'@'%';
+
 grant all on *.* to 'wl-reagent';
 
 exit
@@ -259,72 +243,19 @@ where b.create_time <= a.create_time
 from wubin a
 group by create_time
 
---索引
---创建索引
-create index index_username on user(username)
-alter table user add index index_username (username)
-create index index_user on user(username, create_time, age)
-
---删除索引
-drop index index_username on user
-alter table user drop index index_username
-
---索引字段名不要是关键字
---结果超过一半，索引无效
-
---is null，索引有效；is not null，索引无效
-explain select * from user where username is null
-explain select * from user where username is not null
-
---in 小于等于两个，索引有效；大于两个，索引无效
-explain select * from user where username in ('tom', 'mary')
-explain select * from user where username in ('tom', 'mary', 'wubin')
-
---like 以%开头，索引无效；不以%开头，索引有效
-explain select * from user where username like '%t%'
-explain select * from user where username like 't%'
-
---OR语句
-explain select * from user where age = 23 or age = 24 //结果<=1，索引有效
-explain select * from user where age < 12 or age > 12 //结果<=1，索引有效
-explain select * from user where username = 'tom' or username = 'jack' //结果<=1，索引有效
-explain select * from user where create_time = '2019-12-09 15:33:00' or create_time = '2019-12-09 15:33:01' //结果<=1，索引有效
-explain select * from user where create_time < '2019-12-09 10:07:08' or create_time > '2020-02-04 10:47:50' //结果<=1，索引有效
-explain select * from user where username = 'wubin' or age = 54 //每个字段结果<=1，索引有效
-explain select * from user where username = 'wubin' or realname = 'wer' //每个字段结果<=1，索引有效
-
---<>，!=主键索引有效，非主键索引结果<=1，索引有效
-explain select * from user where id != 12
-explain select * from user where age != 12 //结果<=1，索引有效
-
---数据类型隐式转化（不包括时间类型）
-explain select * from user where username = '123'
-explain select * from user where username = 123 //索引无效
-explain select * from user where username = cast(123 as char)
-
-explain select * from user where create_time = '2019-12-09 14:42:40' //索引有效
-explain select * from user where create_time < '2019-12-09 14:42:40' //索引有效
-explain select * from user where create_time < cast('2019-12-09 14:42:40' as datetime) //索引有效
-explain select * from user where create_time < str_to_date('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s') //索引有效
-
---对索引字段进行计算，索引无效
-explain select * from user where age - 1 = 1 //索引无效
-explain select * from user where age = 23 + 1 //索引有效
-
---对索引字段使用函数，索引无效
-explain select * from user where length(username) = 8
-
---组合索引 最佳左前缀法则
-explain select * from user where username = 'tom'
-explain select * from user where create_time = '2019-12-09 14:42:40' //索引无效
-explain select * from user where age = 12 //索引无效
-explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40'
-explain select * from user where create_time = '2019-12-09 14:42:40' and username = 'tom'
-explain select * from user where username = 'tom' and age = 12
-explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 //索引无效
-explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40' and age = 12
-explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 and username = 'tom'
-explain select * from user where username = 'tom' and create_time < '2019-12-09 14:42:40' and age = 12 //范围条件后的索引失效
+--分组排序
+select a.*, @rownum := if(@group = domain1, @rownum + 1, 1) as rownum,
+@group := domain1
+from
+(
+select domain1, domain2, count(*) as num from
+medical_device_domain
+where province = '浙江省' and domain is not null and domain <> ''
+and domain1 is not null and domain1 <> '' and domain1 not like '%其他%'
+and domain2 is not null and domain2 <> ''
+group by domain1, domain2
+order by domain1, num desc
+) a, (select @rownum := 0, @group := '') b
 
 --前10条记录中，每隔5条取1条
 select * from
@@ -339,10 +270,7 @@ select
 @num := @num + 1,
 date_format(adddate(curdate(), interval @num - 30 day), '%Y-%m-%d') as date 
 from
-yw_person_info,(
-select
-@num := 0 
-) t 
+yw_person_info, (select @num := 0) t 
 where
 adddate(curdate(), interval @num - 30 day) < curdate()
 
@@ -351,6 +279,108 @@ start transaction;
 set @num := 100000;
 update yw_person_info set password = (@num := @num + 1);
 commit;
+
+--
+select @@sql_mode;
+select @@GLOBAL.sql_mode;
+select @@SESSION.sql_mode;
+set sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set global sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+
+--
+show variables
+show global variables
+set global wait_timeout=28800
+
+-
+show variables like 'wait_timeout'
+
+-是否区分表名大小写
+show variables like '%lower%'
+
+-版本
+show variables like '%version%'
+
+--
+show processlist
+kill 12345
+show status like 'Threads%'
+show variables like '%max_connection%'
+
+
+--锁
+https://www.cnblogs.com/wodebudong/articles/7976474.html
+没有索引，update锁表
+有索引，update锁行
+
+
+--索引
+-创建索引
+create index index_username on user(username)
+alter table user add index index_username (username)
+create index index_user on user(username, create_time, age)
+
+-删除索引
+drop index index_username on user
+alter table user drop index index_username
+
+-索引字段名不要是关键字
+-结果超过一半，索引无效
+
+-is null，索引有效；is not null，索引无效
+explain select * from user where username is null
+explain select * from user where username is not null
+
+-in 小于等于两个，索引有效；大于两个，索引无效
+explain select * from user where username in ('tom', 'mary')
+explain select * from user where username in ('tom', 'mary', 'wubin')
+
+-like 以%开头，索引无效；不以%开头，索引有效
+explain select * from user where username like '%t%'
+explain select * from user where username like 't%'
+
+-OR语句
+explain select * from user where age = 23 or age = 24 //结果<=1，索引有效
+explain select * from user where age < 12 or age > 12 //结果<=1，索引有效
+explain select * from user where username = 'tom' or username = 'jack' //结果<=1，索引有效
+explain select * from user where create_time = '2019-12-09 15:33:00' or create_time = '2019-12-09 15:33:01' //结果<=1，索引有效
+explain select * from user where create_time < '2019-12-09 10:07:08' or create_time > '2020-02-04 10:47:50' //结果<=1，索引有效
+explain select * from user where username = 'wubin' or age = 54 //每个字段结果<=1，索引有效
+explain select * from user where username = 'wubin' or realname = 'wer' //每个字段结果<=1，索引有效
+
+-<>，!=主键索引有效，非主键索引结果<=1，索引有效
+explain select * from user where id != 12
+explain select * from user where age != 12 //结果<=1，索引有效
+
+-数据类型隐式转化（不包括时间类型）
+explain select * from user where username = '123'
+explain select * from user where username = 123 //索引无效
+explain select * from user where username = cast(123 as char)
+
+explain select * from user where create_time = '2019-12-09 14:42:40' //索引有效
+explain select * from user where create_time < '2019-12-09 14:42:40' //索引有效
+explain select * from user where create_time < cast('2019-12-09 14:42:40' as datetime) //索引有效
+explain select * from user where create_time < str_to_date('2019-12-09 14:42:40', '%Y-%m-%d %H:%i:%s') //索引有效
+
+-对索引字段进行计算，索引无效
+explain select * from user where age - 1 = 1 //索引无效
+explain select * from user where age = 23 + 1 //索引有效
+
+-对索引字段使用函数，索引无效
+explain select * from user where length(username) = 8
+
+-组合索引 最佳左前缀法则
+explain select * from user where username = 'tom'
+explain select * from user where create_time = '2019-12-09 14:42:40' //索引无效
+explain select * from user where age = 12 //索引无效
+explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40'
+explain select * from user where create_time = '2019-12-09 14:42:40' and username = 'tom'
+explain select * from user where username = 'tom' and age = 12
+explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 //索引无效
+explain select * from user where username = 'tom' and create_time = '2019-12-09 14:42:40' and age = 12
+explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 and username = 'tom'
+explain select * from user where username = 'tom' and create_time < '2019-12-09 14:42:40' and age = 12 //范围条件后的索引失效
 
 
 --开启binlog
@@ -487,6 +517,7 @@ port=13306
 -修改端口需要
 vi /etc/selinux/config
 SELINUX=disabled
+重启服务器
 
 
 --centos7 mysql5.7 rpm安装
@@ -532,7 +563,7 @@ rename user 'root'@'localhost' to 'root'@'%';
 exit;
 
 
--centos8 mysql5.7安装
+--centos8 mysql5.7安装
 -依赖
 yum search libaio
 yum install libaio

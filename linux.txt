@@ -42,7 +42,7 @@ ps -aux | grep XX
 ps -e | grep XX
 -
 netstat -lnp | grep 8080
-kill -9 port
+kill -9
 nohup java -jar XX.jar &
 
 cat /proc/version
@@ -272,6 +272,10 @@ systemctl restart docker
 docker pull hello-world
 docker run hello-world
 
+-搜索镜像
+docker search onlyoffice/documentserver
+-拉取镜像
+docker pull onlyoffice/documentserver
 -查看镜像
 docker images
 -删除镜像
@@ -294,30 +298,31 @@ docker rm $(docker ps -a -q)
 -停止所有容器
 docker stop $(docker ps -a -q)
 
--字体
+-onlyoffice字体
 docker ps
-docker exec -i -t c2e4f086e0e2 /bin/bash
+docker exec -i -t 10d176f40a46 /bin/bash
 cd /usr/share/fonts/
 rm -rf *
 cd /var/www/onlyoffice/documentserver/core-fonts/
 rm -rf *
 Ctrl+D退出容器
 
-docker cp /www/Fonts2/ c2e4f086e0e2:/usr/share/fonts/truetype/custom
-docker exec -i -t c2e4f086e0e2 /bin/bash
+docker cp /www/Fonts2/ 10d176f40a46:/usr/share/fonts/truetype/custom
+docker exec -i -t 10d176f40a46 /bin/bash
 fc-cache -f -v
 /usr/bin/documentserver-generate-allfonts.sh
 supervisorctl restart all
+Ctrl+D退出容器
 
-docker stop c2e4f086e0e2
+docker stop 10d176f40a46
 sudo docker run -i -t -d -p 8070:80 --restart=always \
     -v /app/onlyoffice/DocumentServer/logs:/var/log/onlyoffice  \
     -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data  \
     -v /app/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
     -v /app/onlyoffice/DocumentServer/db:/var/lib/postgresql -e JWT_SECRET=my_jwt_secret onlyoffice/documentserver
 
-docker cp efa27a1ccbdd:/usr/share/fonts/ /www/fonts/
-docker cp efa27a1ccbdd:/var/www/onlyoffice/documentserver/core-fonts/ /www/core-fonts/
+docker cp a3b739bb099f:/usr/share/fonts/ /www/fonts/
+docker cp a3b739bb099f:/var/www/onlyoffice/documentserver/core-fonts/ /www/core-fonts/
 
 -docker安装oracle
 docker search oracle

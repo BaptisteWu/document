@@ -331,6 +331,9 @@ solr create -c mycollection
 
 
 --netcat
+-下载地址
+https://eternallybored.org/misc/netcat/
+
 nc -v 114.115.204.60 21012
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
 {"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
@@ -338,6 +341,28 @@ nc -v 114.115.204.60 21012
 -扫描端口
 nc -z -v 123.157.138.86 3306
 nc -z -v 114.115.204.60 21008-21020
+
+
+--curl
+-下载地址
+https://curl.se/
+
+curl www.baidu.com -i
+
+
+--fiddler
+-下载地址
+https://www.telerik.com/fiddler/fiddler-classic
+https://www.telerik.com/fiddler/add-ons
+CertMaker for iOS and Android
+
+openssl x509 -inform DER -in FiddlerRoot.cer -out cacert.pem
+openssl x509 -inform PEM -subject_hash_old -in cacert.pem
+mv cacert.pem e5c3944b.0
+
+openssl x509 -inform DER -in C:\Users\DELL\Desktop\FiddlerRoot.cer -out C:\Users\DELL\Desktop\FiddlerRoot.pem
+openssl x509 -inform PEM -subject_hash_old -in C:\Users\DELL\Desktop\FiddlerRoot.pem
+ren C:\Users\DELL\Desktop\FiddlerRoot.pem 269953fb.0
 
 
 --ffmpeg

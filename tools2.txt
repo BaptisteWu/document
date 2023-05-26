@@ -3,7 +3,5 @@ https://winscp.net/eng/docs/lang:chs
 https://www.filezilla.cn/
 
 https://www.postman.com/
-https://eternallybored.org/misc/netcat/
-https://curl.se/
 
 https://www.videolan.org/

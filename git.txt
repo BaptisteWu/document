@@ -1,0 +1,46 @@
+生成SSH公钥，按照提示完成三次回车，即可生成 ssh key
+ssh-keygen -t rsa -C "你的邮箱地址"
+通过查看 ~/.ssh/id_rsa.pub 文件内容，获取到你的 public key
+cat ~/.ssh/id_rsa.pub
+
+git status
+git rm -r --cached .
+
+推送到其他分支，先切换到fa分支，然后执行git push命令
+git checkout fa
+git push -u origin fa
+
+git pull冲突
+先将本地修改存储起来
+git stash
+git pull
+查看本地仓库中都存储了几个stash版本
+git stash list
+还原暂存的内容
+git stash pop stash@{0}
+
+--
+gitlab
+gitblit
+
+--svn
+svn checkout https://47.98.108.183:8443/svn/project/16_bdzfzxs/auxiliaryTour/ --username=wubing --password=wb123456  D:/bodao
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

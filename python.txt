@@ -57,6 +57,7 @@ Scripts\activate
 退出虚拟环境
 deactivate
 
+
 --pipenv
 -安装
 pip3 install pipenv -i https://mirrors.aliyun.com/pypi/simple/

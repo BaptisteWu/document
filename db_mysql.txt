@@ -7,8 +7,8 @@ HHhx2022!
 create user 'sxzyy-huimin' identified by 'sxzyy-huiminQWE456!@#';
 grant all on `sxzyy-huimin`.* to 'sxzyy-huimin';
 
-create user 'sxzyy-huimin'@'%' identified by 'sxzyy-huiminQWE456!@#';
-grant all on `sxzyy-huimin`.* to 'sxzyy-huimin'@'%';
+create user 'zldp'@'%' identified by 'zldpQWE456!@#';
+grant all on `patent-big-screen`.* to 'zldp'@'%';
 
 grant all on *.* to 'wl-reagent';
 
@@ -150,7 +150,7 @@ select timestampdiff(second, '1993-07-22 08:08:08', '1993-07-20 06:06:06')
 --根据经纬度算距离
 select st_distance_sphere(point(longitude, latitude), point(#{longitude}, #{latitude})) distance
 select round(st_distance(point(null, null), point(null, null)) * 111195, 1) distance
-round(6378.138 * 2 * asin(sqrt(pow(sin((#{latitude} * pi() / 180 - latitude * pi() / 180) / 2), 2) + cos(#{latitude} * pi() / 180) * cos(latitude * pi() / 180) * pow(sin((#{longitude} * pi() / 180 - longitude * pi() / 180) / 2), 2))) * 1000) distance
+select round(6378.138 * 2 * asin(sqrt(pow(sin((#{latitude} * pi() / 180 - latitude * pi() / 180) / 2), 2) + cos(#{latitude} * pi() / 180) * cos(latitude * pi() / 180) * pow(sin((#{longitude} * pi() / 180 - longitude * pi() / 180) / 2), 2))) * 1000) distance
 
 --随机数
 select floor(rand() * 1000000)
@@ -195,12 +195,11 @@ union all select 3 auto_incre_id
 ) a
 where auto_incre_id <= (length('82,83,84,85,86') - length(replace('82,83,84,85,86', ',', '')) + 1)
 
---创建临时表
-create temporary table if not exists incre_table (auto_incre_id int)
-
 --group_concat一般与group by同时使用
 select group_concat(id) from wubin
 select name,group_concat(id) from wubin group by name
+
+--any_value()
 
 --count()函数有条件
 select count(case when charge_type = 2 then charge_type end) from chargerecord_8
@@ -280,27 +279,36 @@ set @num := 100000;
 update yw_person_info set password = (@num := @num + 1);
 commit;
 
+--创建临时表
+create temporary table if not exists incre_table (auto_incre_id int)
+
 --
+show variables;
+show global variables;
+show session variables;
+
+show variables like '%sql_mode%';
+show global variables like '%sql_mode%';
+show session variables like '%sql_mode%';
+
 select @@sql_mode;
-select @@GLOBAL.sql_mode;
-select @@SESSION.sql_mode;
-set sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-set global sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+select @@global.sql_mode;
+select @@session.sql_mode;
 
---
-show variables
-show global variables
-set global wait_timeout=28800
-
--
-show variables like 'wait_timeout'
+set sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set global sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 
 -是否区分表名大小写
 show variables like '%lower%'
 
 -版本
 show variables like '%version%'
+
+--配置文件
+lower_case_table_names=1
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+character_set_server=utf8mb4
 
 --
 show processlist

@@ -12,18 +12,13 @@ YC34H-6WWDK-085MQ-JYPNX-NZRA2
 https://mirrors.aliyun.com/centos
 https://mirrors.aliyun.com/centos/7.8.2003/isos/x86_64/
 
---设置网络
-vi /etc/sysconfig/network-scripts/ifcfg-ens33
-ONBOOT=yes
-i
-esc
-:wq
-service network restart
-ip addr
 
 --工具
 PuTTY	https://www.chiark.greenend.org.uk/~sgtatham/putty/
+WinSCP	https://winscp.net/eng/docs/lang:chs
+FileZilla	https://www.filezilla.cn/
 FinalShell	http://www.hostbuf.com/
+
 
 --上传文件
 psftp
@@ -44,11 +39,11 @@ ps -e | grep XX
 netstat -lnp | grep 8080
 kill -9
 nohup java -jar XX.jar &
+-重启
+reboot
 
 cat /proc/version
-reboot
 find / -name nginx.conf
-vi /etc/profile
 mkdir test
 rm -rf test
 
@@ -65,20 +60,27 @@ cat /proc/meminfo
 lsblk
 df -h
 
-
---网站
-http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
-http://vault.centos.org/
-http://rpm.pbone.net/
+-设置网络
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+ONBOOT=yes
+i
+esc
+:wq
+service network restart
+ip addr
 
 
 --rpm
+-网站
+http://mirrors.aliyun.com/centos/7/os/x86_64/Packages/
+http://vault.centos.org/
+http://rpm.pbone.net/
 -安装
 rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
 -升级
 rpm -Uvh *.rpm
 -卸载
-rpm -e nginx-1.16.1-1.el7.ngx.x86_64.rpm
+rpm -e nginx-1.16.1-1.el7.ngx.x86_64
 -是否安装
 rpm -q nginx
 -所有安装
@@ -126,7 +128,6 @@ yum remove net-tools
 
 
 --服务
--
 service -help
 service [服务] start
 service [服务] stop
@@ -233,7 +234,7 @@ rabbitmqctl list_users
 rabbitmqctl delete_user username
 rabbitmqctl oldPassword username newPassword
 
---rpm安装
+-rpm安装
 cd /usr/local
 wget https://github.com/rabbitmq/erlang-rpm/releases/download/v22.3.4.5/erlang-22.3.4.5-1.el7.x86_64.rpm
 wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.6/rabbitmq-server-3.8.6-1.el7.noarch.rpm

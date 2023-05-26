@@ -1,7 +1,0 @@
-https://www.chiark.greenend.org.uk/~sgtatham/putty/
-https://winscp.net/eng/docs/lang:chs
-https://www.filezilla.cn/
-
-https://www.postman.com/
-
-https://www.videolan.org/

@@ -1,22 +1,22 @@
---
+--新建用户
 -登录
 mysql -u root -p
-HHhx2022!
+Quye123!@#
 
 -创建用户并授权
-create user 'sxzyy-huimin' identified by 'sxzyy-huiminQWE456!@#';
-grant all on `sxzyy-huimin`.* to 'sxzyy-huimin';
+create user 'wlxcx' identified by 'wlxcxQWE123!@#';
+grant all on `wlxcx`.* to 'wlxcx';
 
-create user 'zldp'@'%' identified by 'zldpQWE456!@#';
-grant all on `patent-big-screen`.* to 'zldp'@'%';
+create user 'sxrmyy-visitor-test'@'%' identified by 'sxrmyy-visitor-testQWE123!@#';
+grant all on `sxrmyy-visitor-test`.* to 'sxrmyy-visitor-test'@'%';
 
 grant all on *.* to 'wl-reagent';
 
 exit
 
 -查看用户权限
-select * from mysql.user;
-show grants for root;
+select * from mysql.user
+show grants for root
 
 --查询插入
 insert into tb_user_copy1(id, username, password, create_time)
@@ -30,11 +30,19 @@ on a.category_id = b.id
 set a.name = '苹果2'
 where a.id = 2 and b.name = '水果'
 
+--关联删除
+delete a
+from goods a
+left join category b
+on a.category_id = b.id
+where a.id = 2 and b.name = '水果'
+
 --null设置默认值
 select ifnull(null, 0)
 select coalesce(null, 0)
 
 --保留小数
+//https://blog.csdn.net/newer_xiaohui/article/details/130883501
 select round(100.3465, 2), round(100, 2), round(0.6, 2), round(114.6, -1) //四舍五入
 select truncate(100.3465, 2), truncate(100, 2), truncate(0.6, 2), truncate(114.6, -1) //舍
 select cell(32.1) //向上取整
@@ -130,7 +138,7 @@ select date_add(curdate() - day(curdate()) + 1, interval -1 month)
 select date_add(curdate() - day(curdate()) + 1, interval 1 month)
 --当月最后一天0点
 select last_day(curdate())
-----当年1月1号0点
+--当年1月1号0点
 select date_add(curdate(), interval -dayofyear(curdate()) + 1 day)
 --去年1月1号0点
 select date_add(curdate() - dayofyear(curdate()) + 1, interval -1 year)
@@ -160,6 +168,16 @@ varchar(int)类型，int是字符数，而不是字节数
 --length()一个汉字三个字符，char_length()一个汉字一个字符
 select length('吴彬')
 select char_length('吴彬')
+
+--判断字符串是否包含空格
+select * from yw_preferential_item
+where type_range2 like '% %'
+
+select * from yw_preferential_item
+where type_range2 regexp ' '
+
+select * from yw_preferential_item
+where length(type_range2) != length(replace(type_range2, ' ', ''))
 
 --字符串拼接
 select concat('%', 'wubin', '%')
@@ -201,9 +219,24 @@ select name,group_concat(id) from wubin group by name
 
 --any_value()
 
---count()函数有条件
-select count(case when charge_type = 2 then charge_type end) from chargerecord_8
-select count(charge_type = 2 or null) from chargerecord_8
+--
+where条件!=过滤了null
+count()里面，=过滤了null
+
+--count()
+count(*)，count(1)会统计null的行
+count(列名)不会统计null的行
+
+count(1)：每一行的值都是1，每一行都会统计
+count(null)：每一行的值都是null，每一行都不会统计，等于0
+
+count碰到null时不统计
+
+-count()函数有条件
+select count(charge_type = 2 or null) from chargerecord
+charge_type不等于2时结果是false，(false or null)结果是null
+
+select count(case when charge_type = 2 then charge_type end) from chargerecord
 
 --分组求最大值，并取最大值所在的行
 select a.* from wubin a
@@ -282,6 +315,7 @@ commit;
 --创建临时表
 create temporary table if not exists incre_table (auto_incre_id int)
 
+
 --
 show variables;
 show global variables;
@@ -305,25 +339,33 @@ show variables like '%lower%'
 -版本
 show variables like '%version%'
 
---配置文件
-lower_case_table_names=1
-sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
-character_set_server=utf8mb4
+-最大连接数
+show variables like '%max_connection%'
 
---
+
+--1040 - Too many connections
 show processlist
 kill 12345
-show status like 'Threads%'
 show variables like '%max_connection%'
+show status like 'Threads%'
+show status like 'Max_used_connections'
+
+-空闲时间在600秒以上
+select concat('kill ', id, ';') from information_schema.`processlist` 
+where command = 'Sleep' and time > 600
+
+-某个用户发起的
+select concat('kill ', id, ';') from information_schema.`processlist`
+where user = 'sxzyy-huimin'
 
 
 --锁
 https://www.cnblogs.com/wodebudong/articles/7976474.html
-没有索引，update锁表
-有索引，update锁行
+条件字段没有索引，update锁表
+条件字段有索引，update锁行
 
 
---索引
+--索引（大表加索引）
 -创建索引
 create index index_username on user(username)
 alter table user add index index_username (username)
@@ -466,7 +508,7 @@ update user set host = '%' where user='root';
 flush privileges;
 
 
---centos7 mysql8 rpm安装
+--centos7 mysql5.7 rpm安装
 -卸载其它mysql
 rpm -qa | grep mariadb
 yum list installed | grep mariadb
@@ -476,6 +518,66 @@ yum remove mariadb*
 rpm -qa | grep mysql
 yum list installed | grep mysql
 
+libaio.x86_64 0:0.3.109-13.el7
+
+-解压
+cd /usr/local/project
+mkdir mysql-5.7.30
+tar xvf mysql-5.7.30-1.el7.x86_64.rpm-bundle.tar -C mysql-5.7.30
+
+-查看
+cd mysql-5.7.30
+rpm -qpl mysql-community-server-5.7.30-1.el7.x86_64.rpm
+
+-安装
+yum install mysql-community-{server,client,common,libs}-* mysql-5.*-
+yum install mysql-community-{server,client,common,libs}-*
+
+-启动
+systemctl start mysqld
+systemctl stop mysqld
+systemctl restart mysqld
+systemctl reload mysqld
+systemctl status mysqld
+-是否启动
+systemctl is-active mysqld
+-开机启动
+systemctl enable mysqld
+systemctl disable mysqld
+-是否开机启动
+systemctl is-enabled mysqld
+
+-查看密码
+grep 'temporary password' /var/log/mysqld.log
+
+-登录
+mysql -u root -p
+,wtmkB,)_6pg
+
+-修改密码
+alter user 'root'@'localhost' identified by 'qweQWE123!@#';
+alter user 'root'@'localhost' identified by 'Hh123456!@#';
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+exit;
+
+-修改配置文件
+cat /etc/my.cnf
+vi /etc/my.cnf
+port=13306
+-修改端口需要
+vi /etc/selinux/config
+SELINUX=disabled
+重启服务器
+
+-配置文件
+lower_case_table_names=1
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+character_set_server=utf8mb4
+max_connections=1000
+
+--centos7 mysql8 rpm安装
 https://repo.mysql.com/
 -下载
 cd /usr/local
@@ -514,57 +616,6 @@ mysql -u root -p
 
 -修改密码
 alter user 'root'@'localhost' identified by 'root';
-
--远程授权
-rename user 'root'@'localhost' to 'root'@'%';
-
--修改配置文件
-cat /etc/my.cnf
-vi /etc/my.cnf
-port=13306
--修改端口需要
-vi /etc/selinux/config
-SELINUX=disabled
-重启服务器
-
-
---centos7 mysql5.7 rpm安装
--解压
-mkdir mysql-5.7.30
-tar xvf mysql-5.7.30-1.el7.x86_64.rpm-bundle.tar -C mysql-5.7.30
-
--查看
-cd mysql-5.7.30
-rpm -qpl mysql-community-server-5.7.30-1.el7.x86_64.rpm
-
--安装
-yum install mysql-community-{server,client,common,libs}-* mysql-5.*-
-yum install mysql-community-{server,client,common,libs}-*
-
--启动
-systemctl start mysqld
-systemctl stop mysqld
-systemctl restart mysqld
-systemctl reload mysqld
-systemctl status mysqld
--是否启动
-systemctl is-active mysqld
--开机启动
-systemctl enable mysqld
-systemctl disable mysqld
--是否开机启动
-systemctl is-enabled mysqld
-
--查看密码
-grep 'temporary password' /var/log/mysqld.log
-
--登录
-mysql -u root -p
-smBJgsyD(0>5
-
--修改密码
-alter user 'root'@'localhost' identified by 'qweQWE123!@#';
-alter user 'root'@'localhost' identified by 'HHhx2022!';
 
 -远程授权
 rename user 'root'@'localhost' to 'root'@'%';

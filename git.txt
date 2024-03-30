@@ -28,7 +28,7 @@ git clone https://gitee.com/hlf890112/intelligent-dispensing.git
 -
 git reflog
 q退出
-git reset --hard 40a9a83
+git reset --hard 05773ee
 
 -查看本地仓库分支
 git branch

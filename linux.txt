@@ -31,6 +31,7 @@ pscp -P 22 -pw 123 D:\tools\linux\centos8\mysql-5.7.30-linux-glibc2.12-x86_64.ta
 --基本指令
 -版本
 cat /etc/redhat-release
+cat /proc/version
 -进程
 ps -aux
 ps -aux | grep XX
@@ -42,7 +43,6 @@ nohup java -jar XX.jar &
 -重启
 reboot
 
-cat /proc/version
 find / -name nginx.conf
 mkdir test
 rm -rf test
@@ -68,6 +68,13 @@ esc
 :wq
 service network restart
 ip addr
+
+-DNS配置
+vi /etc/sysconfig/network-scripts/ifcfg-ens1
+DNS1=223.5.5.5
+或
+vi /etc/resolv.conf
+nameserver 114.114.114.114
 
 
 --rpm
@@ -189,6 +196,14 @@ firewall-cmd --reload
 firewall-cmd --permanent --remove-port=8080/tcp
 
 
+--新建用户并设为ROOT权限
+adduser cyy
+passwd cyy
+qwe123!@#
+qwe123!@#
+visudo或vi /etc/sudoers
+cyy    ALL=(ALL)     ALL
+
 -添加用户组
 groupadd test
 -查看用户组
@@ -205,11 +220,38 @@ cat /etc/passwd
 userdel -r test
 
 
---
+--同步时间
+yum install ntp
+timedatectl set-timezone Asia/Shanghai
+timedatectl set-ntp yes
+timedatectl
+date
+
 rpm -ivh ntpdate-4.2.6p5-29.el7.centos.2.x86_64.rpm
 ntpdate 172.16.10.55
 timedatectl set-timezone Asia/Shanghai
 hwclock -w
+
+
+--
+-口令周期检测
+vi /etc/login.defs
+PASS_MAX_DAYS   90
+PASS_MIN_DAYS   7
+PASS_MIN_LEN    8
+PASS_WARN_AGE   7
+
+-登录锁定检测
+vi /etc/pam.d/sshd
+vi /etc/pam.d/login
+auth       required     pam_tally2.so deny=5 unlock_time=300
+
+vi /etc/profile
+export TMOUT=300
+
+-SSH检测
+vi /etc/ssh/sshd_config
+PermitRootLogin no
 
 
 --rabbitmq安装
@@ -299,31 +341,44 @@ docker rm $(docker ps -a -q)
 -停止所有容器
 docker stop $(docker ps -a -q)
 
--onlyoffice字体
-docker ps
-docker exec -i -t 10d176f40a46 /bin/bash
-cd /usr/share/fonts/
-rm -rf *
-cd /var/www/onlyoffice/documentserver/core-fonts/
-rm -rf *
-Ctrl+D退出容器
+-onlyoffice
+-拉取
+docker pull onlyoffice/documentserver
 
-docker cp /www/Fonts2/ 10d176f40a46:/usr/share/fonts/truetype/custom
-docker exec -i -t 10d176f40a46 /bin/bash
-fc-cache -f -v
-/usr/bin/documentserver-generate-allfonts.sh
-supervisorctl restart all
-Ctrl+D退出容器
-
-docker stop 10d176f40a46
+-运行
 sudo docker run -i -t -d -p 8070:80 --restart=always \
     -v /app/onlyoffice/DocumentServer/logs:/var/log/onlyoffice  \
     -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data  \
     -v /app/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
     -v /app/onlyoffice/DocumentServer/db:/var/lib/postgresql -e JWT_SECRET=my_jwt_secret onlyoffice/documentserver
 
-docker cp a3b739bb099f:/usr/share/fonts/ /www/fonts/
-docker cp a3b739bb099f:/var/www/onlyoffice/documentserver/core-fonts/ /www/core-fonts/
+docker restart b7bc7ba574df
+docker stop dfa28e336ddb
+
+-访问
+http://localhost:8070
+http://cro.zpsoftware.cn:8070
+http://cro2.zpsoftware.cn:8070
+http://cro2.zpsoftware.cn:8070/web-apps/apps/api/documents/api.js
+
+-字体
+docker ps
+docker exec -i -t 6e2c95f4ec76 /bin/bash
+cd /usr/share/fonts/
+rm -rf *
+cd /var/www/onlyoffice/documentserver/core-fonts/
+rm -rf *
+Ctrl+D退出容器
+
+docker cp /www/fonts 6e2c95f4ec76:/usr/share/fonts/truetype/custom
+docker exec -i -t 6e2c95f4ec76 /bin/bash
+fc-cache -f -v
+/usr/bin/documentserver-generate-allfonts.sh
+supervisorctl restart all
+Ctrl+D退出容器
+
+docker cp 7aba08f74120:/usr/share/fonts /www/fonts
+docker cp 7aba08f74120:/var/www/onlyoffice/documentserver/core-fonts /www/core-fonts
 
 -docker安装oracle
 docker search oracle

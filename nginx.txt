@@ -68,9 +68,10 @@ server {
 --connect() to 127.0.0.1:8080 failed (13: Permission denied) while connecting to upstream
 -查看SELinux状态
 /usr/sbin/sestatus -v
-#SELinux status:                 enabled
+#SELinux status:                 disabled
 或
 getenforce
+#Disabled
 
 -临时关闭
 setenforce 0
@@ -107,7 +108,10 @@ nginx -t
 -下载安装
 cd /usr/local
 wget http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm
-rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm
+rpm -ivh pcre2-10.23-2.el7.x86_64.rpm
+rpm -ivh nginx-1.24.0-1.el7.ngx.x86_64.rpm
+
+curl http://116.148.229.237:1234 -i
 
 -启动
 systemctl start nginx
@@ -127,6 +131,17 @@ systemctl is-enabled nginx
 /etc/nginx
 /var/log/nginx
 /usr/share/nginx/html
+
+--centos7 rpm升级
+-停止
+systemctl stop nginx
+-卸载
+rpm -e nginx-1.16.1-1.el7.ngx.x86_64
+-安装
+cd /usr/local/project
+rpm -ivh pcre2-10.23-2.el7.x86_64.rpm
+rpm -ivh nginx-1.24.0-1.el7.ngx.x86_64.rpm
+nginx -v
 
 
 --yum安装

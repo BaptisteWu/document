@@ -1,9 +1,49 @@
 python --version
+python -V
+pip --version
+pip -V
+pip3 --version
+pip3 -V
 
 https://pypi.tuna.tsinghua.edu.cn/simple
 https://mirrors.aliyun.com/pypi/simple/
 https://www.lfd.uci.edu/~gohlke/pythonlibs/
 
+
+--centos7 python3安装
+ll /usr/bin | grep python
+ll /usr/bin | grep pip
+
+yum -y groupinstall "Development tools"
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+yum -y install zlib-devel bzip2-devel libffi-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make
+
+cd /usr/local/project
+tar xvf Python-3.8.18.tgz
+cd Python-3.8.18
+./configure --prefix=/usr/local/python3
+make && make install
+rm -rf /usr/bin/python3
+rm -rf /usr/bin/pip3
+ln -s /usr/local/python3/bin/python3 /usr/bin/python3
+ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3
+python3 -V
+pip3 -V
+
+
+--pip
+pip list
+pip install opencv-python
+pip uninstall opencv-python
+
+-生成依赖列表
+pip freeze > requirements.txt
+
+-从依赖文件安装依赖
+pip install -r requirements.txt
+
+
+--
 pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install cx_Oracle -i https://mirrors.aliyun.com/pypi/simple/
@@ -26,19 +66,14 @@ pip install aiofiles -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install Pillow -i https://mirrors.aliyun.com/pypi/simple/
 
+pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
+pip install "paddleocr>=2.0.1"
+pip install opencv-python==4.6.0.66
+pip install paddlehub -i https://mirror.baidu.com/pypi/simple
+hub install deploy\hubserving\ocr_system
+
 pip install VideoCapture-0.9.5-cp38-cp38-win_amd64.whl
 pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
-
---pip
-pip list
-pip install opencv-python
-pip uninstall opencv-python
-
--生成依赖列表
-pip freeze > requirements.txt
-
--从依赖文件安装依赖
-pip install -r requirements.txt
 
 -turtle
 下载turtle-0.0.2.tar.gz

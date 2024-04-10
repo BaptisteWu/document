@@ -7,8 +7,8 @@ Quye123!@#
 create user 'wlxcx' identified by 'wlxcxQWE123!@#';
 grant all on `wlxcx`.* to 'wlxcx';
 
-create user 'sxrmyy-visitor-test'@'%' identified by 'sxrmyy-visitor-testQWE123!@#';
-grant all on `sxrmyy-visitor-test`.* to 'sxrmyy-visitor-test'@'%';
+create user 'medical-record'@'%' identified by 'medical-recordQWE456$%^';
+grant all on `medical-record`.* to 'medical-record'@'%';
 
 grant all on *.* to 'wl-reagent';
 

@@ -115,8 +115,8 @@ NVM_SYMLINK	=D:\nodejs\nodejs
 settings.txt
 -指令
 nvm root D:\nodejs\nvm
-nvm node_mirror https://npm.taobao.org/mirrors/node/
-nvm npm_mirror https://npm.taobao.org/mirrors/npm/
+nvm node_mirror https://npmmirror.com/mirrors/node/
+nvm npm_mirror https://npmmirror.com/mirrors/npm/
 安装的nodejs版本
 nvm list
 可以安装的nodejs版本
@@ -125,7 +125,8 @@ nvm install <version> [arch]
 nvm uninstall <version>
 nvm use <version> [arch]
 
-node -v
+配置文件D:\nodejs\nodejs\etc\npmrc
+registry=https://registry.npmmirror.com
 
 
 --CentOS7安装NodeJS
@@ -138,15 +139,16 @@ ln -s /usr/local/project/node/bin/npm /usr/local/bin
 node -v
 npm -v
 npm config list
-npm config set registry https://registry.npm.taobao.org
+npm config set registry https://registry.npmmirror.com
+配置文件C:\Users\wubin\.npmrc
 
 
 --npm相关
 npm -v
 npm config list --json
-npm config set registry https://registry.npm.taobao.org -g
+npm config set registry https://registry.npmmirror.com -g
 npm config get registry
-npm config set registry https://registry.npm.taobao.org
+npm config set registry https://registry.npmmirror.com
 npm config delete registry
 
 -查看全局依赖模块安装路径

@@ -105,6 +105,13 @@ create or replace trigger TRIGGER_T_PASS
 before insert on T_PASS
 for each row
 begin
+:new.ID := SEQ_T_PASS.nextval;
+end
+
+create or replace trigger TRIGGER_T_PASS
+before insert on T_PASS
+for each row
+begin
 select SEQ_T_PASS.nextval into :new.PASS_ID from dual;
 end
 

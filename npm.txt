@@ -1,3 +1,107 @@
+--
+http://jmesnil.net/stomp-websocket/doc/
+https://cryptojs.gitbook.io/docs/
+
+
+--nvm相关
+https://github.com/nvm-windows/nvm/releases
+
+-创建配置文件settings.txt
+root: D:\nodejs\nvm
+path: D:\nodejs\nodejs
+arch: 64
+proxy: none
+node_mirror: https://npmmirror.com/mirrors/node/
+npm_mirror: https://npmmirror.com/mirrors/npm/
+
+-配置环境变量
+NVM_HOME	=D:\nodejs\nvm
+NVM_SYMLINK	=D:\nodejs\nodejs
+
+-编辑Path变量
+%NVM_HOME%
+%NVM_SYMLINK%
+
+nvm
+nvm version
+
+-指令
+安装的nodejs版本
+nvm list
+可以安装的nodejs版本
+nvm list available
+nvm install <version> [arch]
+nvm install 18.12.1
+nvm uninstall <version>
+nvm use <version> [arch]
+nvm use 18.12.1
+nvm use 14.17.6
+
+
+--CentOS7安装NodeJS
+cd /usr/local/project
+wget https://nodejs.org/dist/v14.15.4/node-v14.15.4-linux-x64.tar.xz
+tar -xvf node-v14.15.4-linux-x64.tar.xz
+mv node-v14.15.4-linux-x64 node
+ln -s /usr/local/project/node/bin/node /usr/local/bin
+ln -s /usr/local/project/node/bin/npm /usr/local/bin
+node -v
+npm -v
+npm config list
+npm config set registry https://registry.npmmirror.com
+
+
+--npm相关
+npm -v
+
+npm config list --json
+npm config set registry https://registry.npmmirror.com -g
+npm config set cache D:\nodejs\npm-cache -g
+
+-
+npm config get globalconfig
+D:\nodejs\nodejs\etc\npmrc
+
+npm config get userconfig
+C:\Users\wubin\.npmrc
+
+npm config set cache D:\nodejs\npm-cache -g
+设置globalconfig里面的配置
+
+npm config set cache D:\nodejs\npm-cache2
+设置userconfig里面的配置
+
+npm config get cache -g
+npm config get cache
+先取userconfig里面的配置，如果没有，再取lobalconfig里面的配置，加不加-g都一样
+
+npm config delete cache -g
+删除globalconfig里面的配置
+
+npm config delete cache
+删除userconfig里面的配置
+
+-
+npm config get cache
+npm get cache
+
+-清理缓存
+npm cache verify
+npm cache clean --force
+
+-安装模块
+npm install vue
+-卸载模块
+npm uninstall vue
+
+-查看全局依赖模块安装路径
+npm root -g
+-查看当前项目的依赖模块
+npm ls --depth 0
+-查看全局依赖模块
+npm ls -g --depth 0
+
+
 --js相关
 -数组开头添加元素
 array.unshift(obj)
@@ -93,11 +197,6 @@ this.$route.query.id
 --------------------------------------
 
 
---
-http://jmesnil.net/stomp-websocket/doc/
-https://cryptojs.gitbook.io/docs/
-
-
 --vscode相关
 https://code.visualstudio.com/docs/editor/portable
 -open in browser
@@ -107,63 +206,6 @@ https://code.visualstudio.com/docs/editor/portable
 -Auto Rename Tag
 -ESLint
 -Vetur
-
-
---nvm相关
-NVM_HOME	=D:\nodejs\nvm
-NVM_SYMLINK	=D:\nodejs\nodejs
-settings.txt
--指令
-nvm root D:\nodejs\nvm
-nvm node_mirror https://npmmirror.com/mirrors/node/
-nvm npm_mirror https://npmmirror.com/mirrors/npm/
-安装的nodejs版本
-nvm list
-可以安装的nodejs版本
-nvm list available
-nvm install <version> [arch]
-nvm uninstall <version>
-nvm use <version> [arch]
-
-配置文件D:\nodejs\nodejs\etc\npmrc
-registry=https://registry.npmmirror.com
-
-
---CentOS7安装NodeJS
-cd /usr/local/project
-wget https://nodejs.org/dist/v14.15.4/node-v14.15.4-linux-x64.tar.xz
-tar -xvf node-v14.15.4-linux-x64.tar.xz
-mv node-v14.15.4-linux-x64 node
-ln -s /usr/local/project/node/bin/node /usr/local/bin
-ln -s /usr/local/project/node/bin/npm /usr/local/bin
-node -v
-npm -v
-npm config list
-npm config set registry https://registry.npmmirror.com
-配置文件C:\Users\wubin\.npmrc
-
-
---npm相关
-npm -v
-npm config list --json
-npm config set registry https://registry.npmmirror.com -g
-npm config get registry
-npm config set registry https://registry.npmmirror.com
-npm config delete registry
-
--查看全局依赖模块安装路径
-npm root -g
--查看当前项目的依赖模块
-npm ls --depth 0
--查看全局依赖模块
-npm ls -g --depth 0
-
--安装模块
-npm install vue
--S --save 默认
--D --save-dev
--卸载模块
-npm uninstall vue
 
 
 --webpack相关
@@ -210,20 +252,16 @@ npm i antd
 
 
 --react native相关
-sdkmanager "platforms;android-29" --sdk_root=D:\Android\rn\sdk
-sdkmanager "build-tools;29.0.2" --sdk_root=D:\Android\rn\sdk
-sdkmanager --install "ndk;20.1.5948944" --sdk_root=D:\Android\rn\sdk
+需要ndk
 
-配置环境变量 GRADLE_USER_HOME
-修改 android\gradle\wrapper 目录下 gradle-wrapper.properties 文件，
-设置 distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-bin.zip
+修改 android\gradle\wrapper 目录下 gradle-wrapper.properties 文件，设置
+distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-bin.zip
 
-配置环境变量 ANDROID_HOME = D:\Android\rn\sdk
-%ANDROID_HOME%\platform-tools
-%ANDROID_HOME%\emulator
-%ANDROID_HOME%\tools
-%ANDROID_HOME%\tools\bin
-(在 android 目录下新建 local.properties 文件，设置 sdk.dir=D\:\\Android\\rn\\sdk)
+在 android 目录下新建 local.properties 文件，设置
+sdk.dir=D\:\\Android\\sdk
+
+修改 android 目录下 build.gradle 文件，设置 compileSdkVersion 等参数
+修改 android\app 目录下 build.gradle 文件，设置 compileSdkVersion 等参数
 
 adb start-server
 adb connect 192.168.1.104
@@ -233,10 +271,6 @@ adb kill-server
 npx react-native init demo
 cd demo
 npx react-native run-android
-
-
-
-
 
 
 

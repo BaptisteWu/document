@@ -1,9 +1,86 @@
+--
+https://jmeter.apache.org/download_jmeter.cgi
+https://www.jenkins.io/zh/
+nexus：https://www.sonatype.com
+https://github.com/notepad-plus-plus/notepad-plus-plus/releases
+http://www.sublimetext.com
+https://www.postman.com
+https://www.7-zip.org
+https://www.videolan.org
+https://www.xnview.com/en/
+
+
+--数据库连接工具
+https://dbxio.com/cn
+https://github.com/t8y2/dbx/releases
+
+https://dbeaver.io
+https://www.heidisql.com
+
+http://www.maicongs.com
+
+
+
+--
+netstat -aon | findstr "8075" | findstr "LISTENING"
+
+taskkill /?
+taskkill /t /f /pid 5769
+taskkill /t /f /im javaw.exe
+
+tasklist /?
+tasklist /fi "imagename eq javaw.exe"
+tasklist | findstr /i "javaw.exe"
+/i：不区分大小写
+
+-windows开机自启目录
+shell:startup
+
+cmd /k "cd /d E:\tools\putty&&java -jar xxx.jar"
+
+start msedge www.baidu.com
+start msedge www.baidu.com --new-window
+start microsoft-edge:https://www.baidu.com
+
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --start-fullscreen www.baidu.com
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --kiosk www.baidu.com
+
+--
+WMIC
+Product list
+
+rem SQL Server 2019 Database Engine Shared
+msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0}
+
+
+--
+-生成 32 字节（即 256 bit）的随机数据，并以 Base64 编码输出：
+openssl rand -base64 32
+
 openssl genrsa -out nginx.key 2048
 openssl req -new -key nginx.key -out nginx.csr
 openssl x509 -req -days 365 -in nginx.csr -signkey nginx.key -out nginx.crt
 
 openssl genpkey -algorithm RSA -out nginx.key -pkeyopt rsa_keygen_bits:2048
 openssl req -x509 -new -days 365 -nodes -key nginx.key -out nginx.pem
+
+
+--freessl
+https://freessl.cn/
+18717758202@163.com
+wubin930722
+
+curl https://get.acme.sh | sh -s email=my@example.com
+
+证书申请命令
+acme.sh --issue -d sxrmyy-visitor-web.zpsoftware.cn --dns dns_dp --server https://acme.freessl.cn/v2/DV90/directory/otcg41lhpwxwyjcqdha8
+
+证书部署命令
+acme.sh --install-cert -d sxrmyy-visitor-web.zpsoftware.cn \
+--key-file       /etc/nginx/ssl2/sxrmyy-visitor-web.zpsoftware.cn.key  \
+--fullchain-file /etc/nginx/ssl2/sxrmyy-visitor-web.zpsoftware.cn.pem \
+--reloadcmd     "service nginx force-reload"
+
 
 --maven
 -环境变量
@@ -13,6 +90,8 @@ M2_HOME
 %M2_HOME%\bin
 
 mvn -v
+mvn spring-boot:run -DskipTests
+mvn clean package -DskipTests
 
 -配置文件setting.xml
 <localRepository>D:/apache/maven</localRepository>
@@ -33,7 +112,10 @@ mvn -v
 </mirror>
 
 -添加jar到本地仓库
-mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar
+mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar -Dfile=D:\ojdbc14.jar
+mvn install:install-file -DgroupId=com.zjugis -DartifactId=component-parent -Dversion=1.0.1.RELEASE -Dpackaging=pom -Dfile=D:\work\xuzhou\component-parent-1.0.1.RELEASE.pom
+mvn install:install-file -DgroupId=com.zjugis -DartifactId=component-dependencies -Dversion=1.0.1.RELEASE -Dpackaging=pom -Dfile=D:\work\xuzhou\component-dependencies-1.0.2-20220317.065128-4.pom
+mvn install:install-file -DgroupId=com.zjugis -DartifactId=component-common -Dversion=1.0.2-SNAPSHOT -Dpackaging=jar -Dfile=D:\work\xuzhou\component-common-1.0.2-20230713.120611-14.jar
 
 -引入外部jar包
 <dependency>
@@ -55,8 +137,8 @@ mvn install:install-file -Dfile=D:\ojdbc14.jar -DgroupId=com.oracle -DartifactId
 
 --gradle
 -环境变量
-GRADLE_HOME		=E:\gradle-5.6.4
-GRADLE_USER_HOME	=D:\repository\gradle
+GRADLE_HOME=E:\gradle-5.6.4
+GRADLE_USER_HOME=D:\repository\gradle
 gradle -v
 gradle init
 gradle run
@@ -71,37 +153,205 @@ compile fileTree(dir: 'libs', include: ['*.jar'])
 
 
 --android cmdline-tools
--ANDROID_SDK_HOME
-.android文件夹位置
--
-sdkmanager --help --sdk_root=D:\Android\rn\sdk
-sdkmanager --version --sdk_root=D:\Android\rn\sdk
-sdkmanager --list --sdk_root=D:\Android\rn\sdk
-sdkmanager --list_installed --sdk_root=D:\Android\rn\sdk
-sdkmanager "platforms;android-28" --sdk_root=D:\Android\rn\sdk
-sdkmanager --install "ndk;20.1.5948944" --sdk_root=D:\Android\rn\sdk
-sdkmanager --uninstall "platforms;android-28" --sdk_root=D:\Android\rn\sdk
--
-cmdline-tools/latest/bin/...
-cmdline-tools/latest/lib/...
-cmdline-tools/latest/NOTICE.txt
-cmdline-tools/latest/source.properties
+https://developer.android.google.cn/?hl=zh-cn
+https://developer.android.google.cn/tools?hl=zh-cn
 
-
---spring-boot-cli
 -配置环境变量
-spring --version
-spring --help init
--创建项目
-d:
-cd D:\project\java\springboot2
-spring init --build=maven --language=java --boot-version=2.1.5.RELEASE --groupId=com.rmyy --artifactId=print --version=0.0.1-SNAPSHOT --name=print --packaging=jar --java-version=1.8 --dependencies=web print
+.android文件夹位置
+ANDROID_SDK_HOME=D:\Android
+
+GRADLE_USER_HOME=D:\repository\gradle
+
+ANDROID_HOME=D:\Android\sdk
+
+-Path
+%ANDROID_HOME%\cmdline-tools\latest\bin
+%ANDROID_HOME%\platform-tools
+
+-调整目录结构
+D:\Android\sdk\cmdline-tools\latest\bin\sdkmanager.bat
+
+-
+sdkmanager --version
+sdkmanager --help
+sdkmanager --list | findstr cmdline-tools
+sdkmanager --list_installed
+sdkmanager "platforms;android-29"
+sdkmanager "build-tools;29.0.2"
+sdkmanager "platform-tools"
+sdkmanager "ndk;20.1.5948944"
+sdkmanager "cmdline-tools;22.0"
+sdkmanager --uninstall "cmdline-tools;22.0"
+sdkmanager --uninstall "ndk;20.1.5948944"
+sdkmanager --uninstall "platforms;android-29" "build-tools;29.0.2" "platform-tools"
+
+adb connect 192.168.1.100
+adb devices
 
 
 --
 myapp.xml
 myapp.exe install
 myapp.exe start
+
+
+--mongodb
+-新建 mongod.cfg
+systemLog:
+  destination: file
+  path: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\log\mongodb.log
+  logAppend: true
+storage:
+  dbPath: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\data\
+  journal:
+    enabled: true
+net:
+  bindIp: 127.0.0.1
+  port: 27017
+-启动服务
+mongod --config D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg
+
+
+--curl
+Windows10自带
+-下载地址
+https://curl.se/
+
+curl -v www.baidu.com
+curl -v --http2 https://houduan.ggm5.icu//api.php/mei/getShiPinHuangList
+
+curl -O http://medical-record.zpsoftware.cn/dist.zip
+curl -o D:\work\medical-record\dist.zip http://medical-record.zpsoftware.cn/dist.zip
+
+certutil -urlcache -f http://medical-record.zpsoftware.cn/dist.zip D:\work\medical-record\dist.zip
+-f：强制覆盖现有文件
+7z x D:\work\medical-record\dist.zip -oD:\work\medical-record -aoa -bd
+x：解压，-o：指定输出目录，-aoa：覆盖所有现有文件，无提示，-bd：不显示进度
+
+
+--ffmpeg
+-下载地址
+https://ffmpeg.org/download.html
+ffmpeg -version
+
+-信息
+ffprobe D:\work\test\test.wav
+ffprobe -v quiet -print_format json -show_format -show_streams D:\work\test\test.wav
+ffprobe -v error -select_streams a:0 -show_entries stream=sample_rate D:\work\test\test.wav
+
+ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 D:\work\test\test.wav
+ffprobe -v error -show_entries stream=sample_rate -of default=noprint_wrappers=1:nokey=1 D:\work\test\test.wav
+ffprobe -v error -select_streams a:0 -show_entries stream=sample_rate -of default=noprint_wrappers=1:nokey=1 D:\work\test\test.wav
+
+ffmpeg -i D:\work\test\test.wav -ar 16000 D:\work\test\test2.wav
+
+-格式转换
+ffmpeg -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
+ffmpeg -i D:\test\m3u8\Downloads\STARS-979.ts D:\test\m3u8\Downloads\output.mp4
+ffmpeg -i D:\test\m3u8\Downloads\STARS-979.ts -c copy D:\test\m3u8\Downloads\output.mp4
+
+ffmpeg -i https://player.huangguam3u.com/20240124/6j8qLzvQ/index.m3u8 D:\test\m3u8\Downloads\output.mp4
+ffmpeg -i https://player.huangguam3u.com/20240124/6j8qLzvQ/index.m3u8 -c copy D:\test\m3u8\Downloads\output.mp4
+
+ffmpeg -i D:\test\m3u8\Downloads\_3_1_FSDSS-111.mp4 -vf scale=720:-1 D:\test\m3u8\Downloads\output.mp4
+ffmpeg -i D:\test\m3u8\Downloads\_3_1_FSDSS-111.mp4 -vf scale=720:-2 D:\test\m3u8\Downloads\output.mp4
+ffmpeg -i D:\test\m3u8\Downloads\_3_1_FSDSS-111.mp4 -vf scale=720:406 D:\test\m3u8\Downloads\output.mp4
+ffmpeg -i D:\test\m3u8\Downloads\_3_1_FSDSS-111.mp4 -vf "scale=iw*1.5:ih*1.5" D:\test\m3u8\Downloads\output.mp4
+
+ffmpeg -i D:\test\m3u8\Downloads\MIGD-579.mp4 -ss 01:52:08 -c copy D:\test\m3u8\Downloads\output.mp4
+ffmpeg -ss 01:52:07 -i D:\test\m3u8\Downloads\MIGD-579.mp4 -c copy D:\test\m3u8\Downloads\output.mp4
+ffmpeg -ss 00:00:10 -t 00:00:30 -i input.mp4 -c copy output.mp4
+ffmpeg -ss 00:00:10 -to 00:00:30 -i input.mp4 -c copy output.mp4
+
+ffmpeg -f image2 -i D:\test\test1\%03d.jpg -vcodec libx264 -r 1 test.mp4
+
+ffmpeg -i 0.mp4 -f gif 00.gif
+
+ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
+ffmpeg -f concat -safe 0 -i D:\test\m3u8\Downloads\filelist.txt -c copy D:\test\m3u8\Downloads\output.mp4
+
+-播放
+ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
+ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
+ffplay.exe -i D:\test\m3u8\Downloads\yapmMlVcRxNZHk8G.ts
+
+-rtmp
+nginx.exe -c conf\nginx-win-rtmp.conf
+
+ffmpeg.exe -re -i C:\doa\video.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/myapp/test
+ffplay.exe rtmp://localhost:1935/myapp/test
+ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
+
+
+--netcat
+-下载地址
+https://eternallybored.org/misc/netcat/
+
+nc -v 114.115.204.60 21012
+{"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
+{"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
+
+-扫描端口
+nc -z -v 123.157.138.86 3306
+nc -z -v 114.115.204.60 21008-21020
+
+
+--nmap
+nmap -sS -Pn -p1-65535 220.191.224.41
+nmap -sS -Pn -p1-65535 cyy.swj.sx.gov.cn
+
+
+--fiddler
+-下载地址
+https://www.telerik.com/fiddler/fiddler-classic
+https://www.telerik.com/fiddler/add-ons
+CertMaker for iOS and Android
+
+openssl x509 -inform DER -in FiddlerRoot.cer -out cacert.pem
+openssl x509 -inform PEM -subject_hash_old -in cacert.pem
+mv cacert.pem e5c3944b.0
+
+openssl x509 -inform DER -in C:\Users\DELL\Desktop\FiddlerRoot.cer -out C:\Users\DELL\Desktop\FiddlerRoot.pem
+openssl x509 -inform PEM -subject_hash_old -in C:\Users\DELL\Desktop\FiddlerRoot.pem
+ren C:\Users\DELL\Desktop\FiddlerRoot.pem 269953fb.0
+
+
+--caddy
+-下载地址
+https://caddyserver.com/v2
+https://github.com/caddyserver/caddy/releases
+
+caddy run
+caddy stop
+
+http://192.168.1.105:3030
+respond "Hello, world!"
+
+http://192.168.1.105:3030
+root * D:/test/m3u8/Downloads
+file_server browse
+
+
+--tesseract
+tesseract源码下载：https://github.com/tesseract-ocr/tesseract
+tesseract安装包下载：https://digi.bib.uni-mannheim.de/tesseract
+tesseract语言包下载：https://github.com/tesseract-ocr/tessdata
+E:\Program Files\Tesseract-OCR\tessdata
+jTessBoxEditor下载：https://sourceforge.net/projects/vietocr/files/jTessBoxEditor
+
+tesseract --version
+tesseract --list-langs
+-cmd输出
+tesseract D:\test\en.jpg stdout
+-文件输出
+tesseract D:\test\en.jpg result
+-数字
+tesseract D:\test\en.jpg stdout digits
+-中文
+tesseract D:\test\ch.png stdout -l chi_sim
+tesseract D:\test\333.jpg stdout -l chi_sim
+tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
+tesseract D:\test\num.png stdout -l chi_sim --psm 6
 
 
 --RocketMQ
@@ -160,6 +410,8 @@ kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from
 
 
 --RabbitMQ
+https://www.rabbitmq.com/
+
 -启动监控管理
 rabbitmq-plugins enable rabbitmq_management
 重启rabbitmq服务
@@ -169,6 +421,8 @@ http://localhost:15672
 
 
 --ActiveMQ
+https://activemq.apache.org/
+
 http://localhost:8161/
 用户名admin
 密码admin
@@ -177,6 +431,8 @@ http://localhost:8161/
 
 
 --emqx
+https://www.emqx.com/zh
+
 http://localhost:18083/
 用户名admin
 密码public
@@ -196,23 +452,6 @@ zkServer.cmd
 zkCli.cmd
 -启动第三方客户端
 java -jar zookeeper-dev-ZooInspector.jar
-
-
---mongodb
--新建 mongod.cfg
-systemLog:
-  destination: file
-  path: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\log\mongodb.log
-  logAppend: true
-storage:
-  dbPath: D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\data\
-  journal:
-    enabled: true
-net:
-  bindIp: 127.0.0.1
-  port: 27017
--启动服务
-mongod --config D:\db\mongodb\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg
 
 
 --solr
@@ -291,145 +530,6 @@ solr create -c mycollection
 
 <delete><query>*:*</query></delete>
 <commit/>
-
-
---caddy
--下载地址
-https://caddyserver.com/v2
-https://github.com/caddyserver/caddy/releases
-
-caddy run
-caddy stop
-
-http://192.168.1.105:3030
-respond "Hello, world!"
-
-http://192.168.1.105:3030
-root * D:/test/m3u8/Downloads
-file_server browse
-
-
---curl
--下载地址
-https://curl.se/
-
-curl www.baidu.com -i
-
-
---netcat
--下载地址
-https://eternallybored.org/misc/netcat/
-
-nc -v 114.115.204.60 21012
-{"REQ":"Hello","CID":"898607B8101980081125","Shake":0,"Fall":0}
-{"REQ":"Hello","CID":"898607B8101980081125","Shake":1,"Fall":1}
-
--扫描端口
-nc -z -v 123.157.138.86 3306
-nc -z -v 114.115.204.60 21008-21020
-
-
---ffmpeg
--下载地址
-https://ffmpeg.org/download.html
-ffmpeg -version
-
--格式转换
-ffmpeg.exe -i C:\tools\video\012715-793-carib.rmvb C:\tools\video\test.mp4
-
-ffmpeg.exe -f image2 -i D:\test\test1\%03d.jpg -vcodec libx264 -r 1 test.mp4
-
-ffmpeg.exe -i 0.mp4 -f gif 00.gif
-
-ffmpeg -i https://videomy.yongaomy.com/20211017/CxMO3WwJ/index.m3u8 D:\test\b.mp4
-
-ffmpeg -i "concat:D:\test\m3u8\Downloads\1.ts|D:\test\m3u8\Downloads\2.ts|" -c copy D:\test\m3u8\Downloads\3.ts
-ffmpeg -f concat -safe 0 -i D:\test\m3u8\Downloads\filelist.txt -c copy D:\test\m3u8\Downloads\output.mp4
-
--播放
-ffplay.exe -i D:\test\camera\051113-335-carib.rmvb
-ffplay.exe -i D:\test\camera\012715-793-carib.rmvb -vf setpts=PTS/8 -af atempo=2
-ffplay.exe -i D:\test\m3u8\Downloads\yapmMlVcRxNZHk8G.ts
-
--rtmp
-nginx.exe -c conf\nginx-win-rtmp.conf
-
-ffmpeg.exe -re -i C:\doa\video.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/myapp/test
-ffplay.exe rtmp://localhost:1935/myapp/test
-ffplay.exe -i rtmp://localhost:1935/myapp/test -fflags nobuffer
-
-
---nmap
-nmap -sS -Pn -p1-65535 220.191.224.41
-nmap -sS -Pn -p1-65535 cyy.swj.sx.gov.cn
-
-
---fiddler
--下载地址
-https://www.telerik.com/fiddler/fiddler-classic
-https://www.telerik.com/fiddler/add-ons
-CertMaker for iOS and Android
-
-openssl x509 -inform DER -in FiddlerRoot.cer -out cacert.pem
-openssl x509 -inform PEM -subject_hash_old -in cacert.pem
-mv cacert.pem e5c3944b.0
-
-openssl x509 -inform DER -in C:\Users\DELL\Desktop\FiddlerRoot.cer -out C:\Users\DELL\Desktop\FiddlerRoot.pem
-openssl x509 -inform PEM -subject_hash_old -in C:\Users\DELL\Desktop\FiddlerRoot.pem
-ren C:\Users\DELL\Desktop\FiddlerRoot.pem 269953fb.0
-
-
---tesseract
-tesseract源码下载：https://github.com/tesseract-ocr/tesseract
-tesseract安装包下载：https://digi.bib.uni-mannheim.de/tesseract
-tesseract语言包下载：https://github.com/tesseract-ocr/tessdata
-E:\Program Files\Tesseract-OCR\tessdata
-jTessBoxEditor下载：https://sourceforge.net/projects/vietocr/files/jTessBoxEditor
-
-tesseract --version
-tesseract --list-langs
--cmd输出
-tesseract D:\test\en.jpg stdout
--文件输出
-tesseract D:\test\en.jpg result
--数字
-tesseract D:\test\en.jpg stdout digits
--中文
-tesseract D:\test\ch.png stdout -l chi_sim
-tesseract D:\test\333.jpg stdout -l chi_sim
-tesseract D:\wubin\个人\微信图片_20200302084302.jpg stdout -l chi_sim
-tesseract D:\test\num.png stdout -l chi_sim --psm 6
-
-
---
-WMIC
-Product list
-
-rem SQL Server 2019 Database Engine Shared
-msiexec /x {DE5B7937-D5B5-4157-BC30-BB87F021CFF0}
-
-
---
-cmd /k "cd /d E:\tools\putty&&java -jar xxx.jar"
-
-netstat -aon|findstr "27017"
-taskkill /f /PID 5769
-
-start msedge www.baidu.com
-start msedge www.baidu.com --new-window
-start microsoft-edge:https://www.baidu.com
-
---
-https://www.eclipse.org/downloads/
-https://tomcat.apache.org
-https://jmeter.apache.org/download_jmeter.cgi
-https://www.jenkins.io/download
-nexus：https://www.sonatype.com
-https://github.com/notepad-plus-plus/notepad-plus-plus/releases
-http://www.sublimetext.com
-https://www.postman.com
-https://www.7-zip.org
-https://www.videolan.org
 
 
 

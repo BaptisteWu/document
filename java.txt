@@ -1,3 +1,8 @@
+https://www.oracle.com/java/technologies/downloads/
+18717758202@163.com
+Wubin930722!@#
+
+
 --linux rpm安装
 cd /usr/local
 rpm -ivh jdk-8u311-linux-x64.rpm
@@ -17,26 +22,50 @@ source /etc/profile
 java -version
 
 
+--go安装
 tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 go version
 
 
-/usr/lib/systemd/system/huimin.service
+--开机自启
+vi /usr/lib/systemd/system/medical-record.service
 ############################
 [Unit]
-Description=huimin
+Description=medical-record
 After=network-online.target remote-fs.target nss-lookup.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/java -jar /usr/local/project/huimin/huimin-1.0-SNAPSHOT.jar
+ExecStart=/usr/local/project/jdk1.8.0_311/bin/java -jar /usr/local/project/medical-record2-1.0-SNAPSHOT.jar
 
 [Install]
 WantedBy=multi-user.target
 ############################
 
+-编辑
+crontab -e
+@reboot /usr/bin/java -jar /usr/local/project/sxrmyy-whp-1.0-SNAPSHOT.jar
+
+-查看
+crontab -l
+
+
+-------------------------------------------------------------------------------------------------
+        <choose>
+            <when test="">
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+
+-------------------------------------------------------------------------------------------------
+@Transactional(transactionManager = "mainTransactionManager")
+
+-------------------------------------------------------------------------------------------------
+@Excel(name = "出入库类型", replace = {"入库_1", "出库_2"})
+@Excel(name = "就诊日期", format = "yyyy-MM-dd HH:mm:ss")
 
 -------------------------------------------------------------------------------------------------
 Map<Integer, List<User>> map = list.stream().collect(Collectors.groupingBy(User::getId));
@@ -195,8 +224,8 @@ keytool -list -keystore C:/"Program Files"/Java/jdk1.8.0_201/jre/lib/security/ca
 
 ;encrypt=false;trustServerCertificate=false
 
-
-
+-------------------------------------------------------------------------------------------------
+keytool -importkeystore -srckeystore D:\wubin\android\demo.jks -destkeystore D:\wubin\android\demo.jks -deststoretype pkcs12
 
 
 

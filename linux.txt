@@ -11,6 +11,8 @@ YC34H-6WWDK-085MQ-JYPNX-NZRA2
 -镜像下载
 https://mirrors.aliyun.com/centos
 https://mirrors.aliyun.com/centos/7.8.2003/isos/x86_64/
+从麒麟官方源
+https://update.cs2c.com.cn/NS/V10/V10SP3/os/adv/lic/updates/x86_64/Packages/
 
 
 --工具
@@ -46,6 +48,8 @@ reboot
 find / -name nginx.conf
 mkdir test
 rm -rf test
+rm -rf *.map
+find . -type f -name "*.map" -exec rm -f {} \;
 
 -cpu
 lscpu
@@ -60,6 +64,12 @@ cat /proc/meminfo
 lsblk
 df -h
 
+-查看ip
+ip addr
+-查看文件夹大小
+du -sh /var/lib/mysql
+du -sh /var/lib/mysql/sxrmyy@002dwhp
+
 -设置网络
 vi /etc/sysconfig/network-scripts/ifcfg-ens33
 ONBOOT=yes
@@ -67,7 +77,6 @@ i
 esc
 :wq
 service network restart
-ip addr
 
 -DNS配置
 vi /etc/sysconfig/network-scripts/ifcfg-ens1
@@ -102,8 +111,8 @@ https://developer.aliyun.com/mirror/centos
 1.备份
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 2.下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/
-curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
 3.生成缓存
 yum makecache
 
@@ -188,8 +197,12 @@ service firewalld start
 firewall-cmd --list-all
 -查看端口是否开放
 firewall-cmd --query-port=80/tcp
+firewall-cmd --query-port=8080/tcp
+firewall-cmd --query-port=3306/tcp
 -开放端口，需要重启防火墙
 firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --permanent --add-port=8080/tcp
+firewall-cmd --permanent --add-port=3306/tcp
 -重启防火墙
 firewall-cmd --reload
 -移除端口
@@ -218,6 +231,13 @@ passwd test
 cat /etc/passwd
 -删除用户，包括/home目录
 userdel -r test
+
+
+--字体
+fc-list
+fc-list :lang=zh
+fc-cache
+/usr/share/fonts/chinese
 
 
 --同步时间
@@ -283,16 +303,6 @@ wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.6/rabbit
 
 
 --docker安装
-https://docs.docker.com/engine/install/centos/
-https://developer.aliyun.com/mirror/docker-ce?spm=a2c6h.13651102.0.0.567f1b11jFpvr0
--yum安装
-1.
-yum install -y yum-utils
-2.
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-3.
-yum install docker-ce docker-ce-cli containerd.io
-
 -脚本安装
 curl -fsSL https://get.docker.com | sh
 curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
@@ -341,7 +351,50 @@ docker rm $(docker ps -a -q)
 -停止所有容器
 docker stop $(docker ps -a -q)
 
--onlyoffice
+-安装PolarDB-PG
+https://www.polardbx.com/
+ttps://openpolardb.com
+
+https://doc.polardbx.com/
+https://docpolardbpg.openpolardb.com/1740985837355
+https://polardb.github.io/polardb-pg-docs/zh/deploying/db-localfs.html
+
+拉取镜像
+docker pull registry.cn-hangzhou.aliyuncs.com/polardb_pg/polardb_pg_local_instance:15
+初始化数据库
+docker run -it --rm \
+    --cap-add=SYS_PTRACE --privileged=true \
+    --env POLARDB_PORT=5432 \
+    --env POLARDB_USER=polardb \
+    --env POLARDB_PASSWORD='qwe123!@#' \
+    -v /usr/local/project/polardb:/var/polardb \
+    registry.cn-hangzhou.aliyuncs.com/polardb_pg/polardb_pg_local_instance:15 \
+    echo 'done'
+启动数据库服务
+docker run -d \
+    --name=polardb_pg \
+    --cap-add=SYS_PTRACE --privileged=true \
+    -p 54320-54322:5432-5434 \
+    -v /usr/local/project/polardb:/var/polardb \
+    registry.cn-hangzhou.aliyuncs.com/polardb_pg/polardb_pg_local_instance:15
+
+docker stop polardb_pg
+docker rm polardb_pg
+rm -rf /usr/local/project/polardb/*
+
+docker exec -it polardb_pg /bin/bash
+docker exec -it polardb_pg bash
+vi /var/polardb/primary_datadir/pg_hba.conf
+vi /usr/local/project/polardb/primary_datadir/pg_hba.conf
+
+CREATE USER polardb WITH LOGIN PASSWORD 'qwe123!@#';
+
+psql -c 'select version();'
+psql -h 127.0.0.1 -p 5432 -U postgres -d postgres
+psql -h 47.97.1.61 -p 54320 -U postgres -d postgres
+psql -h 47.97.1.61 -p 54320 -U polardb -d postgres
+
+-安装onlyoffice
 -拉取
 docker pull onlyoffice/documentserver
 
@@ -380,7 +433,7 @@ Ctrl+D退出容器
 docker cp 7aba08f74120:/usr/share/fonts /www/fonts
 docker cp 7aba08f74120:/var/www/onlyoffice/documentserver/core-fonts /www/core-fonts
 
--docker安装oracle
+-安装oracle
 docker search oracle
 docker pull truevoly/oracle-12c
 docker run -d -p 1521:1521 --name oracle12c truevoly/oracle-12c

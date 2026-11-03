@@ -6,8 +6,40 @@ pip3 --version
 pip3 -V
 
 https://pypi.tuna.tsinghua.edu.cn/simple
-https://mirrors.aliyun.com/pypi/simple/
 https://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+
+--windows安装uv
+https://docs.astral.sh/uv/
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c {$env:UV_INSTALL_DIR = "E:\uv"; irm https://astral.sh/uv/install.ps1 | iex}
+uv -V
+
+UV_CACHE_DIR = E:\uv\cache
+UV_PYTHON_INSTALL_DIR = E:\uv\python
+UV_TOOL_DIR = E:\uv\tools
+
+uv cache dir
+uv python dir
+uv tool dir
+
+uv python list
+uv python install 3.12
+uv python uninstall 3.12
+
+cd D:\wubin\python\test
+uv venv --python 3.12
+.venv\Scripts\activate
+deactivate
+uv venv --clear
+
+uv pip list
+uv pip install -U "mineru>=4.0,<5" -i https://mirrors.aliyun.com/pypi/simple/
+uv pip install -U "pymilvus>=2.6.0,<2.7" -i https://mirrors.aliyun.com/pypi/simple/
+uv pip install openai -i https://mirrors.aliyun.com/pypi/simple/
+uv pip install modelscope -i https://mirrors.aliyun.com/pypi/simple/
+
+uv cache clean
 
 
 --centos7 python3安装
@@ -31,8 +63,23 @@ python3 -V
 pip3 -V
 
 
+--Ubuntu python3安装
+apt-get install -y python3 python3-dev
+python3 -V
+apt-get install -y python3-pip
+pip -V
+pip3 -V
+apt-get install -y python3-venv
+
+
 --pip
+pip index versions VideoCapture -i https://mirrors.aliyun.com/pypi/simple/
+pip index versions Twisted -i https://mirrors.aliyun.com/pypi/simple/
+
 pip list
+pip show VideoCapture
+pip show pipenv
+
 pip install opencv-python
 pip uninstall opencv-python
 
@@ -44,6 +91,7 @@ pip install -r requirements.txt
 
 
 --
+pip install pyexecjs -i https://mirrors.aliyun.com/pypi/simple/
 pip install xlrd -i https://mirrors.aliyun.com/pypi/simple/
 
 pip install cx_Oracle -i https://mirrors.aliyun.com/pypi/simple/
@@ -71,9 +119,6 @@ pip install "paddleocr>=2.0.1"
 pip install opencv-python==4.6.0.66
 pip install paddlehub -i https://mirror.baidu.com/pypi/simple
 hub install deploy\hubserving\ocr_system
-
-pip install VideoCapture-0.9.5-cp38-cp38-win_amd64.whl
-pip install Twisted-20.3.0-cp38-cp38-win_amd64.whl
 
 -turtle
 下载turtle-0.0.2.tar.gz
@@ -114,8 +159,6 @@ url = "https://pypi.org/simple"
 ==>
 url = "https://mirrors.aliyun.com/pypi/simple"
 
-https://www.lfd.uci.edu/~gohlke/pythonlibs
-
 -激活虚拟环境
 pipenv shell
 
@@ -136,24 +179,6 @@ exit
 
 -删除虚拟环境，先 cd 进入 Pipfile 文件所在目录
 pipenv --rm
-
--scrapy
-pipenv install Twisted-19.2.0-cp37-cp37m-win_amd64.whl
--修改 twisted = "*"
-pipenv lock
-pipenv install scrapy
-pipenv install pywin32
-pipenv install pillow
--创建scrapy项目
-cd C:\Baptiste\python
-scrapy startproject crawler
--创建爬虫
-cd C:\Baptiste\python\crawler\crawler\spiders
-scrapy genspider douban_spider movie.douban.com
--运行爬虫，保存数据
-scrapy crawl douban_spider
-scrapy crawl douban_spider -o test.json
-scrapy crawl douban_spider -o test.csv
 
 
 --conda

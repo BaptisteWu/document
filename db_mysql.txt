@@ -6,17 +6,24 @@ Quye123!@#
 -创建用户并授权
 create user 'wlxcx' identified by 'wlxcxQWE123!@#';
 grant all on `wlxcx`.* to 'wlxcx';
-
-create user 'medical-record'@'%' identified by 'medical-recordQWE456$%^';
-grant all on `medical-record`.* to 'medical-record'@'%';
-
 grant all on *.* to 'wl-reagent';
 
-exit
+create user 'forensic'@'%' identified by 'forensicASD456$%^';
+grant all on `forensic`.* to 'forensic'@'%';
+
+exit;
+
+alter user 'sxrmyy-whp'@'%' identified by 'sxrmyy-whpQWE789!@#';
+
+-删除用户权限
+revoke all on `zldp`.* from 'zldp'@'%';
 
 -查看用户权限
-select * from mysql.user
-show grants for root
+show grants for root;
+show grants for zldp;
+show grants for 'zldp'@'%';
+
+select * from mysql.user;
 
 --查询插入
 insert into tb_user_copy1(id, username, password, create_time)
@@ -185,6 +192,9 @@ select concat('%', 'wubin', '%')
 --字符串截取
 select substring('db098ee7e5bcdf5efb266be68be83d33', 9, 16)
 
+--字符串替换
+select replace('123.jpg', '.jpg', '')
+
 --字符串大小写
 select upper('abc')
 select lower('ABC')
@@ -205,16 +215,34 @@ select substring_index('123,456,789,0', ',', -1) //0
 select substring_index(substring_index('123,456,789,0', ',', 2), ',', -1) //456
 
 --根据某个字段把一条记录分成多条
-select substring_index(substring_index('82,83,84,85,86', ',', auto_incre_id), ',', -1) as id from 
+select substring_index(substring_index('82,83,84,85,86', ',', auto_incre_id), ',', -1) id from 
 (
 select 1 auto_incre_id
-union all select 2 auto_incre_id
-union all select 3 auto_incre_id
+union select 2 auto_incre_id
+union select 3 auto_incre_id
 ) a
 where auto_incre_id <= (length('82,83,84,85,86') - length(replace('82,83,84,85,86', ',', '')) + 1)
 
+select a.*, substring_index(substring_index(hatch_type, ',', help_topic_id + 1), ',', -1)
+from
+tb_enterprise a, mysql.help_topic b
+where help_topic_id < (length(hatch_type) - length(replace(hatch_type, ',', '')) + 1)
+
+select a.*, substring_index(substring_index(hatch_type, ',', auto_incre_id), ',', -1)
+from
+tb_enterprise a,
+(
+select 1 auto_incre_id
+union select 2 auto_incre_id
+union select 3 auto_incre_id
+union select 4 auto_incre_id
+union select 5 auto_incre_id
+) b
+where auto_incre_id <= (length(hatch_type) - length(replace(hatch_type, ',', '')) + 1)
+
 --group_concat一般与group by同时使用
 select group_concat(id) from wubin
+select group_concat(id separator ';') from wubin
 select name,group_concat(id) from wubin group by name
 
 --any_value()
@@ -432,6 +460,9 @@ explain select * from user where username = 'tom' and create_time = '2019-12-09 
 explain select * from user where create_time = '2019-12-09 14:42:40' and age = 12 and username = 'tom'
 explain select * from user where username = 'tom' and create_time < '2019-12-09 14:42:40' and age = 12 //范围条件后的索引失效
 
+--
+mysqldump -u root -p template > D:\test\test.sql
+mysqldump -u root -proot template > D:/test/test2.sql
 
 --开启binlog
 [mysqld]
@@ -449,7 +480,107 @@ mysqlbinlog --no-defaults --base64-output=decode-rows -v D:\mysql-5.7.13-winx64\
 mysqlbinlog --no-defaults --base64-output=decode-rows -v D:\mysql-5.7.13-winx64\data\mysql-bin.000001 > D:/1.sql
 
 
---windows安装
+--主从复制
+[mysqld]
+log-bin=mysql-bin
+server-id=1
+
+GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%' IDENTIFIED BY 'replica_password';
+FLUSH PRIVILEGES;
+
+SHOW MASTER STATUS;
+
+[mysqld]
+server-id = 2
+
+CHANGE MASTER TO
+MASTER_HOST='master_host_ip',
+MASTER_USER='replica',
+MASTER_PASSWORD='replica_password',
+MASTER_LOG_FILE='mysql-bin.000001',
+MASTER_LOG_POS=0;
+
+MASTER_LOG_FILE和MASTER_LOG_POS的值要与SHOW MASTER STATUS中的一致
+
+START SLAVE;
+
+SHOW SLAVE STATUS\G
+
+
+--
+show variables like 'datadir';
+/var/lib/mysql/
+
+
+--
+windows server2012 mysql安装成服务启动不了
+win+r，输入regedit
+计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MySQL，双击打开ImagePath
+修改路径为你的mysql解压后所在的路径，具体到 bin\mysqld
+
+
+--windows mysql5.7安装
+-下载
+https://cdn.mysql.com/archives/mysql-5.7/mysql-5.7.30-winx64.zip
+
+-添加到环境变量Path
+如：D:\mysql-5.7.30-winx64\bin
+
+-创建D:\mysql-5.7.30-winx64\my.ini文件
+正斜杠 / 或两个反斜杠 \\
+[mysqld]
+basedir=D:/mysql-5.7.30-winx64
+datadir=D:/mysql-5.7.30-winx64/data
+lower_case_table_names=1
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+character_set_server=utf8mb4
+max_connections=1000
+
+-初始化数据目录
+mysqld --initialize --console
+mysqld --defaults-file=D:\mysql-5.7.30-winx64\my.ini --initialize --console
+
+-启动服务
+mysqld --console
+
+-停止服务
+mysqladmin -u root shutdown
+
+-安装Windows服务
+mysqld --install MySQL --defaults-file=D:\mysql-5.7.30-winx64\my.ini
+
+-启动Windows服务
+sc start MySQL
+或
+net start MySQL
+
+-停止Windows服务
+sc stop MySQL
+或
+net stop MySQL
+
+-删除Windows服务
+sc delete mysql
+或
+mysqld --remove
+
+-登录
+mysql -u root -p
+
+-修改密码
+alter user 'root'@'localhost' identified by 'root';
+
+-远程授权
+rename user 'root'@'localhost' to 'root'@'%';
+或
+show databases;
+use mysql;
+select host, user, plugin from user;
+update user set host = '%' where user='root';
+flush privileges;
+
+
+--windows mysql8安装
 -下载
 https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.20-winx64.zip
 
@@ -518,6 +649,7 @@ yum remove mariadb*
 rpm -qa | grep mysql
 yum list installed | grep mysql
 
+需要
 libaio.x86_64 0:0.3.109-13.el7
 
 -解压
@@ -552,30 +684,49 @@ grep 'temporary password' /var/log/mysqld.log
 
 -登录
 mysql -u root -p
-,wtmkB,)_6pg
 
 -修改密码
-alter user 'root'@'localhost' identified by 'qweQWE123!@#';
 alter user 'root'@'localhost' identified by 'Hh123456!@#';
 
 -远程授权
 rename user 'root'@'localhost' to 'root'@'%';
 exit;
 
+/usr/sbin/mysqld
+/var/lib/mysql
+/var/log/mysqld.log
+
 -修改配置文件
 cat /etc/my.cnf
 vi /etc/my.cnf
 port=13306
--修改端口需要
-vi /etc/selinux/config
-SELINUX=disabled
-重启服务器
-
--配置文件
 lower_case_table_names=1
 sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
 character_set_server=utf8mb4
 max_connections=1000
+
+-可能需要关闭SELinux
+-查看SELinux状态
+/usr/sbin/sestatus -v
+开启#SELinux status:                 enabled
+关闭#SELinux status:                 disabled
+或
+getenforce
+开启#Enforcing
+关闭#Permissive
+
+-临时关闭
+setenforce 0
+#Permissive
+-临时开启
+setenforce 1
+#Enforcing
+
+-关闭
+vi /etc/selinux/config
+SELINUX=disabled
+重启服务器
+
 
 --centos7 mysql8 rpm安装
 https://repo.mysql.com/
